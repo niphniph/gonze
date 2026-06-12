@@ -5,7 +5,8 @@ import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
-export const Tasks = () => {
+export const Tasks = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [tasks, setTasks] = useState([]);
   
   // Form state
@@ -33,6 +34,56 @@ export const Tasks = () => {
 
   const priorities = ['🔴 მაღალი', '🟡 საშუალო', '🔵 დაბალი', '⚪️ სურვილისამებრ'];
   const statuses = ['✅ შესრულებული', '✏️ პროგრესშია', '⚠️ არ დაგიწყია', '❌ გაუქმდა'];
+
+  const translateCategory = (cat) => {
+    if (language === 'ka') return cat;
+    if (cat.includes('ჯანმრთელობა')) return 'Health 💪🏻';
+    if (cat.includes('სამსახური')) return 'Work 💼';
+    if (cat.includes('ფული')) return 'Money ₿';
+    if (cat.includes('ოჯახი')) return 'Family 👨‍👩‍👧‍👦';
+    if (cat.includes('განვითარება')) return 'Personal Development 📚';
+    if (cat.includes('საქმეები')) return 'Chores 🧹';
+    if (cat.includes('იდეები')) return 'Ideas 💡';
+    if (cat.includes('დასვენება')) return 'Leisure 🎮';
+    if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
+    return cat;
+  };
+
+  const translatePriority = (prio) => {
+    if (language === 'ka') return prio;
+    if (prio.includes('მაღალი')) return '🔴 High';
+    if (prio.includes('საშუალო')) return '🟡 Medium';
+    if (prio.includes('დაბალი')) return '🔵 Low';
+    if (prio.includes('სურვილისამებრ')) return '⚪️ Optional';
+    return prio;
+  };
+
+  const translateStatus = (stat) => {
+    if (language === 'ka') return stat;
+    if (stat.includes('შესრულებული')) return '✅ Completed';
+    if (stat.includes('პროგრესშია')) return '✏️ In Progress';
+    if (stat.includes('არ დაგიწყია')) return '⚠️ Not Started';
+    if (stat.includes('გაუქმდა')) return '❌ Cancelled';
+    return stat;
+  };
+
+  const translatePrioShort = (name) => {
+    if (language === 'ka') return name;
+    if (name === 'მაღალი') return 'High';
+    if (name === 'საშუალო') return 'Medium';
+    if (name === 'დაბალი') return 'Low';
+    if (name === 'სურვილისამებრ') return 'Optional';
+    return name;
+  };
+
+  const translateStatusShort = (name) => {
+    if (language === 'ka') return name;
+    if (name === 'შესრულებული') return 'Completed';
+    if (name === 'პროგრესშია') return 'In Progress';
+    if (name === 'არ დაგიწყია') return 'Not Started';
+    if (name === 'გაუქმდა') return 'Cancelled';
+    return name;
+  };
 
   // Load tasks on mount
   useEffect(() => {
@@ -154,7 +205,7 @@ export const Tasks = () => {
     statusCounts[t.status] = (statusCounts[t.status] || 0) + 1;
   });
   const statusChartData = Object.keys(statusCounts).map(s => ({
-    name: s.split(' ')[1] || s,
+    name: translateStatusShort(s.split(' ')[1] || s),
     value: statusCounts[s]
   })).filter(d => d.value > 0);
 
@@ -165,37 +216,45 @@ export const Tasks = () => {
     priorityCounts[t.priority] = (priorityCounts[t.priority] || 0) + 1;
   });
   const priorityChartData = Object.keys(priorityCounts).map(p => ({
-    name: p.split(' ')[1] || p,
+    name: translatePrioShort(p.split(' ')[1] || p),
     value: priorityCounts[p]
   }));
 
   const PRIORITY_COLORS = {
     'მაღალი': 'hsl(var(--accent-rose))',
+    'High': 'hsl(var(--accent-rose))',
     'საშუალო': 'hsl(var(--accent-amber))',
+    'Medium': 'hsl(var(--accent-amber))',
     'დაბალი': 'hsl(var(--accent-blue))',
-    'სურვილისამებრ': 'hsl(var(--text-muted))'
+    'Low': 'hsl(var(--accent-blue))',
+    'სურვილისამებრ': 'hsl(var(--text-muted))',
+    'Optional': 'hsl(var(--text-muted))'
   };
 
   const STATUS_COLORS = {
     'შესრულებული': 'hsl(var(--accent-emerald))',
+    'Completed': 'hsl(var(--accent-emerald))',
     'პროგრესშია': 'hsl(var(--accent-blue))',
+    'In Progress': 'hsl(var(--accent-blue))',
     'არ დაგიწყია': 'hsl(var(--accent-amber))',
-    'გაუქმდა': 'hsl(var(--accent-rose))'
+    'Not Started': 'hsl(var(--accent-amber))',
+    'გაუქმდა': 'hsl(var(--accent-rose))',
+    'Cancelled': 'hsl(var(--accent-rose))'
   };
 
   return (
     <div className="tasks-page">
       <header className="page-header" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>დავალებები</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>მართეთ ყოველდღიური და სამუშაო ამოცანები</p>
+          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('დავალებები', 'Tasks')}</h1>
+          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('მართეთ ყოველდღიური და სამუშაო ამოცანები', 'Manage daily and work tasks')}</p>
         </div>
         <button 
           onClick={() => { isAdding ? resetForm() : setIsAdding(true); }}
           className="btn btn-primary"
         >
           {isAdding ? <X size={16} /> : <Plus size={16} />}
-          <span>{isAdding ? 'დახურვა' : 'დავალების დამატება'}</span>
+          <span>{isAdding ? t('დახურვა', 'Close') : t('დავალების დამატება', 'Add Task')}</span>
         </button>
       </header>
 
@@ -203,23 +262,23 @@ export const Tasks = () => {
       {isAdding && (
         <GlassCard style={{ marginBottom: '2rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
           <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem', fontWeight: 700 }}>
-            {editingId ? 'დავალების რედაქტირება' : 'ახალი დავალების შექმნა'}
+            {editingId ? t('დავალების რედაქტირება', 'Edit Task') : t('ახალი დავალების შექმნა', 'Create New Task')}
           </h3>
           <form onSubmit={editingId ? handleSaveEdit : handleAddTask}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
               <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                <label className="form-label">დავალება</label>
+                <label className="form-label">{t('დავალება', 'Task')}</label>
                 <input 
                   type="text" 
                   className="form-input" 
-                  placeholder="შეიყვანეთ დავალების დასახელება..." 
+                  placeholder={t("შეიყვანეთ დავალების დასახელება...", "Enter task name...")} 
                   value={name} 
                   onChange={e => setName(e.target.value)} 
                   required 
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">თარიღი</label>
+                <label className="form-label">{t('თარიღი', 'Date')}</label>
                 <input 
                   type="date" 
                   className="form-input" 
@@ -229,37 +288,37 @@ export const Tasks = () => {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">კატეგორია</label>
+                <label className="form-label">{t('კატეგორია', 'Category')}</label>
                 <select className="form-select" value={category} onChange={e => setCategory(e.target.value)}>
-                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  {categories.map(cat => <option key={cat} value={cat}>{translateCategory(cat)}</option>)}
                 </select>
               </div>
               <div className="form-group">
-                <label className="form-label">პრიორიტეტი</label>
+                <label className="form-label">{t('პრიორიტეტი', 'Priority')}</label>
                 <select className="form-select" value={priority} onChange={e => setPriority(e.target.value)}>
-                  {priorities.map(prio => <option key={prio} value={prio}>{prio}</option>)}
+                  {priorities.map(prio => <option key={prio} value={prio}>{translatePriority(prio)}</option>)}
                 </select>
               </div>
               <div className="form-group">
-                <label className="form-label">სტატუსი</label>
+                <label className="form-label">{t('სტატუსი', 'Status')}</label>
                 <select className="form-select" value={status} onChange={e => setStatus(e.target.value)}>
-                  {statuses.map(stat => <option key={stat} value={stat}>{stat}</option>)}
+                  {statuses.map(stat => <option key={stat} value={stat}>{translateStatus(stat)}</option>)}
                 </select>
               </div>
             </div>
             <div className="form-group" style={{ marginTop: '0.5rem' }}>
-              <label className="form-label">კომენტარი</label>
+              <label className="form-label">{t('კომენტარი', 'Comment')}</label>
               <input 
                 type="text" 
                 className="form-input" 
-                placeholder="დაამატეთ შენიშვნა..." 
+                placeholder={t("დაამატეთ შენიშვნა...", "Add comment...")} 
                 value={comment} 
                 onChange={e => setComment(e.target.value)} 
               />
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.25rem' }}>
-              <button type="button" onClick={resetForm} className="btn btn-secondary">გაუქმება</button>
-              <button type="submit" className="btn btn-primary">შენახვა</button>
+              <button type="button" onClick={resetForm} className="btn btn-secondary">{t('გაუქმება', 'Cancel')}</button>
+              <button type="submit" className="btn btn-primary">{t('შენახვა', 'Save')}</button>
             </div>
           </form>
         </GlassCard>
@@ -268,7 +327,7 @@ export const Tasks = () => {
       {/* Stats Summary & Filters */}
       <section style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'stretch' }}>
         <GlassCard style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h4 style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', marginBottom: '0.5rem' }}>საერთო პროგრესი</h4>
+          <h4 style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', marginBottom: '0.5rem' }}>{t('საერთო პროგრესი', 'Overall Progress')}</h4>
           <div style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem' }}>
             {completedCount} / {totalCount}
           </div>
@@ -279,28 +338,28 @@ export const Tasks = () => {
         <GlassCard>
           <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Filter size={16} />
-            <span>ფილტრები</span>
+            <span>{t('ფილტრები', 'Filters')}</span>
           </h4>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" style={{ fontSize: '0.75rem' }}>კატეგორია</label>
+              <label className="form-label" style={{ fontSize: '0.75rem' }}>{t('კატეგორია', 'Category')}</label>
               <select className="form-select" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-                <option value="All">ყველა კატეგორია</option>
-                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                <option value="All">{t('ყველა კატეგორია', 'All Categories')}</option>
+                {categories.map(cat => <option key={cat} value={cat}>{translateCategory(cat)}</option>)}
               </select>
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" style={{ fontSize: '0.75rem' }}>პრიორიტეტი</label>
+              <label className="form-label" style={{ fontSize: '0.75rem' }}>{t('პრიორიტეტი', 'Priority')}</label>
               <select className="form-select" value={filterPriority} onChange={e => setFilterPriority(e.target.value)}>
-                <option value="All">ყველა პრიორიტეტი</option>
-                {priorities.map(prio => <option key={prio} value={prio}>{prio}</option>)}
+                <option value="All">{t('ყველა პრიორიტეტი', 'All Priorities')}</option>
+                {priorities.map(prio => <option key={prio} value={prio}>{translatePriority(prio)}</option>)}
               </select>
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" style={{ fontSize: '0.75rem' }}>სტატუსი</label>
+              <label className="form-label" style={{ fontSize: '0.75rem' }}>{t('სტატუსი', 'Status')}</label>
               <select className="form-select" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
-                <option value="All">ყველა სტატუსი</option>
-                {statuses.map(stat => <option key={stat} value={stat}>{stat}</option>)}
+                <option value="All">{t('ყველა სტატუსი', 'All Statuses')}</option>
+                {statuses.map(stat => <option key={stat} value={stat}>{translateStatus(stat)}</option>)}
               </select>
             </div>
           </div>
@@ -311,7 +370,7 @@ export const Tasks = () => {
       <section style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', alignItems: 'start' }}>
         {/* Task List */}
         <GlassCard style={{ padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>დავალებების სია ({filteredTasks.length})</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>{t('დავალებების სია', 'Tasks List')} ({filteredTasks.length})</h3>
           
           {filteredTasks.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -367,7 +426,7 @@ export const Tasks = () => {
                         )}
                         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
                           <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.04)', color: 'hsl(var(--text-secondary))' }}>
-                            {task.category}
+                            {translateCategory(task.category)}
                           </span>
                           <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.04)', color: 'hsl(var(--text-muted))' }}>
                             {task.date}
@@ -378,12 +437,12 @@ export const Tasks = () => {
 
                     {/* Right: Badges + Action Buttons */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem', display: 'none' /* Hide on very small screens */ }} className="desktop-badges">
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem' }} className="desktop-badges">
                         <span style={{ fontSize: '0.7rem', fontWeight: 600, color: prioColor }}>
-                          {task.priority}
+                          {translatePriority(task.priority)}
                         </span>
                         <span style={{ fontSize: '0.7rem', fontWeight: 600, color: statColor }}>
-                          {task.status}
+                          {translateStatus(task.status)}
                         </span>
                       </div>
                       <div style={{ display: 'flex', gap: '0.25rem' }}>
@@ -407,7 +466,7 @@ export const Tasks = () => {
             </div>
           ) : (
             <div style={{ padding: '3rem 1rem', textAlign: 'center', color: 'hsl(var(--text-muted))' }}>
-              დავალებები ვერ მოიძებნა ამ ფილტრებით.
+              {t('დავალებები ვერ მოიძებნა ამ ფილტრებით.', 'No tasks found matching these filters.')}
             </div>
           )}
         </GlassCard>
@@ -418,7 +477,7 @@ export const Tasks = () => {
           <GlassCard style={{ padding: '1.25rem' }}>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <BarChart2 size={16} style={{ color: 'hsl(var(--primary))' }} />
-              <span>დავალებები პრიორიტეტით</span>
+              <span>{t('დავალებები პრიორიტეტით', 'Tasks by Priority')}</span>
             </h4>
             <div style={{ width: '100%', height: '180px' }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -448,7 +507,7 @@ export const Tasks = () => {
           <GlassCard style={{ padding: '1.25rem' }}>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <BarChart2 size={16} style={{ color: 'hsl(var(--accent-blue))' }} />
-              <span>დავალებები სტატუსით</span>
+              <span>{t('დავალებები სტატუსით', 'Tasks by Status')}</span>
             </h4>
             <div style={{ width: '100%', height: '180px' }}>
               {statusChartData.length > 0 ? (
@@ -480,7 +539,7 @@ export const Tasks = () => {
                 </ResponsiveContainer>
               ) : (
                 <div style={{ padding: '2rem 0', textAlign: 'center', color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
-                  მონაცემები არ არის
+                  {t('მონაცემები არ არის', 'No data available')}
                 </div>
               )}
             </div>

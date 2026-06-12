@@ -15,7 +15,8 @@ import {
   Settings 
 } from 'lucide-react';
 
-export const GoogleIntegrations = () => {
+export const GoogleIntegrations = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [integrations, setIntegrations] = useState({
     connected: false,
     demoMode: true,
@@ -56,7 +57,7 @@ export const GoogleIntegrations = () => {
 
   const handleConnect = () => {
     if (!integrations.demoMode && (!integrations.clientId || !integrations.apiKey)) {
-      alert("გთხოვთ შეიყვანოთ Client ID და API Key რეალურ რეჟიმში დასაკავშირებლად.");
+      alert(t("გთხოვთ შეიყვანოთ Client ID და API Key რეალურ რეჟიმში დასაკავშირებლად.", "Please enter Client ID and API Key to connect in production mode."));
       return;
     }
     setLoading(true);
@@ -72,7 +73,7 @@ export const GoogleIntegrations = () => {
     setTimeout(() => {
       setLoading(false);
       const mockProfile = {
-        name: "ნიკოლოზ კაპანაძე",
+        name: t("ნიკოლოზ კაპანაძე", "Nikoloz Kapanadze"),
         email: "ninekapanadze@gmail.com",
         avatar: "https://lh3.googleusercontent.com/a/ACg8ocLz3J-W9" // mock profile picture
       };
@@ -81,19 +82,19 @@ export const GoogleIntegrations = () => {
         connected: true,
         profile: mockProfile
       });
-      setSuccessMessage("Google-ის ანგარიში წარმატებით დაუკავშირდა!");
+      setSuccessMessage(t("Google-ის ანგარიში წარმატებით დაუკავშირდა!", "Google account connected successfully!"));
       setTimeout(() => setSuccessMessage(''), 4000);
     }, 1000);
   };
 
   const handleDisconnect = () => {
-    if (window.confirm("დარწმუნებული ხართ, რომ გსურთ კავშირის გაწყვეტა?")) {
+    if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ კავშირის გაწყვეტა?", "Are you sure you want to disconnect?"))) {
       saveState({
         ...integrations,
         connected: false,
         profile: null
       });
-      setSuccessMessage("კავშირი გაწყვეტილია.");
+      setSuccessMessage(t("კავშირი გაწყვეტილია.", "Connection disconnected."));
       setTimeout(() => setSuccessMessage(''), 3000);
     }
   };
@@ -101,8 +102,8 @@ export const GoogleIntegrations = () => {
   return (
     <div className="google-integrations-page">
       <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>ინტეგრაციები</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>დაუკავშირეთ Google სერვისები თქვენს პლატფორმას ავტომატური კალენდრისა და შეხვედრებისთვის</p>
+        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ინტეგრაციები', 'Integrations')}</h1>
+        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დაუკავშირეთ Google სერვისები თქვენს პლატფორმას ავტომატური კალენდრისა და შეხვედრებისთვის', 'Connect Google services to your platform for automated calendars and meetings')}</p>
       </header>
 
       {successMessage && (
@@ -129,7 +130,7 @@ export const GoogleIntegrations = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Google Account Connection</h3>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>სიმულაციის რეჟიმი</span>
+              <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>{t('სიმულაციის რეჟიმი', 'Sandbox Mode')}</span>
               <button 
                 onClick={toggleDemoMode} 
                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--primary))' }}
@@ -187,7 +188,7 @@ export const GoogleIntegrations = () => {
 
               <button onClick={handleDisconnect} className="btn btn-danger" style={{ width: '100%' }}>
                 <Trash2 size={16} />
-                <span>კავშირის გაწყვეტა (Disconnect)</span>
+                <span>{t('კავშირის გაწყვეტა (Disconnect)', 'Disconnect Account')}</span>
               </button>
             </div>
           ) : (
@@ -214,9 +215,9 @@ export const GoogleIntegrations = () => {
               }}>
                 <Globe size={32} />
               </div>
-              <h4 style={{ fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.5rem' }}>დაუკავშირეთ Google ანგარიში</h4>
+              <h4 style={{ fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.5rem' }}>{t('დაუკავშირეთ Google ანგარიში', 'Connect Google Account')}</h4>
               <p style={{ color: 'hsl(var(--text-muted))', fontSize: '0.8rem', marginBottom: '1.5rem', lineHeight: '1.4' }}>
-                მოახდინეთ კალენდრის სინქრონიზაცია და დააგენერირეთ Google Meet ბმულები თქვენი დავალებებისა და შეხვედრებისთვის.
+                {t('მოახდინეთ კალენდრის სინქრონიზაცია და დააგენერირეთ Google Meet ბმულები თქვენი დავალებებისა და შეხვედრებისთვის.', 'Sync your calendar and generate Google Meet links for your tasks and meetings.')}
               </p>
               
               <button 
@@ -225,7 +226,7 @@ export const GoogleIntegrations = () => {
                 className="btn btn-primary" 
                 style={{ width: '100%', padding: '0.75rem' }}
               >
-                {loading ? 'მიმდინარეობს დაკავშირება...' : 'Google Account Connect'}
+                {loading ? t('მიმდინარეობს დაკავშირება...', 'Connecting...') : 'Google Account Connect'}
               </button>
             </div>
           )}
@@ -239,7 +240,7 @@ export const GoogleIntegrations = () => {
               API Credentials Configuration
             </h3>
             <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
-              შეიყვანეთ Google Cloud პროექტის რეკვიზიტები. სერთიფიკატები ინახება მხოლოდ თქვენს ბრაუზერში.
+              {t('შეიყვანეთ Google Cloud პროექტის რეკვიზიტები. სერთიფიკატები ინახება მხოლოდ თქვენს ბრაუზერში.', 'Enter Google Cloud project credentials. Certificates are saved only in your browser.')}
             </p>
 
             <div className="form-group">
@@ -267,7 +268,7 @@ export const GoogleIntegrations = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(139, 92, 246, 0.05)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(139, 92, 246, 0.1)' }}>
               <Settings size={16} style={{ color: 'hsl(var(--primary))' }} />
               <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>
-                მიუთითეთ `https://nine13.site` Authorized Redirect URIs-ში.
+                {t('მიუთითეთ `https://nine13.site` Authorized Redirect URIs-ში.', 'Specify `https://nine13.site` in Authorized Redirect URIs.')}
               </span>
             </div>
           </GlassCard>
@@ -276,7 +277,7 @@ export const GoogleIntegrations = () => {
         {/* Permissions & Scopes */}
         <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Active Scopes & Permissions</h3>
-          <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem' }}>მართეთ წვდომის უფლებები ნებისმიერ დროს</p>
+          <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem' }}>{t('მართეთ წვდომის უფლებები ნებისმიერ დროს', 'Manage access permissions at any time')}</p>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
             {/* Calendar scope */}
@@ -293,7 +294,7 @@ export const GoogleIntegrations = () => {
                 <Calendar size={18} style={{ color: 'hsl(var(--primary))' }} />
                 <div>
                   <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>Google Calendar Access</div>
-                  <div style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>სინქრონიზაცია და Meet ლინკების გენერირება</div>
+                  <div style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{t('სინქრონიზაცია და Meet ლინკების გენერირება', 'Sync and generate Meet links')}</div>
                 </div>
               </div>
               <input 
@@ -318,7 +319,7 @@ export const GoogleIntegrations = () => {
                 <Mail size={18} style={{ color: 'hsl(var(--accent-blue))' }} />
                 <div>
                   <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>Gmail Send Access</div>
-                  <div style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>მოწვევის წერილების ავტომატური გაგზავნა</div>
+                  <div style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{t('მოწვევის წერილების ავტომატური გაგზავნა', 'Send invitation emails automatically')}</div>
                 </div>
               </div>
               <input 
@@ -363,7 +364,7 @@ export const GoogleIntegrations = () => {
             </div>
             
             <p style={{ fontSize: '0.9rem', color: 'hsl(var(--text-secondary))', marginBottom: '1rem', lineHeight: '1.4' }}>
-              <strong>Gonze Tracker</strong> ითხოვს ნებართვას თქვენს Google ანგარიშთან დასაკავშირებლად:
+              <strong>Gonze Tracker</strong> {t('ითხოვს ნებართვას თქვენს Google ანგარიშთან დასაკავშირებლად:', 'requests permission to connect to your Google Account:')}
             </p>
 
             <div style={{ 
@@ -378,18 +379,18 @@ export const GoogleIntegrations = () => {
             }}>
               <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>
                 <CheckCircle2 size={16} style={{ color: 'hsl(var(--accent-emerald))', flexShrink: 0 }} />
-                <span>თქვენი ძირითადი პროფილის ინფორმაციის ნახვა (სახელი, მეილი, ფოტო).</span>
+                <span>{t('თქვენი ძირითადი პროფილის ინფორმაციის ნახვა (სახელი, მეილი, ფოტო).', 'View your basic profile info (name, email, photo).')}</span>
               </div>
               {integrations.permissions.calendar && (
                 <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>
                   <CheckCircle2 size={16} style={{ color: 'hsl(var(--accent-emerald))', flexShrink: 0 }} />
-                  <span>Google Calendar-ში ივენთების დამატება, რედაქტირება და წაშლა.</span>
+                  <span>{t('Google Calendar-ში ივენთების დამატება, რედაქტირება და წაშლა.', 'Add, edit, and delete events in Google Calendar.')}</span>
                 </div>
               )}
               {integrations.permissions.gmail && (
                 <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>
                   <CheckCircle2 size={16} style={{ color: 'hsl(var(--accent-emerald))', flexShrink: 0 }} />
-                  <span>Gmail-ის მეშვეობით შეხვედრის მოწვევების გაგზავნა მონაწილეებისთვის.</span>
+                  <span>{t('Gmail-ის მეშვეობით შეხვედრის მოწვევების გაგზავნა მონაწილეებისთვის.', 'Send meeting invitations to participants via Gmail.')}</span>
                 </div>
               )}
             </div>

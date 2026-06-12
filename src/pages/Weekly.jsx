@@ -5,7 +5,8 @@ import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
-export const Weekly = () => {
+export const Weekly = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [weeklyData, setWeeklyData] = useState({});
   const [selectedWeekStart, setSelectedWeekStart] = useState('2026-06-07'); // Default week
   const [newTasks, setNewTasks] = useState({
@@ -21,6 +22,15 @@ export const Weekly = () => {
     'Thursday': 'ხუთშაბათი',
     'Friday': 'პარასკევი',
     'Saturday': 'შაბათი'
+  };
+  const daysOfWeekEn = {
+    'Sunday': 'Sunday',
+    'Monday': 'Monday',
+    'Tuesday': 'Tuesday',
+    'Wednesday': 'Wednesday',
+    'Thursday': 'Thursday',
+    'Friday': 'Friday',
+    'Saturday': 'Saturday'
   };
 
   useEffect(() => {
@@ -42,7 +52,12 @@ export const Weekly = () => {
       d.setDate(baseDate.getDate() + i);
       const dateStr = d.toISOString().split('T')[0];
       const dayName = daysOfWeek[d.getDay()];
-      dates.push({ dateStr, dayName, label: daysOfWeekKa[dayName] || dayName, index: i });
+      dates.push({ 
+        dateStr, 
+        dayName, 
+        label: language === 'ka' ? daysOfWeekKa[dayName] : daysOfWeekEn[dayName], 
+        index: i 
+      });
     }
     return dates;
   };
@@ -101,15 +116,17 @@ export const Weekly = () => {
 
   // Delete task
   const handleDeleteTask = (dayName, taskId) => {
-    const currentWeek = { ...(weeklyData[selectedWeekStart] || {}) };
-    const dayTasks = (currentWeek[dayName] || []).filter(t => t.id !== taskId);
+    if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ გეგმის წაშლა?", "Are you sure you want to delete this plan?"))) {
+      const currentWeek = { ...(weeklyData[selectedWeekStart] || {}) };
+      const dayTasks = (currentWeek[dayName] || []).filter(t => t.id !== taskId);
 
-    currentWeek[dayName] = dayTasks;
-    const updated = {
-      ...weeklyData,
-      [selectedWeekStart]: currentWeek
-    };
-    updateWeeklyState(updated);
+      currentWeek[dayName] = dayTasks;
+      const updated = {
+        ...weeklyData,
+        [selectedWeekStart]: currentWeek
+      };
+      updateWeeklyState(updated);
+    }
   };
 
   // Calculate stats for current week
@@ -143,14 +160,14 @@ export const Weekly = () => {
     <div className="weekly-page">
       <header className="page-header" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>კვირეული</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>დაგეგმეთ თქვენი მიზნები და დავალებები კვირის ჭრილში</p>
+          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('კვირეული', 'Weekly Tracker')}</h1>
+          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დაგეგმეთ თქვენი მიზნები და დავალებები კვირის ჭრილში', 'Plan your goals and tasks in a weekly view')}</p>
         </div>
         
         {/* Date Selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-light)', padding: '0.5rem 1rem', borderRadius: '14px' }}>
           <Calendar size={16} style={{ color: 'hsl(var(--primary))' }} />
-          <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'hsl(var(--text-secondary))' }}>კვირის დასაწყისი:</span>
+          <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'hsl(var(--text-secondary))' }}>{t('კვირის დასაწყისი:', 'Week Start:')}</span>
           <input 
             type="date" 
             className="form-input" 
@@ -163,10 +180,10 @@ export const Weekly = () => {
 
       {/* Week Progress Card */}
       <section style={{ marginBottom: '2.5rem' }}>
-        <GlassCard style={{ display: 'flex', justify: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+        <GlassCard style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
           <div style={{ flex: 1 }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.25rem' }}>ამ კვირის საერთო პროგრესი</h3>
-            <span style={{ fontSize: '0.85rem', color: 'hsl(var(--text-muted))' }}>კვირის ყველა ამოცანის შესრულების მაჩვენებელი</span>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.25rem' }}>{t('ამ კვირის საერთო პროგრესი', "This Week's Overall Progress")}</h3>
+            <span style={{ fontSize: '0.85rem', color: 'hsl(var(--text-muted))' }}>{t('კვირის ყველა ამოცანის შესრულების მაჩვენებელი', 'Completion rate for all weekly tasks')}</span>
           </div>
           <div style={{ minWidth: '250px', flex: 1 }}>
             <ProgressBar progress={weeklyPct} />
@@ -249,7 +266,7 @@ export const Weekly = () => {
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', border: '1px dashed var(--border-light)', borderRadius: '10px', padding: '1.5rem', color: 'hsl(var(--text-muted))', fontSize: '0.8rem' }}>
                     <ClipboardList size={24} style={{ marginBottom: '0.35rem', opacity: 0.5 }} />
-                    დავალებები ცარიელია
+                    {t('დავალებები ცარიელია', 'No tasks planned')}
                   </div>
                 )}
               </div>
@@ -260,7 +277,7 @@ export const Weekly = () => {
                   type="text" 
                   className="form-input" 
                   style={{ padding: '0.4rem 0.5rem', fontSize: '0.85rem', flex: 1 }}
-                  placeholder="ახალი გეგმა..." 
+                  placeholder={t("ახალი გეგმა...", "New plan...")} 
                   value={newTasks[`day${day.index}`]} 
                   onChange={e => setNewTasks({ ...newTasks, [`day${day.index}`]: e.target.value })}
                   onKeyDown={e => { if (e.key === 'Enter') handleAddTask(day.dayName, day.index); }}
@@ -281,7 +298,7 @@ export const Weekly = () => {
       {/* Weekly Completion Chart */}
       <section style={{ marginBottom: '1.5rem' }}>
         <GlassCard>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>კვირის პროგრესი დღეების მიხედვით (%)</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>{t('კვირის პროგრესი დღეების მიხედვით (%)', 'Weekly Progress by Day (%)')}</h3>
           <div style={{ width: '100%', height: '220px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>

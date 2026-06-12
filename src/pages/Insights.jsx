@@ -13,7 +13,8 @@ import {
   CheckCircle
 } from 'lucide-react';
 
-export const Insights = () => {
+export const Insights = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [tasks, setTasks] = useState([]);
   const [habits, setHabits] = useState([]);
   const [transactions, setTransactions] = useState([]);
@@ -40,14 +41,41 @@ export const Insights = () => {
     expenseByCategory[t.category] = (expenseByCategory[t.category] || 0) + t.amount;
   });
 
+  const translateFinanceCategory = (cat) => {
+    if (!cat) return '';
+    if (language === 'ka') return cat;
+    if (cat.includes('ხელფასი')) return 'Salary';
+    if (cat.includes('ბიზნესი')) return 'Business';
+    if (cat.includes('ბონუსი')) return 'Bonus';
+    if (cat.includes('ფრილანსერობა')) return 'Freelancing';
+    if (cat.includes('ინვესტიციები')) return 'Investments';
+    if (cat.includes('სხვა შემოსავალი')) return 'Other Income';
+    if (cat.includes('ქირა')) return 'Rent';
+    if (cat.includes('საჭმელი')) return 'Food';
+    if (cat.includes('კომუნალური')) return 'Utilities';
+    if (cat.includes('ინტერნეტი')) return 'Internet';
+    if (cat.includes('დაზღვევა')) return 'Insurance';
+    if (cat.includes('ტაქსი')) return 'Taxi';
+    if (cat.includes('ტრანსპორტი')) return 'Transport';
+    if (cat.includes('მანქანა')) return 'Car';
+    if (cat.includes('საწვავი')) return 'Fuel';
+    if (cat.includes('გართობა')) return 'Entertainment';
+    if (cat.includes('კაფეები')) return 'Cafes & Restaurants';
+    if (cat.includes('მოგზაურობა')) return 'Travel';
+    if (cat.includes('წამლები')) return 'Medicine';
+    if (cat.includes('შოპინგი')) return 'Shopping';
+    if (cat.includes('სხვა ხარჯი')) return 'Other Expense';
+    return cat;
+  };
+
   // Dynamic Insights Engine
   const getProductivityInsights = () => {
     const list = [];
     
     if (tasks.length === 0) {
       list.push({
-        title: "პროდუქტიულობის ინდექსი",
-        text: "დაამატეთ დავალებები და ჩვევები, რათა AI-მ შეძლოს თქვენი მუშაობის ტემპის გაანალიზება.",
+        title: t("პროდუქტიულობის ინდექსი", "Productivity Index"),
+        text: t("დაამატეთ დავალებები და ჩვევები, რათა AI-მ შეძლოს თქვენი მუშაობის ტემპის გაანალიზება.", "Add tasks and habits so the AI can analyze your productivity pace."),
         type: 'info',
         icon: Clock
       });
@@ -56,22 +84,22 @@ export const Insights = () => {
 
     if (taskCompletionRate >= 75) {
       list.push({
-        title: "შესანიშნავი პროდუქტიულობა!",
-        text: `თქვენი დავალებების შესრულების მაჩვენებელი არის მაღალი: ${taskCompletionRate}%. გააგრძელეთ იგივე ტემპით.`,
+        title: t("შესანიშნავი პროდუქტიულობა!", "Excellent Productivity!"),
+        text: t(`თქვენი დავალებების შესრულების მაჩვენებელი არის მაღალი: ${taskCompletionRate}%. გააგრძელეთ იგივე ტემპით.`, `Your task completion rate is high: ${taskCompletionRate}%. Keep up the good work.`),
         type: 'success',
         icon: CheckCircle
       });
     } else if (taskCompletionRate < 40) {
       list.push({
-        title: "დაბალი პროდუქტიულობის მაჩვენებელი",
-        text: `შესრულებულია დავალებების მხოლოდ ${taskCompletionRate}%. გირჩევთ, გაანაწილოთ დავალებები დღეებზე უფრო თანაბრად.`,
+        title: t("დაბალი პროდუქტიულობის მაჩვენებელი", "Low Productivity Rate"),
+        text: t(`შესრულებულია დავალებების მხოლოდ ${taskCompletionRate}%. გირჩევთ, გაანაწილოთ დავალებები დღეებზე უფრო თანაბრად.`, `Only ${taskCompletionRate}% of tasks completed. We suggest distributing tasks more evenly across days.`),
         type: 'warning',
         icon: AlertTriangle
       });
     } else {
       list.push({
-        title: "სტაბილური პროგრესი",
-        text: `დავალებების ${taskCompletionRate}% წარმატებით შესრულებულია. შეეცადეთ პრიორიტეტული დავალებები დღის პირველ ნახევარში გააკეთოთ.`,
+        title: t("სტაბილური პროგრესი", "Steady Progress"),
+        text: t(`დავალებების ${taskCompletionRate}% წარმატებით შესრულებულია. შეეცადეთ პრიორიტეტული დავალებები დღის პირველ ნახევარში გააკეთოთ.`, `Your task completion is ${taskCompletionRate}%. Try to do priority tasks in the first half of the day.`),
         type: 'info',
         icon: Zap
       });
@@ -79,8 +107,8 @@ export const Insights = () => {
 
     if (habits.length > 0) {
       list.push({
-        title: "ჩვევების კონსისტენტურობა",
-        text: "ყველაზე მაღალი აქტივობა ჩვევების მხრივ შეინიშნება დილის საათებში. დილის ჩვევები უფრო მყარად ყალიბდება.",
+        title: t("ჩვევების კონსისტენტურობა", "Habit Consistency"),
+        text: t("ყველაზე მაღალი აქტივობა ჩვევების მხრივ შეინიშნება დილის საათებში. დილის ჩვევები უფრო მყარად ყალიბდება.", "Most habit activity is observed in the morning. Morning habits form more consistently."),
         type: 'info',
         icon: Award
       });
@@ -94,8 +122,8 @@ export const Insights = () => {
 
     if (transactions.length === 0) {
       list.push({
-        title: "ფინანსური რეპორტები",
-        text: "შეაერთეთ თქვენი საბანკო ანგარიში 'ფინანსების ანალიზი' გვერდიდან ტრანზაქციების გასაანალიზებლად.",
+        title: t("ფინანსური რეპორტები", "Financial Reports"),
+        text: t("შეაერთეთ თქვენი საბანკო ანგარიში 'ფინანსების ანალიზი' გვერდიდან ტრანზაქციების გასაანალიზებლად.", "Connect your bank account from the 'Finance Analyzer' page to analyze transactions."),
         type: 'info',
         icon: Lightbulb
       });
@@ -104,16 +132,16 @@ export const Insights = () => {
 
     if (totalExpenses > totalIncome && totalIncome > 0) {
       list.push({
-        title: "უარყოფითი ფულადი ნაკადი",
-        text: `თქვენი ხარჯები აჭარბებს შემოსავლებს ${totalExpenses - totalIncome} ₾-ით. გირჩევთ, შეამციროთ არაპრიორიტეტული შოპინგის და გართობის ხარჯები.`,
+        title: t("უარყოფითი ფულადი ნაკადი", "Negative Cash Flow"),
+        text: t(`თქვენი ხარჯები აჭარბებს შემოსავლებს ${totalExpenses - totalIncome} ₾-ით. გირჩევთ, შეამციროთ არაპრიორიტეტული შოპინგის და გართობის ხარჯები.`, `Your expenses exceed your income by ${totalExpenses - totalIncome} ₾. We recommend reducing non-priority shopping and entertainment expenses.`),
         type: 'danger',
         icon: TrendingDown
       });
     } else if (totalIncome > 0) {
       const savingsRate = Math.round(((totalIncome - totalExpenses) / totalIncome) * 100);
       list.push({
-        title: "პოზიტიური ბალანსი",
-        text: `თქვენ ზოგავთ შემოსავლის ${savingsRate}%-ს. ეს ძალიან კარგი მაჩვენებელია დაგროვების მიზნებისთვის!`,
+        title: t("პოზიტიური ბალანსი", "Positive Balance"),
+        text: t(`თქვენ ზოგავთ შემოსავლის ${savingsRate}%-ს. ეს ძალიან კარგი მაჩვენებელია დაგროვების მიზნებისთვის!`, `You save ${savingsRate}% of your income. This is a very good rate for savings goals!`),
         type: 'success',
         icon: TrendingUp
       });
@@ -123,8 +151,8 @@ export const Insights = () => {
     const foodSpent = expenseByCategory['საჭმელი'] || 0;
     if (foodSpent > 300) {
       list.push({
-        title: "კვების ხარჯების ანალიზი",
-        text: `ამ თვეში კვებაზე დახარჯულია ${foodSpent} ₾. გამოწერების/რესტორნების ნაცვლად შინ მომზადებით შეგიძლიათ დაზოგოთ ~120 ₾.`,
+        title: t("კვების ხარჯების ანალიზი", "Food Expense Analysis"),
+        text: t(`ამ თვეში კვებაზე დახარჯულია ${foodSpent} ₾. გამოწერების/რესტორნების ნაცვლად შინ მომზადებით შეგიძლიათ დაზოგოთ ~120 ₾.`, `This month ${foodSpent} ₾ was spent on food. Cooking at home instead of eating out/delivery can save around ~120 ₾.`),
         type: 'warning',
         icon: Lightbulb
       });
@@ -136,8 +164,8 @@ export const Insights = () => {
       const spent = expenseByCategory[cat] || 0;
       if (spent > limit) {
         list.push({
-          title: `გადახარჯვა კატეგორიაში: ${cat}`,
-          text: `თქვენ გადააჭარბეთ დაწესებულ ლიმიტს (${limit} ₾) და დახარჯეთ ${spent} ₾.`,
+          title: t(`გადახარჯვა კატეგორიაში: ${translateFinanceCategory(cat)}`, `Budget overrun in: ${translateFinanceCategory(cat)}`),
+          text: t(`თქვენ გადააჭარბეთ დაწესებულ ლიმიტს (${limit} ₾) და დახარჯეთ ${spent} ₾.`, `You exceeded the set limit (${limit} ₾) and spent ${spent} ₾.`),
           type: 'danger',
           icon: AlertTriangle
         });
@@ -153,8 +181,8 @@ export const Insights = () => {
   return (
     <div className="insights-page">
       <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>ინსაითები & AI</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>პერსონალიზებული AI რეკომენდაციები და პროდუქტიულობის/ფინანსური ანალიტიკა</p>
+        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ინსაითები & AI', 'AI Insights')}</h1>
+        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('პერსონალიზებული AI რეკომენდაციები და პროდუქტიულობის/ფინანსური ანალიტიკა', 'Personalized AI recommendations and productivity/financial analytics')}</p>
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
@@ -162,7 +190,7 @@ export const Insights = () => {
         <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.75rem' }}>
             <Sparkles size={20} style={{ color: 'hsl(var(--primary))' }} />
-            პროდუქტიულობის ინსაითები
+            {t('პროდუქტიულობის ინსაითები', 'Productivity Insights')}
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
@@ -204,7 +232,7 @@ export const Insights = () => {
         <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.75rem' }}>
             <Lightbulb size={20} style={{ color: 'hsl(var(--accent-amber))' }} />
-            ფინანსური ინსაითები
+            {t('ფინანსური ინსაითები', 'Financial Insights')}
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>

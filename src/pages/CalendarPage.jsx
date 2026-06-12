@@ -14,7 +14,8 @@ import {
   Link
 } from 'lucide-react';
 
-export const CalendarPage = () => {
+export const CalendarPage = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [currentDate, setCurrentDate] = useState(new Date(2026, 5, 12)); // June 12, 2026 (local month is 0-indexed: 5 = June)
   const [events, setEvents] = useState([]);
   const [integrations, setIntegrations] = useState({ connected: false });
@@ -42,8 +43,8 @@ export const CalendarPage = () => {
     // Map tasks to events
     const taskEvents = localTasks.map(t => ({
       id: `task-${t.id}`,
-      title: `დავალება: ${t.text}`,
-      description: t.category || "დავალება",
+      title: `${language === 'ka' ? 'დავალება: ' : 'Task: '}${t.text || t.name}`,
+      description: translateCategory(t.category) || (language === 'ka' ? "დავალება" : "Task"),
       date: t.date || "2026-06-12",
       time: "23:59",
       type: 'task',
@@ -54,7 +55,7 @@ export const CalendarPage = () => {
     // Map meetings to events
     const meetingEvents = localMeetings.map(m => ({
       id: `meet-${m.id}`,
-      title: `შეხვედრა: ${m.title}`,
+      title: `${language === 'ka' ? 'შეხვედრა: ' : 'Meeting: '}${m.title}`,
       description: m.description,
       date: m.date,
       time: m.time,
@@ -73,6 +74,21 @@ export const CalendarPage = () => {
     setEvents([...taskEvents, ...meetingEvents, ...customEvents]);
   };
 
+  const translateCategory = (cat) => {
+    if (!cat) return '';
+    if (language === 'ka') return cat;
+    if (cat.includes('ჯანმრთელობა')) return 'Health 💪🏻';
+    if (cat.includes('სამსახური')) return 'Work 💼';
+    if (cat.includes('ფული')) return 'Money ₿';
+    if (cat.includes('ოჯახი')) return 'Family 👨‍👩‍👧‍👦';
+    if (cat.includes('განვითარება')) return 'Personal Development 📚';
+    if (cat.includes('საქმეები')) return 'Chores 🧹';
+    if (cat.includes('იდეები')) return 'Ideas 💡';
+    if (cat.includes('დასვენება')) return 'Leisure 🎮';
+    if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
+    return cat;
+  };
+
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
@@ -83,7 +99,7 @@ export const CalendarPage = () => {
 
   const handleSyncGoogle = () => {
     if (!integrations.connected) {
-      alert("გთხოვთ დაუკავშიროთ Google ანგარიში 'ინტეგრაციები' გვერდიდან კალენდრის სინქრონიზაციისთვის.");
+      alert(t("გთხოვთ დაუკავშიროთ Google ანგარიში 'ინტეგრაციები' გვერდიდან კალენდრის სინქრონიზაციისთვის.", "Please connect Google account from the Integrations page to sync calendar."));
       return;
     }
     setLoading(true);
@@ -94,7 +110,7 @@ export const CalendarPage = () => {
       const mockGoogleEvents = [
         {
           id: `google-1`,
-          title: "Google Sync: კვარტალური რეპორტი",
+          title: "Google Sync: Quarter Report",
           description: "Sync project board with teammates",
           date: "2026-06-15",
           time: "10:30",
@@ -104,7 +120,7 @@ export const CalendarPage = () => {
         },
         {
           id: `google-2`,
-          title: "Google Sync: ექიმთან კონსულტაცია",
+          title: "Google Sync: Doctor consultation",
           description: "Dentist checkup appointment",
           date: "2026-06-18",
           time: "15:00",
@@ -119,7 +135,7 @@ export const CalendarPage = () => {
       const filteredCustom = currentCustom.filter(e => !e.id.startsWith('google-'));
       db.saveCalendarEvents([...filteredCustom, ...mockGoogleEvents]);
       loadEvents();
-      alert("Google კალენდარი წარმატებით სინქრონიზდა!");
+      alert(t("Google კალენდარი წარმატებით სინქრონიზდა!", "Google Calendar synced successfully!"));
     }, 1500);
   };
 
@@ -152,10 +168,15 @@ export const CalendarPage = () => {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const monthNames = [
+  const monthNamesKa = [
     "იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი",
     "ივლისი", "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"
   ];
+  const monthNamesEn = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const monthNames = language === 'ka' ? monthNamesKa : monthNamesEn;
 
   const firstDayIndex = new Date(year, month, 1).getDay(); // 0 is Sunday, 1 is Monday...
   // Convert Sunday (0) to index 6, Monday (1) to 0 etc.
@@ -198,22 +219,26 @@ export const CalendarPage = () => {
     return events.filter(e => e.date === dateString);
   };
 
+  const daysOfWeek = language === 'ka' 
+    ? ["ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ", "კვი"]
+    : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
   return (
     <div className="calendar-page">
       <header className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>კალენდარი</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>დავალებები, შეხვედრები და კალენდრის ივენთები ერთიან სივრცეში</p>
+          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('კალენდარი', 'Calendar')}</h1>
+          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დავალებები, შეხვედრები და კალენდრის ივენთები ერთიან სივრცეში', 'Tasks, meetings, and calendar events in one unified space')}</p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button onClick={handleSyncGoogle} disabled={loading} className="btn btn-secondary">
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-            <span>{loading ? 'მიმდინარეობს სინქრონიზაცია...' : 'Google Sync'}</span>
+            <span>{loading ? t('მიმდინარეობს სინქრონიზაცია...', 'Syncing...') : 'Google Sync'}</span>
           </button>
           <button onClick={() => setShowFormModal(true)} className="btn btn-primary">
             <Plus size={16} />
-            <span>ივენთის დამატება</span>
+            <span>{t('ივენთის დამატება', 'Add Event')}</span>
           </button>
         </div>
       </header>
@@ -228,7 +253,7 @@ export const CalendarPage = () => {
             <ChevronLeft size={16} />
           </button>
           <button onClick={() => setCurrentDate(new Date(2026, 5, 12))} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
-            დღეს
+            {t('დღეს', 'Today')}
           </button>
           <button onClick={handleNextMonth} className="btn btn-secondary" style={{ padding: '0.5rem' }}>
             <ChevronRight size={16} />
@@ -248,7 +273,7 @@ export const CalendarPage = () => {
         boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)'
       }}>
         {/* Days of Week */}
-        {["ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ", "კვი"].map(day => (
+        {daysOfWeek.map(day => (
           <div key={day} style={{
             background: 'hsl(var(--bg-surface-elevated))',
             padding: '0.75rem',
@@ -331,7 +356,7 @@ export const CalendarPage = () => {
                 
                 {dateEvents.length > 3 && (
                   <span style={{ fontSize: '0.6rem', color: 'hsl(var(--text-muted))', paddingLeft: '0.25rem' }}>
-                    +{dateEvents.length - 3} სხვა...
+                    +{dateEvents.length - 3} {t('სხვა...', 'more...')}
                   </span>
                 )}
               </div>
@@ -377,14 +402,14 @@ export const CalendarPage = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem', fontSize: '0.8rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--text-secondary))' }}>
                 <Clock size={14} style={{ color: 'hsl(var(--primary))' }} />
-                <span>თარიღი: <strong>{selectedEvent.date}</strong> {selectedEvent.time && ` | ${selectedEvent.time}`}</span>
+                <span>{t('თარიღი: ', 'Date: ')} <strong>{selectedEvent.date}</strong> {selectedEvent.time && ` | ${selectedEvent.time}`}</span>
               </div>
 
               {selectedEvent.meetLink && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--text-secondary))' }}>
                   <Video size={14} style={{ color: 'hsl(var(--accent-blue))' }} />
                   <a href={selectedEvent.meetLink} target="_blank" rel="noopener noreferrer" style={{ color: 'hsl(var(--accent-blue))', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                    Google Meet შეხვედრა
+                    {t('Google Meet შეხვედრა', 'Google Meet Meeting')}
                     <Link size={10} />
                   </a>
                 </div>
@@ -392,7 +417,7 @@ export const CalendarPage = () => {
 
               {selectedEvent.participants && selectedEvent.participants.length > 0 && (
                 <div>
-                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem' }}>მონაწილეები:</span>
+                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem' }}>{t('მონაწილეები:', 'Participants:')}</span>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
                     {selectedEvent.participants.map(p => (
                       <span key={p} style={{ fontSize: '0.7rem', padding: '0.1rem 0.35rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
@@ -406,7 +431,7 @@ export const CalendarPage = () => {
               {selectedEvent.googleSynced && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'hsl(var(--accent-amber))', fontWeight: 600 }}>
                   <Clock size={12} />
-                  <span>სინქრონიზებულია Google Calendar-თან</span>
+                  <span>{t('სინქრონიზებულია Google Calendar-თან', 'Synced with Google Calendar')}</span>
                 </div>
               )}
             </div>
@@ -416,7 +441,7 @@ export const CalendarPage = () => {
               className="btn btn-primary" 
               style={{ width: '100%', padding: '0.5rem' }}
             >
-              დახურვა
+              {t('დახურვა', 'Close')}
             </button>
           </div>
         </div>
@@ -440,15 +465,15 @@ export const CalendarPage = () => {
             padding: '1.75rem',
             boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)'
           }}>
-            <h3 style={{ fontWeight: 800, fontSize: '1.2rem', marginBottom: '1.25rem' }}>ივენთის დამატება</h3>
+            <h3 style={{ fontWeight: 800, fontSize: '1.2rem', marginBottom: '1.25rem' }}>{t('ივენთის დამატება', 'Add Event')}</h3>
 
             <form onSubmit={handleAddEvent} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">სათაური</label>
+                <label className="form-label">{t('სათაური', 'Title')}</label>
                 <input 
                   type="text" 
                   className="form-input" 
-                  placeholder="ივენთის დასახელება" 
+                  placeholder={t("ივენთის დასახელება", "Event Title")} 
                   value={formTitle}
                   onChange={e => setFormTitle(e.target.value)}
                   required 
@@ -456,20 +481,20 @@ export const CalendarPage = () => {
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">ტიპი</label>
+                <label className="form-label">{t('ტიპი', 'Type')}</label>
                 <select 
                   className="form-select" 
                   value={formType}
                   onChange={e => setFormType(e.target.value)}
                 >
-                  <option value="event">ივენთი (Event)</option>
-                  <option value="task">დავალება (Task)</option>
+                  <option value="event">{t('ივენთი (Event)', 'Event')}</option>
+                  <option value="task">{t('დავალება (Task)', 'Task')}</option>
                 </select>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">თარიღი</label>
+                  <label className="form-label">{t('თარიღი', 'Date')}</label>
                   <input 
                     type="date" 
                     className="form-input" 
@@ -480,7 +505,7 @@ export const CalendarPage = () => {
                 </div>
 
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">დრო</label>
+                  <label className="form-label">{t('დრო', 'Time')}</label>
                   <input 
                     type="time" 
                     className="form-input" 
@@ -492,10 +517,10 @@ export const CalendarPage = () => {
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">აღწერა</label>
+                <label className="form-label">{t('აღწერა', 'Description')}</label>
                 <textarea 
                   className="form-textarea" 
-                  placeholder="დამატებითი დეტალები..." 
+                  placeholder={t("დამატებითი დეტალები...", "Additional details...")} 
                   rows="2"
                   value={formDesc}
                   onChange={e => setFormDesc(e.target.value)}
@@ -509,14 +534,14 @@ export const CalendarPage = () => {
                   className="btn btn-secondary" 
                   style={{ flex: 1 }}
                 >
-                  Cancel
+                  {t('გაუქმება', 'Cancel')}
                 </button>
                 <button 
                   type="submit" 
                   className="btn btn-primary" 
                   style={{ flex: 1 }}
                 >
-                  დამატება
+                  {t('დამატება', 'Add')}
                 </button>
               </div>
             </form>

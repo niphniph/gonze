@@ -12,7 +12,9 @@ import { MetricCard } from '../components/MetricCard';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
-export const Dashboard = () => {
+export const Dashboard = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
+
   const [tasks, setTasks] = useState([]);
   const [habits, setHabits] = useState({ list: [], history: {} });
   const [weekly, setWeekly] = useState({});
@@ -20,10 +22,10 @@ export const Dashboard = () => {
 
   // Load data
   useEffect(() => {
-    setTasks(db.getTasks());
-    setHabits(db.getHabits());
-    setWeekly(db.getWeekly());
-    setFinance(db.getFinance());
+    setTasks(db.getTasks() || []);
+    setHabits(db.getHabits() || { list: [], history: {} });
+    setWeekly(db.getWeekly() || {});
+    setFinance(db.getFinance() || []);
   }, []);
 
   const todayStr = "2026-06-07"; // Aligned with the current system date
@@ -36,16 +38,18 @@ export const Dashboard = () => {
   const totalTasksCompleted = tasks.filter(t => t.completed).length;
 
   // 2. Habit Statistics
-  const totalHabitListCount = habits.list.length;
-  const habitHistory = habits.history;
+  const totalHabitListCount = habits.list ? habits.list.length : 0;
+  const habitHistory = habits.history || {};
   
   // Calculate today's habits
   let todayHabitsCompleted = 0;
-  habits.list.forEach(h => {
-    if (habitHistory[h.id] && habitHistory[h.id][todayStr]) {
-      todayHabitsCompleted++;
-    }
-  });
+  if (habits.list) {
+    habits.list.forEach(h => {
+      if (habitHistory[h.id] && habitHistory[h.id][todayStr]) {
+        todayHabitsCompleted++;
+      }
+    });
+  }
   const todayHabitsPct = totalHabitListCount > 0 ? (todayHabitsCompleted / totalHabitListCount) * 100 : 0;
 
   // Calculate habit completion in the past 7 days (June 1 - June 7)
@@ -56,11 +60,13 @@ export const Dashboard = () => {
     const dateStr = d.toISOString().split('T')[0];
     
     let completedCount = 0;
-    habits.list.forEach(h => {
-      if (habitHistory[h.id] && habitHistory[h.id][dateStr]) {
-        completedCount++;
-      }
-    });
+    if (habits.list) {
+      habits.list.forEach(h => {
+        if (habitHistory[h.id] && habitHistory[h.id][dateStr]) {
+          completedCount++;
+        }
+      });
+    }
 
     const percent = totalHabitListCount > 0 ? Math.round((completedCount / totalHabitListCount) * 100) : 0;
     
@@ -130,8 +136,8 @@ export const Dashboard = () => {
   return (
     <div className="dashboard-page">
       <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>დეშბორდი</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>დღევანდელი დღის და კვირის რეზიუმე</p>
+        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('დეშბორდი', 'Dashboard')}</h1>
+        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დღევანდელი დღის და კვირის რეზიუმე', "Today's summary and weekly overview")}</p>
       </header>
 
       {/* Grid of KPI Metrics */}
@@ -142,29 +148,29 @@ export const Dashboard = () => {
         marginBottom: '2.5rem' 
       }}>
         <MetricCard 
-          title="დღევანდელი დავალებები"
+          title={t('დღევანდელი დავალებები', "Today's Tasks")}
           value={`${todayTasksCompleted}/${todayTasks.length}`}
           icon={CheckCircle}
-          footerText={`შესრულება: ${Math.round(todayTasksPct)}%`}
+          footerText={`${t('შესრულება:', 'Completion:')} ${Math.round(todayTasksPct)}%`}
         />
         <MetricCard 
-          title="დღევანდელი ჩვევები"
+          title={t('დღევანდელი ჩვევები', "Today's Habits")}
           value={`${todayHabitsCompleted}/${totalHabitListCount}`}
           icon={Award}
-          footerText={`შესრულება: ${Math.round(todayHabitsPct)}%`}
+          footerText={`${t('შესრულება:', 'Completion:')} ${Math.round(todayHabitsPct)}%`}
         />
         <MetricCard 
-          title="ფინანსური ბალანსი"
+          title={t('ფინანსური ბალანსი', "Net Balance")}
           value={`${netBalance.toLocaleString()} ₾`}
           icon={Wallet}
-          footerText={`შემოსავალი: +${totalIncome} ₾ | ხარჯი: -${totalExpense} ₾`}
+          footerText={`${t('შემოსავალი', 'Income')}: +${totalIncome} ₾ | ${t('ხარჯი', 'Expense')}: -${totalExpense} ₾`}
           className={netBalance >= 0 ? 'balance-positive' : 'balance-negative'}
         />
         <MetricCard 
-          title="დასრულებული დავალებები სულ"
+          title={t('დასრულებული დავალებები სულ', 'Total Tasks Completed')}
           value={totalTasksCompleted}
           icon={LayoutDashboard}
-          footerText="ყველა კატეგორიიდან"
+          footerText={t('ყველა კატეგორიიდან', 'From all categories')}
         />
       </section>
 
@@ -173,24 +179,24 @@ export const Dashboard = () => {
         <GlassCard>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <TrendingUp size={18} style={{ color: 'hsl(var(--primary))' }} />
-            <span>პროგრესის ინდიკატორები</span>
+            <span>{t('პროგრესის ინდიკატორები', 'Progress Metrics')}</span>
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
-                <span style={{ color: 'hsl(var(--text-secondary))' }}>დღევანდელი დავალებების პროგრესი</span>
+                <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('დღევანდელი დავალებების პროგრესი', "Today's Tasks Progress")}</span>
               </div>
               <ProgressBar progress={todayTasksPct} />
             </div>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
-                <span style={{ color: 'hsl(var(--text-secondary))' }}>კვირის გეგმის პროგრესი</span>
+                <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('კვირის გეგმის პროგრესი', 'Weekly Tracker Progress')}</span>
               </div>
               <ProgressBar progress={weeklyTrackerPct} />
             </div>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
-                <span style={{ color: 'hsl(var(--text-secondary))' }}>ჩვევების ყოველთვიური პროგრესი (ივნისი)</span>
+                <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('ჩვევების ყოველთვიური პროგრესი (ივნისი)', 'Monthly Habits Progress (June)')}</span>
               </div>
               <ProgressBar progress={monthlyHabitsPct} />
             </div>
@@ -207,7 +213,7 @@ export const Dashboard = () => {
         {/* Weekly Habit Adherence Area Chart */}
         <GlassCard style={{ minHeight: '350px', display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem', color: 'hsl(var(--text-primary))' }}>
-            ჩვევების კვირის პროგრესი (%)
+            {t('ჩვევების კვირის პროგრესი (%)', 'Weekly Habit Success Rate (%)')}
           </h3>
           <div style={{ flex: 1, width: '100%', minHeight: '260px' }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -244,7 +250,7 @@ export const Dashboard = () => {
         {/* Expense categories Pie Chart */}
         <GlassCard style={{ minHeight: '350px', display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem', color: 'hsl(var(--text-primary))' }}>
-            ხარჯები კატეგორიების მიხედვით
+            {t('ხარჯები კატეგორიების მიხედვით', 'Expenses by Category')}
           </h3>
           <div style={{ flex: 1, width: '100%', minHeight: '260px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {financeChartData.length > 0 ? (
@@ -283,7 +289,7 @@ export const Dashboard = () => {
               </ResponsiveContainer>
             ) : (
               <div style={{ color: 'hsl(var(--text-muted))', fontSize: '0.9rem' }}>
-                არ არის ხარჯების მონაცემები
+                {t('არ არის ხარჯების მონაცემები', 'No expense data available')}
               </div>
             )}
           </div>

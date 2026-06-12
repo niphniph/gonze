@@ -33,7 +33,8 @@ import {
   Target
 } from 'lucide-react';
 
-export const FinanceAnalyzer = () => {
+export const FinanceAnalyzer = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState({});
@@ -49,14 +50,41 @@ export const FinanceAnalyzer = () => {
 
   // Add Budget & Goal State
   const [newBudgetCategory, setNewBudgetCategory] = useState('საჭმელი');
-  const [newBudgetLimit, setNewBudgetLimit] = useState('');
   const [newGoalName, setNewGoalName] = useState('');
   const [newGoalTarget, setNewGoalTarget] = useState('');
   const [newGoalCurrent, setNewGoalCurrent] = useState('');
+  const [newBudgetLimit, setNewBudgetLimit] = useState('');
 
   const expenseCategories = [
-    'საჭმელი', 'ქირა', 'კომუნალური', 'ტრანსპორტი', 'გართობა', 'შოპინგი', 'სხვა ხარჯი'
+    'საჭმელი', 'ქირა', 'კომუნალური', 'ტრანსპორტი', 'გართობა', 'შოპინგი', 'სზვა ხარჯი'
   ];
+
+  const translateFinanceCategory = (cat) => {
+    if (!cat) return '';
+    if (language === 'ka') return cat;
+    if (cat.includes('ხელფასი')) return 'Salary';
+    if (cat.includes('ბიზნესი')) return 'Business';
+    if (cat.includes('ბონუსი')) return 'Bonus';
+    if (cat.includes('ფრილანსერობა')) return 'Freelancing';
+    if (cat.includes('ინვესტიციები')) return 'Investments';
+    if (cat.includes('სხვა შემოსავალი')) return 'Other Income';
+    if (cat.includes('ქირა')) return 'Rent';
+    if (cat.includes('საჭმელი')) return 'Food';
+    if (cat.includes('კომუნალური')) return 'Utilities';
+    if (cat.includes('ინტერნეტი')) return 'Internet';
+    if (cat.includes('დაზღვევა')) return 'Insurance';
+    if (cat.includes('ტაქსი')) return 'Taxi';
+    if (cat.includes('ტრანსპორტი')) return 'Transport';
+    if (cat.includes('მანქანა')) return 'Car';
+    if (cat.includes('საწვავი')) return 'Fuel';
+    if (cat.includes('გართობა')) return 'Entertainment';
+    if (cat.includes('კაფეები')) return 'Cafes & Restaurants';
+    if (cat.includes('მოგზაურობა')) return 'Travel';
+    if (cat.includes('წამლები')) return 'Medicine';
+    if (cat.includes('შოპინგი')) return 'Shopping';
+    if (cat.includes('სხვა ხარჯი') || cat.includes('სზვა ხარჯი')) return 'Other Expense';
+    return cat;
+  };
 
   useEffect(() => {
     setAccounts(db.getFinancialAccounts() || []);
@@ -75,7 +103,7 @@ export const FinanceAnalyzer = () => {
     db.saveTransactions(newTx);
     db.saveBudgets(newBudgets);
     db.saveSavingsGoals(newGoals);
-
+    
     // Sync to old finance transaction ledger in db.js so they are compatible
     const legacyTx = newTx.map(t => ({
       id: t.id,
@@ -95,7 +123,7 @@ export const FinanceAnalyzer = () => {
   const handlePlaidSubmit = (e) => {
     e.preventDefault();
     if (!selectedBank) {
-      alert("გთხოვთ აირჩიოთ ბანკი.");
+      alert(t("გთხოვთ აირჩიოთ ბანკი.", "Please select a bank."));
       return;
     }
     setSyncing(true);
@@ -110,14 +138,14 @@ export const FinanceAnalyzer = () => {
       ];
 
       const mockTx = [
-        { id: `tx-1`, accountId: `acc-1`, amount: 2800, type: 'income', category: 'ხელფასი', date: '2026-06-01', note: 'შემოსავალი ხელფასიდან' },
-        { id: `tx-2`, accountId: `acc-1`, amount: 120, type: 'expense', category: 'საჭმელი', date: '2026-06-11', note: 'სუპერმარკეტი ორნაბიჯი' },
-        { id: `tx-3`, accountId: `acc-1`, amount: 1500, type: 'expense', category: 'ქირა', date: '2026-06-02', note: 'ბინის ქირა' },
-        { id: `tx-4`, accountId: `acc-1`, amount: 75, type: 'expense', category: 'კომუნალური', date: '2026-06-05', note: 'თელასი კომუნალურები' },
+        { id: `tx-1`, accountId: `acc-1`, amount: 2800, type: 'income', category: 'ხელფასი', date: '2026-06-01', note: t('შემოსავალი ხელფასიდან', 'Salary Income') },
+        { id: `tx-2`, accountId: `acc-1`, amount: 120, type: 'expense', category: 'საჭმელი', date: '2026-06-11', note: t('სუპერმარკეტი ორნაბიჯი', 'Supermarket') },
+        { id: `tx-3`, accountId: `acc-1`, amount: 1500, type: 'expense', category: 'ქირა', date: '2026-06-02', note: t('ბინის ქირა', 'Apartment Rent') },
+        { id: `tx-4`, accountId: `acc-1`, amount: 75, type: 'expense', category: 'კომუნალური', date: '2026-06-05', note: t('თელასი კომუნალურები', 'Electricity Utilities') },
         { id: `tx-5`, accountId: `acc-1`, amount: 35, type: 'expense', category: 'ტრანსპორტი', date: '2026-06-09', note: 'Yandex Taxi' },
         { id: `tx-6`, accountId: `acc-3`, amount: 180, type: 'expense', category: 'შოპინგი', date: '2026-06-10', note: 'Zara clothing' },
         { id: `tx-7`, accountId: `acc-3`, amount: 110, type: 'expense', category: 'გართობა', date: '2026-06-08', note: 'Cavea Cinema' },
-        { id: `tx-8`, accountId: `acc-1`, amount: 450, type: 'income', category: 'ინვესტიციები', date: '2026-06-07', note: 'დივიდენდები' }
+        { id: `tx-8`, accountId: `acc-1`, amount: 450, type: 'income', category: 'ინვესტიციები', date: '2026-06-07', note: t('დივიდენდები', 'Dividends') }
       ];
 
       const defaultBudgets = {
@@ -127,20 +155,20 @@ export const FinanceAnalyzer = () => {
       };
 
       const defaultGoals = [
-        { id: 'goal-1', name: 'სამოგზაურო ფონდი ✈️', target: 5000, current: 2500 }
+        { id: 'goal-1', name: t('სამოგზაურო ფონდი ✈️', 'Travel Fund ✈️'), target: 5000, current: 2500 }
       ];
 
       saveFinancialData(mockAccounts, mockTx, defaultBudgets, defaultGoals);
       setSyncing(false);
-      setSuccessMsg(`ბანკი ${selectedBank} წარმატებით დაუკავშირდა! მონაცემები იმპორტირებულია.`);
+      setSuccessMsg(t(`ბანკი ${selectedBank} წარმატებით დაუკავშირდა! მონაცემები იმპორტირებულია.`, `Bank ${selectedBank} connected successfully! Data imported.`));
       setTimeout(() => setSuccessMsg(''), 4000);
     }, 1500);
   };
 
   const handleDisconnectBank = () => {
-    if (window.confirm("დარწმუნებული ხართ, რომ გსურთ ბანკის კავშირის გაწყვეტა და მონაცემების წაშლა?")) {
+    if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ ბანკის კავშირის გაწყვეტა და მონაცემების წაშლა?", "Are you sure you want to disconnect bank and delete data?"))) {
       saveFinancialData([], [], {}, []);
-      setSuccessMsg("ბანკის კავშირი გაუქმდა. ყველა ტრანზაქცია წაშლილია.");
+      setSuccessMsg(t("ბანკის კავშირი გაუქმდა. ყველა ტრანზაქცია წაშლილია.", "Bank disconnected. All transactions deleted."));
       setTimeout(() => setSuccessMsg(''), 3000);
     }
   };
@@ -198,7 +226,7 @@ export const FinanceAnalyzer = () => {
   });
 
   const pieChartData = Object.keys(expenseByCategory).map(cat => ({
-    name: cat,
+    name: translateFinanceCategory(cat),
     value: expenseByCategory[cat]
   }));
 
@@ -225,7 +253,6 @@ export const FinanceAnalyzer = () => {
     if (budgetOverruns === 0 && Object.keys(budgets).length > 0) score += 15;
     else score -= (budgetOverruns * 10);
 
-    // Limit score bounds
     return Math.max(0, Math.min(100, score));
   };
 
@@ -242,7 +269,7 @@ export const FinanceAnalyzer = () => {
     if (foodSpent > 100) {
       insightsList.push({
         id: 'ins-1',
-        text: `კვების ხარჯები ამ თვეში გაიზარდა 23%-ით. მიზანშეწონილია ბიუჯეტის კონტროლი.`,
+        text: t(`კვების ხარჯები ამ თვეში გაიზარდა 23%-ით. მიზანშეწონილია ბიუჯეტის კონტროლი.`, `Food expenses increased by 23% this month. Budget control is recommended.`),
         type: 'warning'
       });
     }
@@ -253,7 +280,7 @@ export const FinanceAnalyzer = () => {
       if (savings > 500) {
         insightsList.push({
           id: 'ins-2',
-          text: `თქვენ შეგიძლიათ დაზოგოთ დაახლოებით 150 ₾ თვეში გამოუყენებელი სერვისების ან გამოწერების შემცირებით.`,
+          text: t(`თქვენ შეგიძლიათ დაზოგოთ დაახლოებით 150 ₾ თვეში გამოუყენებელი სერვისების ან გამოწერების შემცირებით.`, `You can save around 150 ₾ per month by reducing unused services or subscriptions.`),
           type: 'info'
         });
       }
@@ -266,7 +293,7 @@ export const FinanceAnalyzer = () => {
       if (spent > limit) {
         insightsList.push({
           id: `ins-b-${cat}`,
-          text: `გაფრთხილება: თქვენ გადააჭარბეთ '${cat}' კატეგორიის ბიუჯეტს ${spent - limit} ₾-ით.`,
+          text: t(`გაფრთხილება: თქვენ გადააჭარბეთ '${cat}' კატეგორიის ბიუჯეტს ${spent - limit} ₾-ით.`, `Warning: You exceeded '${translateFinanceCategory(cat)}' budget by ${spent - limit} ₾.`),
           type: 'danger'
         });
       }
@@ -283,19 +310,19 @@ export const FinanceAnalyzer = () => {
     <div className="finance-analyzer-page">
       <header className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>ფინანსების ანალიზი</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>ღია ბანკინგის მხარდაჭერა, ავტომატური რეპორტინგი და AI ფინანსური ინსაითები</p>
+          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ფინანსების ანალიზი', 'Finance Analyzer')}</h1>
+          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('ღია ბანკინგის მხარდაჭერა, ავტომატური რეპორტინგი და AI ფინანსური ინსაითები', 'Open banking support, automated reporting and AI financial insights')}</p>
         </div>
 
         {accounts.length > 0 ? (
           <button onClick={handleDisconnectBank} className="btn btn-danger">
             <Trash2 size={16} />
-            <span>ბანკის გათიშვა</span>
+            <span>{t('ბანკის გათიშვა', 'Disconnect Bank')}</span>
           </button>
         ) : (
           <button onClick={handleConnectBank} disabled={syncing} className="btn btn-primary">
             <Building2 size={16} />
-            <span>{syncing ? 'მიმდინარეობს დაკავშირება...' : 'ბანკის დაკავშირება'}</span>
+            <span>{syncing ? t('მიმდინარეობს დაკავშირება...', 'Connecting...') : t('ბანკის დაკავშირება', 'Connect Bank')}</span>
           </button>
         )}
       </header>
@@ -323,12 +350,12 @@ export const FinanceAnalyzer = () => {
           <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--primary))' }}>
             <Wallet size={40} />
           </div>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>ფინანსური ანალიზატორი გათიშულია</h3>
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{t('ფინანსური ანალიზატორი გათიშულია', 'Financial Analyzer Disconnected')}</h3>
           <p style={{ color: 'hsl(var(--text-muted))', fontSize: '0.9rem', maxWidth: '450px', lineHeight: '1.5' }}>
-            დააკავშირეთ თქვენი საბანკო ანგარიში, რათა ავტომატურად მოხდეს ტრანზაქციების იმპორტირება, კატეგორიზაცია და ფინანსური ჯანმრთელობის ანალიზი.
+            {t("დააკავშირეთ თქვენი საბანკო ანგარიში, რათა ავტომატურად მოხდეს ტრანზაქციების იმპორტირება, კატეგორიზაცია და ფინანსური ჯანმრთელობის ანალიზი.", "Connect your bank account to automatically import, categorize, and analyze your financial health.")}
           </p>
           <button onClick={handleConnectBank} className="btn btn-primary">
-            დააკავშირეთ ბანკი ახლავე (Mock Integration)
+            {t('დააკავშირეთ ბანკი ახლავე (Mock Integration)', 'Connect Bank Now (Mock Integration)')}
           </button>
         </div>
       ) : (
@@ -341,7 +368,7 @@ export const FinanceAnalyzer = () => {
                 <Wallet size={24} />
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>საერთო ბალანსი</span>
+                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('საერთო ბალანსი', 'Net Balance')}</span>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{currentBalance.toLocaleString()} ₾</h3>
               </div>
             </GlassCard>
@@ -351,7 +378,7 @@ export const FinanceAnalyzer = () => {
                 <ArrowUpRight size={24} />
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>შემოსავლები (თვე)</span>
+                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('შემოსავლები (თვე)', 'Income (Month)')}</span>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'hsl(var(--accent-emerald))' }}>+{totalIncome.toLocaleString()} ₾</h3>
               </div>
             </GlassCard>
@@ -361,7 +388,7 @@ export const FinanceAnalyzer = () => {
                 <ArrowDownRight size={24} />
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>ხარჯები (თვე)</span>
+                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('ხარჯები (თვე)', 'Expenses (Month)')}</span>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'hsl(var(--accent-rose))' }}>-{totalExpenses.toLocaleString()} ₾</h3>
               </div>
             </GlassCard>
@@ -369,7 +396,7 @@ export const FinanceAnalyzer = () => {
             {/* Health Score Card */}
             <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>ფინანსური ჯანმრთელობის ინდექსი</span>
+                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('ფინანსური ჯანმრთელობის ინდექსი', 'Financial Health Index')}</span>
                 <Sparkles size={16} style={{ color: 'hsl(var(--primary))' }} />
               </div>
               <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: healthScore > 75 ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-amber))' }}>
@@ -385,7 +412,7 @@ export const FinanceAnalyzer = () => {
             <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Sparkles size={18} style={{ color: 'hsl(var(--primary))' }} />
-                AI ფინანსური რეკომენდაციები
+                {t('AI ფინანსური რეკომენდაციები', 'AI Financial Insights')}
               </h3>
 
               {insights.length > 0 ? (
@@ -415,14 +442,14 @@ export const FinanceAnalyzer = () => {
                 </div>
               ) : (
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
-                  რეკომენდაციები ჯერ არ არის
+                  {t('რეკომენდაციები ჯერ არ არის', 'No insights yet')}
                 </div>
               )}
             </GlassCard>
 
             {/* Category Expenses Chart */}
             <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>ხარჯების გადანაწილება</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>{t('ხარჯების გადანაწილება', 'Expense Distribution')}</h3>
               <div style={{ flex: 1, minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {pieChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
@@ -443,7 +470,7 @@ export const FinanceAnalyzer = () => {
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <span style={{ color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>მონაცემები არ არის</span>
+                  <span style={{ color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>{t('მონაცემები არ არის', 'No data available')}</span>
                 )}
               </div>
             </GlassCard>
@@ -453,7 +480,7 @@ export const FinanceAnalyzer = () => {
           <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
             {/* Category Budgets Manager */}
             <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>კატეგორიის ბიუჯეტები</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>{t('კატეგორიის ბიუჯეტები', 'Category Budgets')}</h3>
               
               <form onSubmit={handleAddBudget} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
                 <select 
@@ -462,18 +489,18 @@ export const FinanceAnalyzer = () => {
                   onChange={e => setNewBudgetCategory(e.target.value)}
                   style={{ flex: 1 }}
                 >
-                  {expenseCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  {expenseCategories.map(cat => <option key={cat} value={cat}>{translateFinanceCategory(cat)}</option>)}
                 </select>
                 <input 
                   type="number" 
                   className="form-input" 
-                  placeholder="ლიმიტი (₾)" 
+                  placeholder={t("ლიმიტი (₾)", "Limit (₾)")} 
                   value={newBudgetLimit}
                   onChange={e => setNewBudgetLimit(e.target.value)}
                   style={{ width: '100px' }}
                   required
                 />
-                <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>დამატება</button>
+                <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>{t('დამატება', 'Add')}</button>
               </form>
 
               {/* Budgets list */}
@@ -487,16 +514,16 @@ export const FinanceAnalyzer = () => {
                   return (
                     <div key={cat} style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-light)', borderRadius: '10px', padding: '0.75rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>
-                        <span>{cat}</span>
+                        <span>{translateFinanceCategory(cat)}</span>
                         <span style={{ color: isOver ? 'hsl(var(--accent-rose))' : 'hsl(var(--text-secondary))' }}>
                           {spent} ₾ / {limit} ₾
                         </span>
                       </div>
                       <ProgressBar progress={pct} type={isOver ? 'complete' : 'ongoing'} />
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'hsl(var(--text-muted))', marginTop: '0.35rem' }}>
-                        <span>{pct}% ათვისებული</span>
+                        <span>{pct}% {t('ათვისებული', 'spent')}</span>
                         <button onClick={() => handleRemoveBudget(cat)} style={{ background: 'transparent', border: 'none', color: 'hsl(var(--accent-rose))', cursor: 'pointer' }}>
-                          წაშლა
+                          {t('წაშლა', 'Delete')}
                         </button>
                       </div>
                     </div>
@@ -509,14 +536,14 @@ export const FinanceAnalyzer = () => {
             <GlassCard>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Target size={18} style={{ color: 'hsl(var(--accent-emerald))' }} />
-                დაზოგვის მიზნები
+                {t('დაზოგვის მიზნები', 'Savings Goals')}
               </h3>
 
               <form onSubmit={handleAddGoal} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
                 <input 
                   type="text" 
                   className="form-input" 
-                  placeholder="მიზანი (მაგ. მოგზაურობა ✈️)" 
+                  placeholder={t("მიზანი (მაგ. მოგზაურობა ✈️)", "Goal (e.g. Travel ✈️)")} 
                   value={newGoalName}
                   onChange={e => setNewGoalName(e.target.value)}
                   required 
@@ -525,7 +552,7 @@ export const FinanceAnalyzer = () => {
                   <input 
                     type="number" 
                     className="form-input" 
-                    placeholder="სამიზნე (₾)" 
+                    placeholder={t("სამიზნე (₾)", "Target (₾)")} 
                     value={newGoalTarget}
                     onChange={e => setNewGoalTarget(e.target.value)}
                     required
@@ -533,12 +560,12 @@ export const FinanceAnalyzer = () => {
                   <input 
                     type="number" 
                     className="form-input" 
-                    placeholder="არსებული (₾)" 
+                    placeholder={t("არსებული (₾)", "Current (₾)")} 
                     value={newGoalCurrent}
                     onChange={e => setNewGoalCurrent(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>მიზნის შექმნა</button>
+                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>{t('მიზნის შექმნა', 'Create Goal')}</button>
               </form>
 
               {/* Goals list */}
@@ -553,9 +580,9 @@ export const FinanceAnalyzer = () => {
                       </div>
                       <ProgressBar progress={pct} type="complete" />
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'hsl(var(--text-muted))', marginTop: '0.35rem' }}>
-                        <span>{pct}% შევსებული</span>
+                        <span>{pct}% {t('შევსებული', 'saved')}</span>
                         <button onClick={() => handleRemoveGoal(goal.id)} style={{ background: 'transparent', border: 'none', color: 'hsl(var(--accent-rose))', cursor: 'pointer' }}>
-                          წაშლა
+                          {t('წაშლა', 'Delete')}
                         </button>
                       </div>
                     </div>
@@ -569,7 +596,7 @@ export const FinanceAnalyzer = () => {
           <section style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem', flexWrap: 'wrap' }}>
             {/* Accounts details */}
             <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>დაკავშირებული ანგარიშები</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>{t('დაკავშირებული ანგარიშები', 'Connected Accounts')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {accounts.map(acc => (
                   <div key={acc.id} style={{ padding: '0.75rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
@@ -587,7 +614,7 @@ export const FinanceAnalyzer = () => {
 
             {/* Transactions imported */}
             <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>იმპორტირებული ტრანზაქციები ({transactions.length})</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>{t('იმპორტირებული ტრანზაქციები', 'Imported Transactions')} ({transactions.length})</h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '300px', overflowY: 'auto' }}>
                 {transactions.map(tx => {
@@ -595,8 +622,8 @@ export const FinanceAnalyzer = () => {
                   return (
                     <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.75rem', background: 'rgba(255, 255, 255, 0.01)', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
                       <div>
-                        <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{tx.note}</div>
-                        <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{tx.date} | {tx.category}</span>
+                        <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{translateFinanceCategory(tx.note)}</div>
+                        <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{tx.date} | {translateFinanceCategory(tx.category)}</span>
                       </div>
                       <span style={{ fontWeight: 700, fontSize: '0.9rem', color: isIncome ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-rose))' }}>
                         {isIncome ? '+' : '-'}{tx.amount} ₾
@@ -634,27 +661,27 @@ export const FinanceAnalyzer = () => {
             </div>
 
             <p style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))', marginBottom: '1.25rem', lineHeight: '1.4' }}>
-              დააკავშირეთ თქვენი საბანკო ანგარიში უსაფრთხოდ. ჩვენ არასდროს ვინახავთ პაროლებს.
+              {t('დააკავშირეთ თქვენი საბანკო ანგარიში უსაფრთხოდ. ჩვენ არასდროს ვინახავთ პაროლებს.', 'Connect your bank account securely. We never store your password.')}
             </p>
 
             <form onSubmit={handlePlaidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">აირჩიეთ ბანკი</label>
+                <label className="form-label">{t('აირჩიეთ ბანკი', 'Select Bank')}</label>
                 <select 
                   className="form-select" 
                   value={selectedBank} 
                   onChange={e => setSelectedBank(e.target.value)}
                   required
                 >
-                  <option value="">-- აირჩიეთ --</option>
-                  <option value="TBC Bank">თიბისი ბანკი (TBC Bank)</option>
-                  <option value="Bank of Georgia">საქართველოს ბანკი (BOG)</option>
-                  <option value="Liberty Bank">ლიბერთი ბანკი (Liberty)</option>
+                  <option value="">{t('-- აირჩიეთ --', '-- Select Bank --')}</option>
+                  <option value="TBC Bank">{t('თიბისი ბანკი (TBC Bank)', 'TBC Bank')}</option>
+                  <option value="Bank of Georgia">{t('საქართველოს ბანკი (BOG)', 'Bank of Georgia (BOG)')}</option>
+                  <option value="Liberty Bank">{t('ლიბერთი ბანკი (Liberty)', 'Liberty Bank (Liberty)')}</option>
                 </select>
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">მომხმარებელი (Username)</label>
+                <label className="form-label">{t('მომხმარებელი (Username)', 'Username')}</label>
                 <input 
                   type="text" 
                   className="form-input" 
@@ -666,7 +693,7 @@ export const FinanceAnalyzer = () => {
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">პაროლი (Password)</label>
+                <label className="form-label">{t('პაროლი (Password)', 'Password')}</label>
                 <input 
                   type="password" 
                   className="form-input" 

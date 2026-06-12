@@ -4,7 +4,8 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recha
 import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 
-export const Finance = () => {
+export const Finance = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [transactions, setTransactions] = useState([]);
   
   // Form state
@@ -21,6 +22,35 @@ export const Finance = () => {
     'კაფეები და რესტორნები', 'მოგზაურობა', 'წამლები', 'შოპინგი', 'სხვა ხარჯი'
   ];
 
+  const translateFinanceCategory = (cat) => {
+    if (!cat) return '';
+    if (language === 'ka') return cat;
+    // Income
+    if (cat === 'ხელფასი') return 'Salary';
+    if (cat === 'ბიზნესი') return 'Business';
+    if (cat === 'ბონუსი') return 'Bonus';
+    if (cat === 'ფრილანსერობა') return 'Freelancing';
+    if (cat === 'ინვესტიციები') return 'Investments';
+    if (cat === 'სხვა შემოსავალი') return 'Other Income';
+    // Expense
+    if (cat === 'ქირა') return 'Rent';
+    if (cat === 'საჭმელი') return 'Food';
+    if (cat === 'კომუნალური') return 'Utilities';
+    if (cat === 'ინტერნეტი') return 'Internet';
+    if (cat === 'დაზღვევა') return 'Insurance';
+    if (cat === 'ტაქსი') return 'Taxi';
+    if (cat === 'ტრანსპორტი') return 'Transport';
+    if (cat === 'მანქანა') return 'Car';
+    if (cat === 'საწვავი') return 'Fuel';
+    if (cat === 'გართობა') return 'Entertainment';
+    if (cat === 'კაფეები და რესტორნები') return 'Cafes & Restaurants';
+    if (cat === 'მოგზაურობა') return 'Travel';
+    if (cat === 'წამლები') return 'Medicine';
+    if (cat === 'შოპინგი') return 'Shopping';
+    if (cat === 'სხვა ხარჯი') return 'Other Expense';
+    return cat;
+  };
+
   // Set default category depending on type
   useEffect(() => {
     setCategory(type === 'income' ? incomeCategories[0] : expenseCategories[0]);
@@ -28,7 +58,7 @@ export const Finance = () => {
 
   // Load finance transactions
   useEffect(() => {
-    setTransactions(db.getFinance());
+    setTransactions(db.getFinance() || []);
   }, []);
 
   const updateFinanceState = (newTx) => {
@@ -57,8 +87,10 @@ export const Finance = () => {
 
   // Delete transaction
   const handleDeleteTransaction = (id) => {
-    const updated = transactions.filter(t => t.id !== id);
-    updateFinanceState(updated);
+    if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ ტრანზაქციის წაშლა?", "Are you sure you want to delete this transaction?"))) {
+      const updated = transactions.filter(t => t.id !== id);
+      updateFinanceState(updated);
+    }
   };
 
   // Calculations
@@ -76,7 +108,7 @@ export const Finance = () => {
   });
   
   const pieChartData = Object.keys(expenseByCategory).map(cat => ({
-    name: cat,
+    name: translateFinanceCategory(cat),
     value: expenseByCategory[cat]
   }));
 
@@ -95,8 +127,8 @@ export const Finance = () => {
   return (
     <div className="finance-page">
       <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>ფინანსები</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>მართეთ შემოსავლები და ხარჯები მარტივად</p>
+        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ფინანსები', 'Finance Ledger')}</h1>
+        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('მართეთ შემოსავლები და ხარჯები მარტივად', 'Easily manage income and expenses')}</p>
       </header>
 
       {/* Stats Summary cards */}
@@ -112,7 +144,7 @@ export const Finance = () => {
             <Wallet size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>საერთო ბალანსი</span>
+            <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>{t('საერთო ბალანსი', 'Net Balance')}</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 700, color: netBalance >= 0 ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-rose))' }}>
               {netBalance.toLocaleString()} ₾
             </h3>
@@ -125,7 +157,7 @@ export const Finance = () => {
             <ArrowUpRight size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>სულ შემოსავალი</span>
+            <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>{t('სულ შემოსავალი', 'Total Income')}</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 700, color: 'hsl(var(--text-primary))' }}>
               +{totalIncome.toLocaleString()} ₾
             </h3>
@@ -138,7 +170,7 @@ export const Finance = () => {
             <ArrowDownRight size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>სულ ხარჯი</span>
+            <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>{t('სულ ხარჯი', 'Total Expense')}</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 700, color: 'hsl(var(--text-primary))' }}>
               -{totalExpense.toLocaleString()} ₾
             </h3>
@@ -150,7 +182,7 @@ export const Finance = () => {
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
         {/* Ledger entry form */}
         <GlassCard>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>ტრანზაქციის დამატება</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>{t('ტრანზაქციის დამატება', 'Add Transaction')}</h3>
           
           <form onSubmit={handleAddTransaction}>
             {/* Type tabs toggle */}
@@ -178,7 +210,7 @@ export const Finance = () => {
                   transition: 'all 0.2s'
                 }}
               >
-                ხარჯი
+                {t('ხარჯი', 'Expense')}
               </button>
               <button 
                 type="button" 
@@ -196,14 +228,14 @@ export const Finance = () => {
                   transition: 'all 0.2s'
                 }}
               >
-                შემოსავალი
+                {t('შემოსავალი', 'Income')}
               </button>
             </div>
 
             {/* Inputs */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div className="form-group">
-                <label className="form-label">თანხა (₾)</label>
+                <label className="form-label">{t('თანხა (₾)', 'Amount (₾)')}</label>
                 <input 
                   type="number" 
                   className="form-input" 
@@ -215,17 +247,17 @@ export const Finance = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">კატეგორია</label>
+                <label className="form-label">{t('კატეგორია', 'Category')}</label>
                 <select className="form-select" value={category} onChange={e => setCategory(e.target.value)}>
                   {type === 'income' 
-                    ? incomeCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)
-                    : expenseCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)
+                    ? incomeCategories.map(cat => <option key={cat} value={cat}>{translateFinanceCategory(cat)}</option>)
+                    : expenseCategories.map(cat => <option key={cat} value={cat}>{translateFinanceCategory(cat)}</option>)
                   }
                 </select>
               </div>
 
               <div className="form-group">
-                <label className="form-label">თარიღი</label>
+                <label className="form-label">{t('თარიღი', 'Date')}</label>
                 <input 
                   type="date" 
                   className="form-input" 
@@ -236,11 +268,11 @@ export const Finance = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">კომენტარი</label>
+                <label className="form-label">{t('კომენტარი', 'Comment')}</label>
                 <input 
                   type="text" 
                   className="form-input" 
-                  placeholder="შენიშვნა..." 
+                  placeholder={t("შენიშვნა...", "Note...")} 
                   value={note} 
                   onChange={e => setNote(e.target.value)} 
                 />
@@ -253,14 +285,14 @@ export const Finance = () => {
               style={{ width: '100%', marginTop: '0.5rem', background: type === 'income' ? 'hsl(var(--accent-emerald))' : 'hsl(var(--primary))' }}
             >
               <Plus size={16} />
-              <span>ტრანზაქციის დამატება</span>
+              <span>{t('ტრანზაქციის დამატება', 'Add Transaction')}</span>
             </button>
           </form>
         </GlassCard>
 
         {/* Expense Category Chart */}
         <GlassCard style={{ display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>ხარჯების ანალიზი</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>{t('ხარჯების ანალიზი', 'Expense Analysis')}</h3>
           
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '220px' }}>
             {pieChartData.length > 0 ? (
@@ -299,7 +331,7 @@ export const Finance = () => {
               </ResponsiveContainer>
             ) : (
               <div style={{ color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
-                არ არის ხარჯების მონაცემები
+                {t('არ არის ხარჯების მონაცემები', 'No expense data available')}
               </div>
             )}
           </div>
@@ -309,7 +341,7 @@ export const Finance = () => {
       {/* Ledger list */}
       <section>
         <GlassCard style={{ padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>ტრანზაქციების ისტორია ({transactions.length})</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>{t('ტრანზაქციების ისტორია', 'Transactions History')} ({transactions.length})</h3>
           
           {transactions.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -341,11 +373,11 @@ export const Finance = () => {
                       </div>
                       
                       <div>
-                        <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{tx.note}</div>
+                        <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{translateFinanceCategory(tx.note)}</div>
                         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.15rem' }}>
                           <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-secondary))', display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
                             <Tag size={10} />
-                            {tx.category}
+                            {translateFinanceCategory(tx.category)}
                           </span>
                           <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))', display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
                             <Calendar size={10} />
@@ -376,7 +408,7 @@ export const Finance = () => {
             </div>
           ) : (
             <div style={{ padding: '3rem 1rem', textAlign: 'center', color: 'hsl(var(--text-muted))' }}>
-              ტრანზაქციები ვერ მოიძებნა.
+              {t('ტრანზაქციები ვერ მოიძებნა.', 'No transactions found.')}
             </div>
           )}
         </GlassCard>

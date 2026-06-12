@@ -15,41 +15,48 @@ import { Settings } from './pages/Settings';
 
 function App() {
   const [activePage, setActivePage] = useState('dashboard');
+  const [language, setLanguage] = useState(localStorage.getItem('gonze_lang') || 'en');
+
+  const handleSetLanguage = (lang) => {
+    setLanguage(lang);
+    localStorage.setItem('gonze_lang', lang);
+  };
 
   const renderPage = () => {
+    const pageProps = { language, setActivePage };
     switch (activePage) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard {...pageProps} />;
       case 'planner':
-        return <Planner setActivePage={setActivePage} />;
+        return <Planner {...pageProps} />;
       case 'tasks':
-        return <Tasks />;
+        return <Tasks {...pageProps} />;
       case 'habits':
-        return <Habits />;
+        return <Habits {...pageProps} />;
       case 'weekly':
-        return <Weekly />;
+        return <Weekly {...pageProps} />;
       case 'calendar':
-        return <CalendarPage />;
+        return <CalendarPage {...pageProps} />;
       case 'meetings':
-        return <Meetings />;
+        return <Meetings {...pageProps} />;
       case 'finance':
-        return <Finance />;
+        return <Finance {...pageProps} />;
       case 'finance_analyzer':
-        return <FinanceAnalyzer />;
+        return <FinanceAnalyzer {...pageProps} />;
       case 'google_integrations':
-        return <GoogleIntegrations />;
+        return <GoogleIntegrations {...pageProps} />;
       case 'insights':
-        return <Insights />;
+        return <Insights {...pageProps} />;
       case 'settings':
-        return <Settings />;
+        return <Settings {...pageProps} handleSetLanguage={handleSetLanguage} />;
       default:
-        return <Dashboard />;
+        return <Dashboard {...pageProps} />;
     }
   };
 
   return (
     <div className="app-layout">
-      <Navbar activePage={activePage} setActivePage={setActivePage} />
+      <Navbar activePage={activePage} setActivePage={setActivePage} language={language} setLanguage={handleSetLanguage} />
       <main className="main-content">
         {renderPage()}
       </main>

@@ -5,7 +5,8 @@ import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
-export const Habits = () => {
+export const Habits = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [habitsList, setHabitsList] = useState([]);
   const [habitHistory, setHabitHistory] = useState({});
 
@@ -18,11 +19,11 @@ export const Habits = () => {
   const currentYear = 2026;
   const currentMonthIdx = 5; // June (0-indexed)
   const monthDaysCount = 30;
-  const monthName = "ივნისი";
+  const monthName = t("ივნისი", "June");
 
   useEffect(() => {
     const data = db.getHabits();
-    setHabitsList(data.list);
+    setHabitsList(data.list || []);
     setHabitHistory(data.history || {});
   }, []);
 
@@ -67,10 +68,12 @@ export const Habits = () => {
 
   // Delete habit
   const handleDeleteHabit = (habitId) => {
-    const updatedList = habitsList.filter(h => h.id !== habitId);
-    const updatedHistory = { ...habitHistory };
-    delete updatedHistory[habitId];
-    updateHabitsState(updatedList, updatedHistory);
+    if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ ჩვევის წაშლა?", "Are you sure you want to delete this habit?"))) {
+      const updatedList = habitsList.filter(h => h.id !== habitId);
+      const updatedHistory = { ...habitHistory };
+      delete updatedHistory[habitId];
+      updateHabitsState(updatedList, updatedHistory);
+    }
   };
 
   // Generate date strings for June 1-30, 2026
@@ -79,7 +82,7 @@ export const Habits = () => {
     for (let d = 1; d <= monthDaysCount; d++) {
       const dateStr = `${currentYear}-06-${String(d).padStart(2, '0')}`;
       const dayObj = new Date(currentYear, currentMonthIdx, d);
-      const dayName = dayObj.toLocaleDateString('ka-GE', { weekday: 'short' });
+      const dayName = dayObj.toLocaleDateString(language === 'ka' ? 'ka-GE' : 'en-US', { weekday: 'short' });
       dates.push({ dateStr, label: `${dayName} ${d}`, dayNum: d });
     }
     return dates;
@@ -94,13 +97,23 @@ export const Habits = () => {
       const d = new Date(currentYear, currentMonthIdx, 7);
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().split('T')[0];
-      const label = d.toLocaleDateString('ka-GE', { weekday: 'short' }) + ' ' + d.getDate();
+      const label = d.toLocaleDateString(language === 'ka' ? 'ka-GE' : 'en-US', { weekday: 'short' }) + ' ' + d.getDate();
       dates.push({ dateStr, label });
     }
     return dates;
   };
 
   const past7Days = getPast7Days();
+
+  const translateCategory = (cat) => {
+    if (language === 'ka') return cat;
+    if (cat.includes('ჯანმრთელობა')) return 'Health 💪';
+    if (cat.includes('განვითარება')) return 'Development 📖';
+    if (cat.includes('პირადი')) return 'Personal 🗓️';
+    if (cat.includes('ფინანსები')) return 'Finance 💰';
+    if (cat.includes('სამსახური')) return 'Work 🎯';
+    return cat;
+  };
 
   // Calculations for charts
   const getHabitCompletionStats = (habitId) => {
@@ -131,44 +144,44 @@ export const Habits = () => {
     <div className="habits-page">
       <header className="page-header" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>ჩვევები</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>ჩამოაყალიბეთ სასარგებლო ჩვევები ყოველდღიური თვალყურის დევნებით</p>
+          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ჩვევები', 'Habits')}</h1>
+          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('ჩამოაყალიბეთ სასარგებლო ჩვევები ყოველდღიური თვალყურის დევნებით', 'Form good habits with daily tracking')}</p>
         </div>
         <button 
           onClick={() => setIsAdding(!isAdding)} 
           className="btn btn-primary"
         >
-          {isAdding ? 'გაუქმება' : 'ჩვევის დამატება'}
+          {isAdding ? t('გაუქმება', 'Cancel') : t('ჩვევის დამატება', 'Add Habit')}
         </button>
       </header>
 
       {/* Add Habit Card */}
       {isAdding && (
         <GlassCard style={{ marginBottom: '2rem' }}>
-          <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem', fontWeight: 700 }}>ახალი ჩვევის დამატება</h3>
+          <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem', fontWeight: 700 }}>{t('ახალი ჩვევის დამატება', 'Add New Habit')}</h3>
           <form onSubmit={handleAddHabit} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div className="form-group" style={{ flex: 2, minWidth: '200px', marginBottom: 0 }}>
-              <label className="form-label">ჩვევის სახელი (მაგ. ვარჯიში 💪)</label>
+              <label className="form-label">{t('ჩვევის სახელი (მაგ. ვარჯიში 💪)', 'Habit Name (e.g. Exercise 💪)')}</label>
               <input 
                 type="text" 
                 className="form-input" 
-                placeholder="შეიყვანეთ ჩვევა..." 
+                placeholder={t("შეიყვანეთ ჩვევა...", "Enter habit name...")} 
                 value={newHabitName} 
                 onChange={e => setNewHabitName(e.target.value)} 
                 required 
               />
             </div>
             <div className="form-group" style={{ flex: 1, minWidth: '150px', marginBottom: 0 }}>
-              <label className="form-label">კატეგორია</label>
+              <label className="form-label">{t('კატეგორია', 'Category')}</label>
               <select className="form-select" value={newHabitCategory} onChange={e => setNewHabitCategory(e.target.value)}>
-                <option value="ჯანმრთელობა 💪">ჯანმრთელობა 💪</option>
-                <option value="განვითარება 📖">განვითარება 📖</option>
-                <option value="პირადი 🗓️">პირადი 🗓️</option>
-                <option value="ფინანსები 💰">ფინანსები 💰</option>
-                <option value="სამსახური 🎯">სამსახური 🎯</option>
+                <option value="ჯანმრთელობა 💪">{t("ჯანმრთელობა 💪", "Health 💪")}</option>
+                <option value="განვითარება 📖">{t("განვითარება 📖", "Development 📖")}</option>
+                <option value="პირადი 🗓️">{t("პირადი 🗓️", "Personal 🗓️")}</option>
+                <option value="ფინანსები 💰">{t("ფინანსები 💰", "Finance 💰")}</option>
+                <option value="სამსახური 🎯">{t("სამსახური 🎯", "Work 🎯")}</option>
               </select>
             </div>
-            <button type="submit" className="btn btn-primary">დამატება</button>
+            <button type="submit" className="btn btn-primary">{t('დამატება', 'Add')}</button>
           </form>
         </GlassCard>
       )}
@@ -177,7 +190,7 @@ export const Habits = () => {
       {habitsList.length > 0 && (
         <section style={{ marginBottom: '2.5rem' }}>
           <GlassCard style={{ minHeight: '260px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>ჩვევების პროგრესი ივნისში (%)</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>{t('ჩვევების პროგრესი ივნისში (%)', 'Habits Progress in June (%)')}</h3>
             <div style={{ width: '100%', height: '200px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
@@ -207,7 +220,7 @@ export const Habits = () => {
       {/* Main Layout: List of habits & Quick checks */}
       <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <Calendar size={18} style={{ color: 'hsl(var(--primary))' }} />
-        <span>კვირის სწრაფი პანელი (ბოლო 7 დღე)</span>
+        <span>{t('კვირის სწრაფი პანელი (ბოლო 7 დღე)', 'Weekly Quick Panel (Last 7 Days)')}</span>
       </h3>
 
       <section style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem', marginBottom: '2.5rem' }}>
@@ -232,7 +245,7 @@ export const Habits = () => {
                     <span style={{ fontSize: '1.25rem' }}>🏆</span>
                     <div>
                       <h4 style={{ fontSize: '1rem', fontWeight: 700 }}>{habit.name}</h4>
-                      <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>{habit.category}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>{translateCategory(habit.category)}</span>
                     </div>
                   </div>
                 </div>
@@ -304,7 +317,7 @@ export const Habits = () => {
           })
         ) : (
           <GlassCard style={{ padding: '3rem 1rem', textAlign: 'center', color: 'hsl(var(--text-muted))' }}>
-            ჯერ ჩვევები არ დამატებულა. ჩაამატეთ ზედა ღილაკით!
+            {t("ჯერ ჩვევები არ დამატებულა. ჩაამატეთ ზედა ღილაკით!", "No habits added yet. Add some using the button above!")}
           </GlassCard>
         )}
       </section>
@@ -314,7 +327,7 @@ export const Habits = () => {
         <section>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Calendar size={18} style={{ color: 'hsl(var(--accent-blue))' }} />
-            <span>ივნისის ყოველთვიური მატრიცა ({monthName} 2026)</span>
+            <span>{t(`ივნისის ყოველთვიური მატრიცა (${monthName} 2026)`, `June Monthly Matrix (${monthName} 2026)`)}</span>
           </h3>
           
           <GlassCard style={{ padding: 0, overflow: 'hidden' }}>
@@ -322,7 +335,7 @@ export const Habits = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border-light)', background: 'rgba(255, 255, 255, 0.02)' }}>
-                    <th style={{ padding: '1rem', textAlign: 'left', minWidth: '180px', position: 'sticky', left: 0, background: 'hsl(var(--bg-surface))', borderRight: '1px solid var(--border-light)' }}>ჩვევა</th>
+                    <th style={{ padding: '1rem', textAlign: 'left', minWidth: '180px', position: 'sticky', left: 0, background: 'hsl(var(--bg-surface))', borderRight: '1px solid var(--border-light)' }}>{t('ჩვევა', 'Habit')}</th>
                     {juneDates.map(d => (
                       <th key={d.dateStr} style={{ padding: '0.5rem', textAlign: 'center', minWidth: '50px', fontWeight: 500, color: 'hsl(var(--text-secondary))' }}>
                         {d.label}

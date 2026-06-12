@@ -16,7 +16,8 @@ import {
   UserPlus
 } from 'lucide-react';
 
-export const Meetings = () => {
+export const Meetings = ({ language }) => {
+  const t = (ka, en) => (language === 'ka' ? ka : en);
   const [meetings, setMeetings] = useState([]);
   const [integrations, setIntegrations] = useState({ connected: false });
   
@@ -37,7 +38,7 @@ export const Meetings = () => {
   const [successMsg, setSuccessMsg] = useState('');
 
   useEffect(() => {
-    setMeetings(db.getMeetings());
+    setMeetings(db.getMeetings() || []);
     setIntegrations(db.getIntegrations());
   }, []);
 
@@ -53,7 +54,7 @@ export const Meetings = () => {
       // Map current meetings to calendar events
       const meetingEvents = updated.map(m => ({
         id: `cal-m-${m.id}`,
-        title: `შეხვედრა: ${m.title}`,
+        title: `${language === 'ka' ? 'შეხვედრა: ' : 'Meeting: '}${m.title}`,
         description: m.description,
         date: m.date,
         time: m.time,
@@ -71,7 +72,7 @@ export const Meetings = () => {
     if (!email) return;
     // Simple email regex check
     if (!/\S+@\S+\.\S+/.test(email)) {
-      alert("გთხოვთ შეიყვანოთ სწორი ელ-ფოსტის მისამართი.");
+      alert(t("გთხოვთ შეიყვანოთ სწორი ელ-ფოსტის მისამართი.", "Please enter a valid email address."));
       return;
     }
     if (participants.includes(email)) return;
@@ -130,9 +131,9 @@ export const Meetings = () => {
       setParticipantInput('');
       setLoading(false);
 
-      let feedback = "შეხვედრა წარმატებით შეიქმნა!";
-      if (meetLink) feedback += " Google Meet ბმული დაგენერირდა.";
-      if (isGmailSent) feedback += " მოწვევები გაიგზავნა Gmail-ით.";
+      let feedback = t("შეხვედრა წარმატებით შეიქმნა!", "Meeting created successfully!");
+      if (meetLink) feedback += t(" Google Meet ბმული დაგენერირდა.", " Google Meet link generated.");
+      if (isGmailSent) feedback += t(" მოწვევები გაიგზავნა Gmail-ით.", " Invitations sent via Gmail.");
       
       setSuccessMsg(feedback);
       setTimeout(() => setSuccessMsg(''), 4000);
@@ -140,7 +141,7 @@ export const Meetings = () => {
   };
 
   const handleDeleteMeeting = (id) => {
-    if (window.confirm("დარწმუნებული ხართ, რომ გსურთ შეხვედრის წაშლა?")) {
+    if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ შეხვედრის წაშლა?", "Are you sure you want to delete this meeting?"))) {
       const updated = meetings.filter(m => m.id !== id);
       saveMeetings(updated);
     }
@@ -149,8 +150,8 @@ export const Meetings = () => {
   return (
     <div className="meetings-page">
       <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>შეხვედრები & Google Meet</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>დაგეგმეთ შეხვედრები, დააგენერირეთ Google Meet ბმულები და გაუგზავნეთ მოწვევები მონაწილეებს</p>
+        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('შეხვედრები & Google Meet', 'Meetings & Google Meet')}</h1>
+        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დაგეგმეთ შეხვედრები, დააგენერირეთ Google Meet ბმულები და გაუგზავნეთ მოწვევები მონაწილეებს', 'Schedule meetings, generate Google Meet links, and send invitations to participants')}</p>
       </header>
 
       {successMsg && (
@@ -188,9 +189,9 @@ export const Meetings = () => {
         }}>
           <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
           <div>
-            <strong>Google ანგარიში არ არის დაკავშირებული!</strong>
+            <strong>{t('Google ანგარიში არ არის დაკავშირებული!', 'Google account is not connected!')}</strong>
             <p style={{ marginTop: '0.25rem', color: 'rgba(245, 158, 11, 0.8)' }}>
-              ავტომატური Google Meet ბმულების შესაქმნელად და მონაწილეებისთვის მოწვევების გასაგზავნად, ჯერ დააკავშირეთ თქვენი Google ანგარიში **Google ინტეგრაციის** გვერდიდან. ახლა შეხვედრები შეიქმნება ლოკალურად.
+              {t("ავტომატური Google Meet ბმულების შესაქმნელად და მონაწილეებისთვის მოწვევების გასაგზავნად, ჯერ დააკავშირეთ თქვენი Google ანგარიში **Google ინტეგრაციის** გვერდიდან. ახლა შეხვედრები შეიქმნება ლოკალურად.", "To automatically generate Google Meet links and send invitations to participants, please connect your Google account from the **Google Integration** page first. For now, meetings will be created locally.")}
             </p>
           </div>
         </div>
@@ -201,16 +202,16 @@ export const Meetings = () => {
         <GlassCard>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Plus size={20} style={{ color: 'hsl(var(--primary))' }} />
-            შეხვედრის დაგეგმვა
+            {t('შეხვედრის დაგეგმვა', 'Schedule Meeting')}
           </h3>
 
           <form onSubmit={handleCreateMeeting} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">სათაური</label>
+              <label className="form-label">{t('სათაური', 'Title')}</label>
               <input 
                 type="text" 
                 className="form-input" 
-                placeholder="მაგ: პროექტის განხილვა" 
+                placeholder={t("მაგ: პროექტის განხილვა", "e.g. Project Discussion")} 
                 value={title} 
                 onChange={e => setTitle(e.target.value)} 
                 required 
@@ -218,10 +219,10 @@ export const Meetings = () => {
             </div>
 
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">აღწერა (Description)</label>
+              <label className="form-label">{t('აღწერა (Description)', 'Description')}</label>
               <textarea 
                 className="form-textarea" 
-                placeholder="შეხვედრის დღის წესრიგი..." 
+                placeholder={t("შეხვედრის დღის წესრიგი...", "Meeting agenda...")} 
                 rows="3"
                 value={description} 
                 onChange={e => setDescription(e.target.value)} 
@@ -230,7 +231,7 @@ export const Meetings = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">თარიღი</label>
+                <label className="form-label">{t('თარიღი', 'Date')}</label>
                 <input 
                   type="date" 
                   className="form-input" 
@@ -241,7 +242,7 @@ export const Meetings = () => {
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">დრო</label>
+                <label className="form-label">{t('დრო', 'Time')}</label>
                 <input 
                   type="time" 
                   className="form-input" 
@@ -254,7 +255,7 @@ export const Meetings = () => {
 
             {/* Participants manager */}
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">მონაწილეები (ელ-ფოსტა)</label>
+              <label className="form-label">{t('მონაწილეები (ელ-ფოსტა)', 'Participants (Email)')}</label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <input 
                   type="email" 
@@ -363,7 +364,7 @@ export const Meetings = () => {
               style={{ width: '100%', padding: '0.75rem', marginTop: '0.5rem' }}
             >
               <Video size={16} />
-              <span>{loading ? 'მიმდინარეობს შექმნა...' : 'შეხვედრის დაგეგმვა'}</span>
+              <span>{loading ? t('მიმდინარეობს შექმნა...', 'Creating...') : t('შეხვედრის დაგეგმვა', 'Schedule Meeting')}</span>
             </button>
           </form>
         </GlassCard>
@@ -372,7 +373,7 @@ export const Meetings = () => {
         <GlassCard style={{ display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Users size={20} style={{ color: 'hsl(var(--accent-blue))' }} />
-            დაგეგმილი შეხვედრები ({meetings.length})
+            {t('დაგეგმილი შეხვედრები', 'Scheduled Meetings')} ({meetings.length})
           </h3>
 
           {meetings.length > 0 ? (
@@ -428,7 +429,7 @@ export const Meetings = () => {
                   {meeting.participants && meeting.participants.length > 0 && (
                     <div style={{ marginBottom: '1rem' }}>
                       <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'hsl(var(--text-secondary))', display: 'block', marginBottom: '0.25rem' }}>
-                        მონაწილეები ({meeting.participants.length}):
+                        {t('მონაწილეები (', 'Participants (')}{meeting.participants.length}):
                       </span>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
                         {meeting.participants.map(p => (
@@ -443,13 +444,13 @@ export const Meetings = () => {
                   {/* Integration Status Flags */}
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                     {meeting.googleSynced && (
-                      <span style={{ fontSize: '0.65rem', padding: '0.2rem 0.4rem', borderRadius: '4px', background: 'rgba(139, 92, 246, 0.1)', color: 'hsl(var(--primary-hover))', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
+                      <span style={{ fontSize: '0.65rem', padding: '0.2rem 0.4rem', borderRadius: '4px', background: 'rgba(139, 92, 246, 0.1)', color: 'hsl(var(--primary-hover))', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.2' }}>
                         <CheckCircle2 size={10} />
                         Calendar Synced
                       </span>
                     )}
                     {meeting.gmailSent && (
-                      <span style={{ fontSize: '0.65rem', padding: '0.2rem 0.4rem', borderRadius: '4px', background: 'rgba(14, 165, 233, 0.1)', color: 'hsl(var(--accent-blue))', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
+                      <span style={{ fontSize: '0.65rem', padding: '0.2rem 0.4rem', borderRadius: '4px', background: 'rgba(14, 165, 233, 0.1)', color: 'hsl(var(--accent-blue))', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.2' }}>
                         <Mail size={10} />
                         Invites Sent
                       </span>
@@ -474,7 +475,7 @@ export const Meetings = () => {
                       }}
                     >
                       <Video size={14} />
-                      <span>Google Meet-ზე შესვლა</span>
+                      <span>{t('Google Meet-ზე შესვლა', 'Join Google Meet')}</span>
                       <ExternalLink size={12} />
                     </a>
                   ) : (
@@ -487,7 +488,7 @@ export const Meetings = () => {
                       textAlign: 'center',
                       border: '1px dashed var(--border-light)' 
                     }}>
-                      შეხვედრის ონლაინ ბმული არ არის დაგენერირებული
+                      {t('შეხვედრის ონლაინ ბმული არ არის დაგენერირებული', 'Online meeting link is not generated')}
                     </div>
                   )}
                 </div>
@@ -495,7 +496,7 @@ export const Meetings = () => {
             </div>
           ) : (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 1rem', color: 'hsl(var(--text-muted))' }}>
-              დაგეგმილი შეხვედრები არ მოიძებნა.
+              {t('დაგეგმილი შეხვედრები არ მოიძებნა.', 'No scheduled meetings found.')}
             </div>
           )}
         </GlassCard>
