@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../utils/db';
+import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
 import { 
   Globe, 
@@ -32,7 +33,17 @@ export const GoogleIntegrations = ({ language }) => {
 
   useEffect(() => {
     setIntegrations(db.getIntegrations());
-  }, []);
+
+    const handleAuthSuccess = () => {
+      const updated = db.getIntegrations();
+      setIntegrations(updated);
+      setSuccessMessage(t("Google-ის ანგარიში წარმატებით დაუკავშირდა!", "Google account connected successfully!"));
+      setTimeout(() => setSuccessMessage(''), 4000);
+    };
+
+    window.addEventListener('google-auth-success', handleAuthSuccess);
+    return () => window.removeEventListener('google-auth-success', handleAuthSuccess);
+  }, [language]);
 
   const saveState = (updated) => {
     setIntegrations(updated);
@@ -55,45 +66,45 @@ export const GoogleIntegrations = ({ language }) => {
     saveState({ ...integrations, demoMode: !integrations.demoMode });
   };
 
-  const handleConnect = () => {
+  const handleConnect = async () => {
     if (!integrations.demoMode && (!integrations.clientId || !integrations.apiKey)) {
       alert(t("გთხოვთ შეიყვანოთ Client ID და API Key რეალურ რეჟიმში დასაკავშირებლად.", "Please enter Client ID and API Key to connect in production mode."));
       return;
     }
     setLoading(true);
-    setTimeout(() => {
+    try {
+      if (integrations.demoMode) {
+        setLoading(false);
+        setShowConsentModal(true);
+      } else {
+        await googleService.connect();
+        setLoading(false);
+      }
+    } catch (err) {
+      alert(err.message || 'Connection failed.');
       setLoading(false);
-      setShowConsentModal(true);
-    }, 1200);
+    }
   };
 
-  const handleApproveConsent = () => {
-    setLoading(true);
+  const handleApproveConsent = async () => {
     setShowConsentModal(false);
-    setTimeout(() => {
-      setLoading(false);
-      const mockProfile = {
-        name: t("ნიკოლოზ კაპანაძე", "Nikoloz Kapanadze"),
-        email: "ninekapanadze@gmail.com",
-        avatar: "https://lh3.googleusercontent.com/a/ACg8ocLz3J-W9" // mock profile picture
-      };
-      saveState({
-        ...integrations,
-        connected: true,
-        profile: mockProfile
-      });
+    setLoading(true);
+    try {
+      const updated = await googleService.connect();
+      setIntegrations(updated);
       setSuccessMessage(t("Google-ის ანგარიში წარმატებით დაუკავშირდა!", "Google account connected successfully!"));
       setTimeout(() => setSuccessMessage(''), 4000);
-    }, 1000);
+    } catch (err) {
+      alert(err.message || 'Connection failed.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
     if (window.confirm(t("დარწმუნებული ხართ, რომ გსურთ კავშირის გაწყვეტა?", "Are you sure you want to disconnect?"))) {
-      saveState({
-        ...integrations,
-        connected: false,
-        profile: null
-      });
+      const updated = await googleService.disconnect();
+      setIntegrations(updated);
       setSuccessMessage(t("კავშირი გაწყვეტილია.", "Connection disconnected."));
       setTimeout(() => setSuccessMessage(''), 3000);
     }

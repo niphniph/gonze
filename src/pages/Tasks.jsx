@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit2, Check, X, Filter, BarChart2 } from 'lucide-react';
+import { Plus, Trash2, Edit2, Check, X, Filter, BarChart2, Video, Mail, UserPlus } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie, Legend } from 'recharts';
 import { db } from '../utils/db';
+import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
@@ -19,6 +20,15 @@ export const Tasks = ({ language }) => {
   const [priority, setPriority] = useState('🔴 მაღალი');
   const [status, setStatus] = useState('⚠️ არ დაგიწყია');
   const [comment, setComment] = useState('');
+
+  // Google Integration states
+  const [integrations, setIntegrations] = useState({ connected: false });
+  const [syncToCalendar, setSyncToCalendar] = useState(false);
+  const [createMeetLink, setCreateMeetLink] = useState(false);
+  const [sendGmailInvites, setSendGmailInvites] = useState(false);
+  const [participants, setParticipants] = useState([]);
+  const [participantInput, setParticipantInput] = useState('');
+  const [syncLoading, setSyncLoading] = useState(false);
 
   // Filters
   const [filterCategory, setFilterCategory] = useState('All');
@@ -88,6 +98,7 @@ export const Tasks = ({ language }) => {
   // Load tasks on mount
   useEffect(() => {
     setTasks(db.getTasks());
+    setIntegrations(db.getIntegrations());
   }, []);
 
   // Sync tasks to local storage
@@ -112,10 +123,70 @@ export const Tasks = ({ language }) => {
     updateTasksState(updated);
   };
 
+  const handleAddParticipant = () => {
+    const email = participantInput.trim();
+    if (!email) return;
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert(t("გთხოვთ შეიყვანოთ სწორი ელ-ფოსტის მისამართი.", "Please enter a valid email address."));
+      return;
+    }
+    if (participants.includes(email)) return;
+    setParticipants([...participants, email]);
+    setParticipantInput('');
+  };
+
+  const handleRemoveParticipant = (email) => {
+    setParticipants(participants.filter(p => p !== email));
+  };
+
   // Add task
-  const handleAddTask = (e) => {
+  const handleAddTask = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
+
+    setSyncLoading(true);
+    let meetLink = "";
+    let isSynced = false;
+    let googleEventId = "";
+
+    if (integrations.connected && syncToCalendar) {
+      try {
+        const res = await googleService.createCalendarEvent({
+          title: name.trim(),
+          description: comment.trim(),
+          date,
+          time: "12:00",
+          attendees: participants
+        });
+        if (res.success) {
+          meetLink = res.meetLink;
+          googleEventId = res.id;
+          isSynced = true;
+
+          if (sendGmailInvites && participants.length > 0) {
+            const subject = `${t('დავალების მოწვევა: ', 'Task Invitation: ')}${name.trim()}`;
+            const body = `
+              <div style="font-family: sans-serif; padding: 20px; color: #111;">
+                <h2>${name.trim()}</h2>
+                <p><strong>${t('კატეგორია:', 'Category:')}</strong> ${translateCategory(category)}</p>
+                <p>${comment.trim() || t('დამატებითი აღწერის გარეშე.', 'No additional description.')}</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
+                ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <small style="color: #666;">Sent automatically via Gonze Productivity Tracker</small>
+              </div>
+            `;
+            await Promise.all(
+              participants.map(email => googleService.sendGmailInvitation({ to: email, subject, body }))
+            );
+          }
+        }
+      } catch (err) {
+        console.error("Google Calendar / Gmail error for task:", err);
+        alert(t("Google კალენდართან სინქრონიზაციის შეცდომა: ", "Google Calendar sync error: ") + err.message);
+      }
+    }
 
     const newTask = {
       id: `task-${Date.now()}`,
@@ -125,10 +196,15 @@ export const Tasks = ({ language }) => {
       priority,
       status,
       completed: status === '✅ შესრულებული',
-      comment
+      comment,
+      meetLink,
+      googleEventId,
+      googleSynced: isSynced,
+      participants
     };
 
     updateTasksState([newTask, ...tasks]);
+    setSyncLoading(false);
     resetForm();
   };
 
@@ -141,12 +217,63 @@ export const Tasks = ({ language }) => {
     setPriority(task.priority);
     setStatus(task.status);
     setComment(task.comment || '');
+    setSyncToCalendar(task.googleSynced || false);
+    setParticipants(task.participants || []);
     setIsAdding(true); // open form
   };
 
-  const handleSaveEdit = (e) => {
+  const handleSaveEdit = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
+
+    setSyncLoading(true);
+    let meetLink = "";
+    let isSynced = false;
+    let googleEventId = "";
+
+    const existingTask = tasks.find(t => t.id === editingId);
+    meetLink = existingTask?.meetLink || "";
+    googleEventId = existingTask?.googleEventId || "";
+    isSynced = existingTask?.googleSynced || false;
+
+    if (integrations.connected && syncToCalendar && !isSynced) {
+      try {
+        const res = await googleService.createCalendarEvent({
+          title: name.trim(),
+          description: comment.trim(),
+          date,
+          time: "12:00",
+          attendees: participants
+        });
+        if (res.success) {
+          meetLink = res.meetLink;
+          googleEventId = res.id;
+          isSynced = true;
+
+          if (sendGmailInvites && participants.length > 0) {
+            const subject = `${t('დავალების მოწვევა: ', 'Task Invitation: ')}${name.trim()}`;
+            const body = `
+              <div style="font-family: sans-serif; padding: 20px; color: #111;">
+                <h2>${name.trim()}</h2>
+                <p><strong>${t('კატეგორია:', 'Category:')}</strong> ${translateCategory(category)}</p>
+                <p>${comment.trim() || t('დამატებითი აღწერის გარეშე.', 'No additional description.')}</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
+                ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <small style="color: #666;">Sent automatically via Gonze Productivity Tracker</small>
+              </div>
+            `;
+            await Promise.all(
+              participants.map(email => googleService.sendGmailInvitation({ to: email, subject, body }))
+            );
+          }
+        }
+      } catch (err) {
+        console.error("Google Calendar error for task edit:", err);
+        alert(t("Google კალენდართან სინქრონიზაციის შეცდომა: ", "Google Calendar sync error: ") + err.message);
+      }
+    }
 
     const updated = tasks.map(task => {
       if (task.id === editingId) {
@@ -158,13 +285,18 @@ export const Tasks = ({ language }) => {
           priority,
           status,
           completed: status === '✅ შესრულებული',
-          comment
+          comment,
+          meetLink,
+          googleEventId,
+          googleSynced: isSynced,
+          participants: participants.length > 0 ? participants : task.participants
         };
       }
       return task;
     });
 
     updateTasksState(updated);
+    setSyncLoading(false);
     resetForm();
   };
 
@@ -183,6 +315,13 @@ export const Tasks = ({ language }) => {
     setComment('');
     setEditingId(null);
     setIsAdding(false);
+    
+    // Reset Google form states
+    setSyncToCalendar(false);
+    setCreateMeetLink(false);
+    setSendGmailInvites(false);
+    setParticipants([]);
+    setParticipantInput('');
   };
 
   // Filter tasks
@@ -316,9 +455,111 @@ export const Tasks = ({ language }) => {
                 onChange={e => setComment(e.target.value)} 
               />
             </div>
+
+            {/* Google Integration options if connected */}
+            {integrations.connected && (
+              <div style={{ 
+                background: 'rgba(139, 92, 246, 0.03)', 
+                border: '1px solid rgba(139, 92, 246, 0.1)', 
+                borderRadius: '10px', 
+                padding: '1rem',
+                marginTop: '1rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem'
+              }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--primary-hover))', marginBottom: '0.25rem' }}>
+                  Smart Google Automation
+                </div>
+                
+                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={syncToCalendar} 
+                      onChange={e => setSyncToCalendar(e.target.checked)}
+                      style={{ accentColor: 'hsl(var(--primary))' }}
+                    />
+                    <span>Create Google Calendar Event</span>
+                  </label>
+
+                  {syncToCalendar && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={sendGmailInvites} 
+                        onChange={e => setSendGmailInvites(e.target.checked)}
+                        style={{ accentColor: 'hsl(var(--primary))' }}
+                      />
+                      <span>Send Email Invitation (via Gmail)</span>
+                    </label>
+                  )}
+                </div>
+
+                {/* Participants list for task */}
+                {syncToCalendar && sendGmailInvites && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.25rem' }}>
+                    <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: 0 }}>
+                      {t('მოწვეული მონაწილეები', 'Invited Participants (Email)')}
+                    </label>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <input 
+                        type="email" 
+                        className="form-input" 
+                        placeholder="invitee@example.com" 
+                        value={participantInput} 
+                        onChange={e => setParticipantInput(e.target.value)} 
+                        onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddParticipant())}
+                        style={{ padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
+                      />
+                      <button 
+                        type="button" 
+                        onClick={handleAddParticipant} 
+                        className="btn btn-secondary" 
+                        style={{ padding: '0.4rem 0.6rem' }}
+                      >
+                        <UserPlus size={14} />
+                      </button>
+                    </div>
+
+                    {participants.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.25rem' }}>
+                        {participants.map(p => (
+                          <span 
+                            key={p} 
+                            style={{ 
+                              fontSize: '0.7rem', 
+                              background: 'rgba(255, 255, 255, 0.05)', 
+                              border: '1px solid var(--border-light)', 
+                              padding: '0.15rem 0.4rem', 
+                              borderRadius: '4px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.25rem'
+                            }}
+                          >
+                            {p}
+                            <button 
+                              type="button" 
+                              onClick={() => handleRemoveParticipant(p)}
+                              style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-rose))', fontSize: '0.65rem', padding: '0 0.1rem' }}
+                            >
+                              ✕
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.25rem' }}>
-              <button type="button" onClick={resetForm} className="btn btn-secondary">{t('გაუქმება', 'Cancel')}</button>
-              <button type="submit" className="btn btn-primary">{t('შენახვა', 'Save')}</button>
+              <button type="button" onClick={resetForm} className="btn btn-secondary" disabled={syncLoading}>{t('გაუქმება', 'Cancel')}</button>
+              <button type="submit" className="btn btn-primary" disabled={syncLoading}>
+                {syncLoading ? t('მიმდინარეობს სინქრონიზაცია...', 'Syncing...') : t('შენახვა', 'Save')}
+              </button>
             </div>
           </form>
         </GlassCard>
@@ -424,13 +665,51 @@ export const Tasks = ({ language }) => {
                             {task.comment}
                           </div>
                         )}
-                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.35rem', flexWrap: 'wrap', alignItems: 'center' }}>
                           <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.04)', color: 'hsl(var(--text-secondary))' }}>
                             {translateCategory(task.category)}
                           </span>
                           <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.04)', color: 'hsl(var(--text-muted))' }}>
                             {task.date}
                           </span>
+                          {task.googleSynced && (
+                            <span style={{ 
+                              fontSize: '0.65rem', 
+                              padding: '0.1rem 0.4rem', 
+                              borderRadius: '4px', 
+                              background: 'rgba(139, 92, 246, 0.1)', 
+                              color: 'hsl(var(--primary-hover))', 
+                              fontWeight: 600,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.2rem'
+                            }}>
+                              Google Synced
+                            </span>
+                          )}
+                          {task.meetLink && (
+                            <a 
+                              href={task.meetLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              style={{ 
+                                fontSize: '0.65rem', 
+                                padding: '0.1rem 0.4rem', 
+                                borderRadius: '4px', 
+                                background: 'rgba(14, 165, 233, 0.15)', 
+                                color: 'hsl(var(--accent-blue))', 
+                                fontWeight: 600,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.2rem',
+                                textDecoration: 'none'
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Video size={10} />
+                              Join Meet
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>

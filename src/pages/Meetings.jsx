@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../utils/db';
+import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
 import { 
   Video, 
@@ -84,28 +85,66 @@ export const Meetings = ({ language }) => {
     setParticipants(participants.filter(p => p !== email));
   };
 
-  const handleCreateMeeting = (e) => {
+  const handleCreateMeeting = async (e) => {
     e.preventDefault();
     if (!title) return;
 
     setLoading(true);
 
-    setTimeout(() => {
+    try {
       let meetLink = "";
       let isSynced = false;
       let isGmailSent = false;
+      let googleEventId = "";
 
-      // Handle Google integration features
+      // Handle Google integration features via googleService
       if (integrations.connected) {
-        if (createMeetLink) {
-          // Generate realistic google meet link hash
-          const hash1 = Math.random().toString(36).substring(2, 5);
-          const hash2 = Math.random().toString(36).substring(2, 6);
-          const hash3 = Math.random().toString(36).substring(2, 5);
-          meetLink = `https://meet.google.com/${hash1}-${hash2}-${hash3}`;
+        if (syncToCalendar) {
+          try {
+            const res = await googleService.createCalendarEvent({
+              title: title.trim(),
+              description: description.trim(),
+              date,
+              time,
+              attendees: participants
+            });
+            if (res.success) {
+              meetLink = res.meetLink;
+              googleEventId = res.id;
+              isSynced = true;
+            }
+          } catch (calError) {
+            console.error("Failed to sync calendar event:", calError);
+            alert(t("Google კალენდართან სინქრონიზაციის შეცდომა: ", "Google Calendar sync error: ") + calError.message);
+          }
         }
-        isSynced = syncToCalendar;
-        isGmailSent = sendGmailInvites && participants.length > 0;
+
+        if (isSynced && sendGmailInvites && participants.length > 0) {
+          try {
+            const subject = `${t('მოწვევა შეხვედრაზე: ', 'Meeting Invitation: ')}${title.trim()}`;
+            const body = `
+              <div style="font-family: sans-serif; padding: 20px; color: #111;">
+                <h2>${title.trim()}</h2>
+                <p>${description.trim() || t('დამატებითი აღწერის გარეშე.', 'No additional description.')}</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
+                <p><strong>${t('დრო:', 'Time:')}</strong> ${time}</p>
+                ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <small style="color: #666;">Sent automatically via Gonze Productivity Tracker</small>
+              </div>
+            `;
+            
+            // Send to all participants
+            await Promise.all(
+              participants.map(email => googleService.sendGmailInvitation({ to: email, subject, body }))
+            );
+            isGmailSent = true;
+          } catch (gmailError) {
+            console.error("Failed to send invitations via Gmail:", gmailError);
+            alert(t("Gmail-ით მოწვევის გაგზავნის შეცდომა: ", "Gmail invitation send error: ") + gmailError.message);
+          }
+        }
       }
 
       const newMeeting = {
@@ -116,6 +155,7 @@ export const Meetings = ({ language }) => {
         time,
         participants,
         meetLink,
+        googleEventId,
         googleSynced: isSynced,
         gmailSent: isGmailSent,
         createdAt: new Date().toISOString()
@@ -129,7 +169,6 @@ export const Meetings = ({ language }) => {
       setDescription('');
       setParticipants([]);
       setParticipantInput('');
-      setLoading(false);
 
       let feedback = t("შეხვედრა წარმატებით შეიქმნა!", "Meeting created successfully!");
       if (meetLink) feedback += t(" Google Meet ბმული დაგენერირდა.", " Google Meet link generated.");
@@ -137,7 +176,11 @@ export const Meetings = ({ language }) => {
       
       setSuccessMsg(feedback);
       setTimeout(() => setSuccessMsg(''), 4000);
-    }, 1000);
+    } catch (err) {
+      alert(t("შეხვედრის შექმნის შეცდომა: ", "Meeting creation error: ") + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteMeeting = (id) => {

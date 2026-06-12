@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../utils/db';
+import { financeService } from '../services/financeProviders';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 import { 
@@ -120,7 +121,7 @@ export const FinanceAnalyzer = ({ language }) => {
     setShowPlaidModal(true);
   };
 
-  const handlePlaidSubmit = (e) => {
+  const handlePlaidSubmit = async (e) => {
     e.preventDefault();
     if (!selectedBank) {
       alert(t("გთხოვთ აირჩიოთ ბანკი.", "Please select a bank."));
@@ -129,24 +130,12 @@ export const FinanceAnalyzer = ({ language }) => {
     setSyncing(true);
     setShowPlaidModal(false);
 
-    setTimeout(() => {
-      // Import mock financial structure
-      const mockAccounts = [
-        { id: `acc-1`, name: `${selectedBank} Checking`, type: 'checking', balance: 4250.00, bankName: selectedBank },
-        { id: `acc-2`, name: `${selectedBank} Savings`, type: 'savings', balance: 12400.00, bankName: selectedBank },
-        { id: `acc-3`, name: `${selectedBank} Visa Card`, type: 'credit', balance: -850.00, bankName: selectedBank }
-      ];
+    try {
+      const provider = financeService.getProvider(selectedBank);
+      await provider.connect(selectedBank, username, password);
 
-      const mockTx = [
-        { id: `tx-1`, accountId: `acc-1`, amount: 2800, type: 'income', category: 'ხელფასი', date: '2026-06-01', note: t('შემოსავალი ხელფასიდან', 'Salary Income') },
-        { id: `tx-2`, accountId: `acc-1`, amount: 120, type: 'expense', category: 'საჭმელი', date: '2026-06-11', note: t('სუპერმარკეტი ორნაბიჯი', 'Supermarket') },
-        { id: `tx-3`, accountId: `acc-1`, amount: 1500, type: 'expense', category: 'ქირა', date: '2026-06-02', note: t('ბინის ქირა', 'Apartment Rent') },
-        { id: `tx-4`, accountId: `acc-1`, amount: 75, type: 'expense', category: 'კომუნალური', date: '2026-06-05', note: t('თელასი კომუნალურები', 'Electricity Utilities') },
-        { id: `tx-5`, accountId: `acc-1`, amount: 35, type: 'expense', category: 'ტრანსპორტი', date: '2026-06-09', note: 'Yandex Taxi' },
-        { id: `tx-6`, accountId: `acc-3`, amount: 180, type: 'expense', category: 'შოპინგი', date: '2026-06-10', note: 'Zara clothing' },
-        { id: `tx-7`, accountId: `acc-3`, amount: 110, type: 'expense', category: 'გართობა', date: '2026-06-08', note: 'Cavea Cinema' },
-        { id: `tx-8`, accountId: `acc-1`, amount: 450, type: 'income', category: 'ინვესტიციები', date: '2026-06-07', note: t('დივიდენდები', 'Dividends') }
-      ];
+      const importedAccounts = await provider.getAccounts(selectedBank);
+      const importedTx = await provider.getTransactions();
 
       const defaultBudgets = {
         'საჭმელი': 500,
@@ -158,11 +147,15 @@ export const FinanceAnalyzer = ({ language }) => {
         { id: 'goal-1', name: t('სამოგზაურო ფონდი ✈️', 'Travel Fund ✈️'), target: 5000, current: 2500 }
       ];
 
-      saveFinancialData(mockAccounts, mockTx, defaultBudgets, defaultGoals);
-      setSyncing(false);
+      saveFinancialData(importedAccounts, importedTx, defaultBudgets, defaultGoals);
       setSuccessMsg(t(`ბანკი ${selectedBank} წარმატებით დაუკავშირდა! მონაცემები იმპორტირებულია.`, `Bank ${selectedBank} connected successfully! Data imported.`));
       setTimeout(() => setSuccessMsg(''), 4000);
-    }, 1500);
+    } catch (err) {
+      console.error('Failed to connect bank:', err);
+      alert(t('ბანკთან დაკავშირება ვერ მოხერხდა: ', 'Failed to connect bank: ') + err.message);
+    } finally {
+      setSyncing(false);
+    }
   };
 
   const handleDisconnectBank = () => {
@@ -171,6 +164,16 @@ export const FinanceAnalyzer = ({ language }) => {
       setSuccessMsg(t("ბანკის კავშირი გაუქმდა. ყველა ტრანზაქცია წაშლილია.", "Bank disconnected. All transactions deleted."));
       setTimeout(() => setSuccessMsg(''), 3000);
     }
+  };
+
+  const handleEditTransactionCategory = (txId, newCategory) => {
+    const updatedTx = transactions.map(tx => {
+      if (tx.id === txId) {
+        return { ...tx, category: newCategory };
+      }
+      return tx;
+    });
+    saveFinancialData(accounts, updatedTx, budgets, savingsGoals);
   };
 
   const handleAddBudget = (e) => {
@@ -621,9 +624,50 @@ export const FinanceAnalyzer = ({ language }) => {
                   const isIncome = tx.type === 'income';
                   return (
                     <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.75rem', background: 'rgba(255, 255, 255, 0.01)', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
-                      <div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', flex: 1 }}>
                         <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{translateFinanceCategory(tx.note)}</div>
-                        <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{tx.date} | {translateFinanceCategory(tx.category)}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{tx.date}</span>
+                          <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>|</span>
+                          
+                          {/* Category Selector Dropdown */}
+                          <select
+                            value={tx.category}
+                            onChange={(e) => handleEditTransactionCategory(tx.id, e.target.value)}
+                            style={{
+                              background: 'rgba(0, 0, 0, 0.3)',
+                              border: '1px solid var(--border-light)',
+                              borderRadius: '4px',
+                              color: 'hsl(var(--text-secondary))',
+                              fontSize: '0.7rem',
+                              padding: '0.1rem 0.25rem',
+                              cursor: 'pointer',
+                              outline: 'none'
+                            }}
+                          >
+                            {tx.type === 'income' ? (
+                              <>
+                                <option value="ხელფასი">{translateFinanceCategory('ხელფასი')}</option>
+                                <option value="ბიზნესი">{translateFinanceCategory('ბიზნესი')}</option>
+                                <option value="ბონუსი">{translateFinanceCategory('ბონუსი')}</option>
+                                <option value="ფრილანსერობა">{translateFinanceCategory('ფრილანსერობა')}</option>
+                                <option value="ინვესტიციები">{translateFinanceCategory('ინვესტიციები')}</option>
+                                <option value="სხვა შემოსავალი">{translateFinanceCategory('სხვა შემოსავალი')}</option>
+                              </>
+                            ) : (
+                              <>
+                                <option value="საჭმელი">{translateFinanceCategory('საჭმელი')}</option>
+                                <option value="ქირა">{translateFinanceCategory('ქირა')}</option>
+                                <option value="კომუნალური">{translateFinanceCategory('კომუნალური')}</option>
+                                <option value="ტრანსპორტი">{translateFinanceCategory('ტრანსპორტი')}</option>
+                                <option value="გართობა">{translateFinanceCategory('გართობა')}</option>
+                                <option value="შოპინგი">{translateFinanceCategory('შოპინგი')}</option>
+                                <option value="სხვა ხარჯი">{translateFinanceCategory('სხვა ხარჯი')}</option>
+                                <option value="სზვა ხარჯი">{translateFinanceCategory('სზვა ხარჯი')}</option>
+                              </>
+                            )}
+                          </select>
+                        </div>
                       </div>
                       <span style={{ fontWeight: 700, fontSize: '0.9rem', color: isIncome ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-rose))' }}>
                         {isIncome ? '+' : '-'}{tx.amount} ₾

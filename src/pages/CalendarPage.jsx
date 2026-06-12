@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../utils/db';
+import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
 import { 
   ChevronLeft, 
@@ -11,7 +12,8 @@ import {
   RefreshCw,
   Info,
   Clock,
-  Link
+  Link,
+  UserPlus
 } from 'lucide-react';
 
 export const CalendarPage = ({ language }) => {
@@ -29,6 +31,13 @@ export const CalendarPage = ({ language }) => {
   const [formDate, setFormDate] = useState('2026-06-12');
   const [formTime, setFormTime] = useState('12:00');
   const [formDesc, setFormDesc] = useState('');
+
+  // Google Integration states
+  const [syncToGoogle, setSyncToGoogle] = useState(false);
+  const [sendInvites, setSendInvites] = useState(false);
+  const [participants, setParticipants] = useState([]);
+  const [participantInput, setParticipantInput] = useState('');
+  const [syncLoading, setSyncLoading] = useState(false);
 
   useEffect(() => {
     loadEvents();
@@ -139,9 +148,69 @@ export const CalendarPage = ({ language }) => {
     }, 1500);
   };
 
-  const handleAddEvent = (e) => {
+  const handleAddParticipant = () => {
+    const email = participantInput.trim();
+    if (!email) return;
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert(t("გთხოვთ შეიყვანოთ სწორი ელ-ფოსტის მისამართი.", "Please enter a valid email address."));
+      return;
+    }
+    if (participants.includes(email)) return;
+    setParticipants([...participants, email]);
+    setParticipantInput('');
+  };
+
+  const handleRemoveParticipant = (email) => {
+    setParticipants(participants.filter(p => p !== email));
+  };
+
+  const handleAddEvent = async (e) => {
     e.preventDefault();
     if (!formTitle) return;
+
+    setSyncLoading(true);
+    let meetLink = "";
+    let isSynced = false;
+    let googleEventId = "";
+
+    if (integrations.connected && syncToGoogle) {
+      try {
+        const res = await googleService.createCalendarEvent({
+          title: formTitle.trim(),
+          description: formDesc.trim(),
+          date: formDate,
+          time: formTime,
+          attendees: participants
+        });
+        if (res.success) {
+          meetLink = res.meetLink;
+          googleEventId = res.id;
+          isSynced = true;
+
+          if (sendInvites && participants.length > 0) {
+            const subject = `${t('მოწვევა შეხვედრაზე: ', 'Meeting Invitation: ')}${formTitle.trim()}`;
+            const body = `
+              <div style="font-family: sans-serif; padding: 20px; color: #111;">
+                <h2>${formTitle.trim()}</h2>
+                <p>${formDesc.trim() || t('დამატებითი აღწერის გარეშე.', 'No additional description.')}</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p><strong>${t('თარიღი:', 'Date:')}</strong> ${formDate}</p>
+                <p><strong>${t('დრო:', 'Time:')}</strong> ${formTime}</p>
+                ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <small style="color: #666;">Sent automatically via Gonze Productivity Tracker</small>
+              </div>
+            `;
+            await Promise.all(
+              participants.map(email => googleService.sendGmailInvitation({ to: email, subject, body }))
+            );
+          }
+        }
+      } catch (err) {
+        console.error("Google Calendar / Gmail error for event:", err);
+        alert(t("Google კალენდართან სინქრონიზაციის შეცდომა: ", "Google Calendar sync error: ") + err.message);
+      }
+    }
 
     const newEvent = {
       id: `cal-custom-${Date.now()}`,
@@ -151,7 +220,10 @@ export const CalendarPage = ({ language }) => {
       time: formTime,
       type: formType,
       color: formType === 'task' ? 'hsl(var(--primary))' : 'hsl(var(--accent-emerald))',
-      googleSynced: integrations.connected
+      googleSynced: isSynced,
+      googleEventId,
+      meetLink,
+      participants
     };
 
     const currentCustom = db.getCalendarEvents() || [];
@@ -161,6 +233,11 @@ export const CalendarPage = ({ language }) => {
     // Reset Form & Close Modal
     setFormTitle('');
     setFormDesc('');
+    setSyncToGoogle(false);
+    setSendInvites(false);
+    setParticipants([]);
+    setParticipantInput('');
+    setSyncLoading(false);
     setShowFormModal(false);
   };
 
@@ -527,12 +604,111 @@ export const CalendarPage = ({ language }) => {
                 />
               </div>
 
+              {/* Google Integration options if connected */}
+              {integrations.connected && (
+                <div style={{ 
+                  background: 'rgba(139, 92, 246, 0.03)', 
+                  border: '1px solid rgba(139, 92, 246, 0.1)', 
+                  borderRadius: '10px', 
+                  padding: '1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem'
+                }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--primary-hover))', marginBottom: '0.25rem' }}>
+                    Smart Google Automation
+                  </div>
+                  
+                  <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={syncToGoogle} 
+                        onChange={e => setSyncToGoogle(e.target.checked)}
+                        style={{ accentColor: 'hsl(var(--primary))' }}
+                      />
+                      <span>Create Google Calendar Event</span>
+                    </label>
+
+                    {syncToGoogle && (
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={sendInvites} 
+                          onChange={e => setSendInvites(e.target.checked)}
+                          style={{ accentColor: 'hsl(var(--primary))' }}
+                        />
+                        <span>Send Email Invitation (via Gmail)</span>
+                      </label>
+                    )}
+                  </div>
+
+                  {/* Participants list for calendar event */}
+                  {syncToGoogle && sendInvites && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.25rem' }}>
+                      <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: 0 }}>
+                        {t('მოწვეული მონაწილეები', 'Invited Participants (Email)')}
+                      </label>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <input 
+                          type="email" 
+                          className="form-input" 
+                          placeholder="invitee@example.com" 
+                          value={participantInput} 
+                          onChange={e => setParticipantInput(e.target.value)} 
+                          onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddParticipant())}
+                          style={{ padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
+                        />
+                        <button 
+                          type="button" 
+                          onClick={handleAddParticipant} 
+                          className="btn btn-secondary" 
+                          style={{ padding: '0.4rem 0.6rem' }}
+                        >
+                          <UserPlus size={14} />
+                        </button>
+                      </div>
+
+                      {participants.length > 0 && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.25rem' }}>
+                          {participants.map(p => (
+                            <span 
+                              key={p} 
+                              style={{ 
+                                fontSize: '0.7rem', 
+                                background: 'rgba(255, 255, 255, 0.05)', 
+                                border: '1px solid var(--border-light)', 
+                                padding: '0.15rem 0.4rem', 
+                                borderRadius: '4px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.25rem'
+                              }}
+                            >
+                              {p}
+                              <button 
+                                type="button" 
+                                onClick={() => handleRemoveParticipant(p)}
+                                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-rose))', fontSize: '0.65rem', padding: '0 0.1rem' }}
+                              >
+                                ✕
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
                 <button 
                   type="button" 
                   onClick={() => setShowFormModal(false)} 
                   className="btn btn-secondary" 
                   style={{ flex: 1 }}
+                  disabled={syncLoading}
                 >
                   {t('გაუქმება', 'Cancel')}
                 </button>
@@ -540,8 +716,9 @@ export const CalendarPage = ({ language }) => {
                   type="submit" 
                   className="btn btn-primary" 
                   style={{ flex: 1 }}
+                  disabled={syncLoading}
                 >
-                  {t('დამატება', 'Add')}
+                  {syncLoading ? t('მიმდინარეობს სინქრონიზაცია...', 'Syncing...') : t('დამატება', 'Add')}
                 </button>
               </div>
             </form>

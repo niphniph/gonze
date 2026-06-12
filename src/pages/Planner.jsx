@@ -18,6 +18,8 @@ export const Planner = ({ language, setActivePage }) => {
   const [habits, setHabits] = useState([]);
   const [habitHistory, setHabitHistory] = useState({});
   const [meetings, setMeetings] = useState([]);
+  const [budgets, setBudgets] = useState({});
+  const [transactions, setTransactions] = useState([]);
   const [todayStr, setTodayStr] = useState('2026-06-12'); // Mock local date
 
   useEffect(() => {
@@ -26,6 +28,8 @@ export const Planner = ({ language, setActivePage }) => {
     setHabits(habitData.list || []);
     setHabitHistory(habitData.history || {});
     setMeetings(db.getMeetings() || []);
+    setBudgets(db.getBudgets() || {});
+    setTransactions(db.getTransactions() || []);
   }, []);
 
   const handleToggleTask = (taskId) => {
@@ -84,8 +88,77 @@ export const Planner = ({ language, setActivePage }) => {
     if (cat.includes('იდეები')) return 'Ideas 💡';
     if (cat.includes('დასვენება')) return 'Leisure 🎮';
     if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
+    if (cat.includes('საჭმელი')) return 'Food 🍔';
+    if (cat.includes('ქირა')) return 'Rent 🏠';
+    if (cat.includes('კომუნალური')) return 'Utilities ⚡';
+    if (cat.includes('ტრანსპორტი')) return 'Transport 🚗';
+    if (cat.includes('გართობა')) return 'Entertainment 🎭';
+    if (cat.includes('შოპინგი')) return 'Shopping 🛍️';
+    if (cat.includes('სხვა ხარჯი')) return 'Other Expense 💸';
     return cat;
   };
+
+  // Budget warning calculation based on today's tasks
+  const getBudgetWarnings = () => {
+    if (Object.keys(budgets).length === 0 || transactions.length === 0) return [];
+    
+    const categorySpending = {};
+    transactions.filter(t => t.type === 'expense').forEach(t => {
+      categorySpending[t.category] = (categorySpending[t.category] || 0) + t.amount;
+    });
+
+    const warnings = [];
+    const checkedCategories = new Set();
+
+    todayTasks.forEach(task => {
+      let matchedBudgetCategory = '';
+      const textToSearch = `${task.name} ${task.category}`.toLowerCase();
+
+      if (textToSearch.includes('საჭმელი') || textToSearch.includes('კვება') || textToSearch.includes('food') || textToSearch.includes('grocery') || textToSearch.includes('supermarket')) {
+        matchedBudgetCategory = 'საჭმელი';
+      } else if (textToSearch.includes('ქირა') || textToSearch.includes('rent') || textToSearch.includes('ბინა')) {
+        matchedBudgetCategory = 'ქირა';
+      } else if (textToSearch.includes('კომუნალური') || textToSearch.includes('utility') || textToSearch.includes('წყალი') || textToSearch.includes('დენი') || textToSearch.includes('bill')) {
+        matchedBudgetCategory = 'კომუნალური';
+      } else if (textToSearch.includes('ტრანსპორტი') || textToSearch.includes('ტაქსი') || textToSearch.includes('transport') || textToSearch.includes('taxi') || textToSearch.includes('yandex')) {
+        matchedBudgetCategory = 'ტრანსპორტი';
+      } else if (textToSearch.includes('გართობა') || textToSearch.includes('კინო') || textToSearch.includes('cinema') || textToSearch.includes('party') || textToSearch.includes('leisure')) {
+        matchedBudgetCategory = 'გართობა';
+      } else if (textToSearch.includes('შოპინგი') || textToSearch.includes('shopping') || textToSearch.includes('ყიდვა') || textToSearch.includes('zara')) {
+        matchedBudgetCategory = 'შოპინგი';
+      }
+
+      if (matchedBudgetCategory && budgets[matchedBudgetCategory] && !checkedCategories.has(matchedBudgetCategory)) {
+        checkedCategories.add(matchedBudgetCategory);
+        const limit = budgets[matchedBudgetCategory];
+        const spent = categorySpending[matchedBudgetCategory] || 0;
+        
+        if (spent >= limit) {
+          warnings.push({
+            category: matchedBudgetCategory,
+            type: 'exceeded',
+            text: t(
+              `გაფრთხილება: '${matchedBudgetCategory}' ბიუჯეტი გადაჭარბებულია! დახარჯულია: ${spent} ₾ (ლიმიტი: ${limit} ₾)`,
+              `Warning: '${translateTaskCategory(matchedBudgetCategory)}' budget exceeded! Spent: ${spent} ₾ (Limit: ${limit} ₾)`
+            )
+          });
+        } else if (spent >= limit * 0.8) {
+          warnings.push({
+            category: matchedBudgetCategory,
+            type: 'approaching',
+            text: t(
+              `ყურადღება: უახლოვდებით '${matchedBudgetCategory}' ბიუჯეტის ლიმიტს. დახარჯულია: ${spent} ₾ (ლიმიტი: ${limit} ₾)`,
+              `Notice: Approaching '${translateTaskCategory(matchedBudgetCategory)}' budget limit. Spent: ${spent} ₾ (Limit: ${limit} ₾)`
+            )
+          });
+        }
+      }
+    });
+
+    return warnings;
+  };
+
+  const budgetWarnings = getBudgetWarnings();
 
   return (
     <div className="planner-page">
@@ -99,6 +172,32 @@ export const Planner = ({ language, setActivePage }) => {
           <span>{t('დღეს: 12 ივნისი, 2026', 'Today: June 12, 2026')}</span>
         </div>
       </header>
+
+      {/* Budget warnings */}
+      {budgetWarnings.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+          {budgetWarnings.map((warn, index) => (
+            <div 
+              key={index} 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                padding: '1rem',
+                borderRadius: '12px',
+                border: `1px solid ${warn.type === 'exceeded' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.2)'}`,
+                background: warn.type === 'exceeded' ? 'rgba(239, 68, 68, 0.05)' : 'rgba(245, 158, 11, 0.05)',
+                color: warn.type === 'exceeded' ? 'hsl(var(--accent-rose))' : 'hsl(var(--accent-amber))',
+                fontSize: '0.875rem',
+                fontWeight: 600
+              }}
+            >
+              <span style={{ fontSize: '1.2rem' }}>⚠️</span>
+              <span>{warn.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Stats Summary Panel */}
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
