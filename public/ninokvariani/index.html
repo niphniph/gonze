@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="ka" class="scroll-smooth">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>საფეხური - ფსიქოლოგიური საკონსულტაციო ცენტრი და ფსიქოსინთეზი</title>
+    <meta name="description" content="ფსიქოლოგიური საკონსულტაციო ცენტრი საფეხური. ფსიქოთერაპია, ფსიქოსინთეზი, პიროვნული ზრდა და ტრენინგები თბილისში. იპოვნეთ გზა საკუთარ თავთან დასაბრუნებლად."/>
+    
+    <!-- TailWind CSS CDN with Forms & Container Queries -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind Configuration -->
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e3e2e0",
+                    "surface-bright": "#faf9f7",
+                    "warm-gray": "#7A7D7D",
+                    "background": "#faf9f7",
+                    "primary-fixed": "#bceecf",
+                    "surface": "#faf9f7",
+                    "on-primary-fixed": "#002112",
+                    "inverse-primary": "#a1d1b4",
+                    "on-surface-variant": "#414943",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e3e2e0",
+                    "surface-container-high": "#e9e8e6",
+                    "secondary-fixed": "#dce4df",
+                    "on-primary-container": "#9fcfb2",
+                    "tertiary-fixed": "#ffe088",
+                    "inverse-surface": "#2f3130",
+                    "primary-fixed-dim": "#a1d1b4",
+                    "on-tertiary-fixed": "#241a00",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#735c00",
+                    "surface-dim": "#dadad8",
+                    "on-secondary-fixed-variant": "#414944",
+                    "on-background": "#1a1c1b",
+                    "on-tertiary-container": "#4f3e00",
+                    "primary": "#14422d",
+                    "inverse-on-surface": "#f1f1ef",
+                    "error": "#ba1a1a",
+                    "surface-container": "#efeeec",
+                    "secondary": "#58605c",
+                    "tertiary-container": "#cca830",
+                    "soft-border": "#E5E7E7",
+                    "outline-variant": "#c0c9c1",
+                    "on-surface": "#1a1c1b",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "surface-container-low": "#f4f3f1",
+                    "on-secondary-container": "#5c6460",
+                    "secondary-container": "#dae2dc",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#717973",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#e9c349",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "section-gap": "120px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "margin-mobile": "20px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Hanken Grotesk", "system-ui", "sans-serif"],
+                    "headline-lg": ["Hanken Grotesk", "system-ui", "sans-serif"],
+                    "body-md": ["Source Sans 3", "system-ui", "sans-serif"],
+                    "label-md": ["Hanken Grotesk", "system-ui", "sans-serif"],
+                    "body-lg": ["Source Sans 3", "system-ui", "sans-serif"],
+                    "headline-lg-mobile": ["Hanken Grotesk", "system-ui", "sans-serif"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+    
+    <style>
+        /* Materials Symbols standard values */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        
+        /* Smooth infinite scrolling marquee strip */
+        .scrolling-text {
+            white-space: nowrap;
+            animation: scroll 25s linear infinite;
+            display: inline-flex;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-container:hover .scrolling-text {
+            animation-play-state: paused;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Custom Scrollbar for premium aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf9f7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #14422d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0d2c1e;
+        }
+
+        /* Interactive active transitions */
+        .btn-primary-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-primary-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(20, 66, 45, 0.15);
+        }
+
+        /* Step path line animation */
+        .step-line-fill {
+            transition: height 1.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background bg-background selection:bg-primary-fixed selection:text-primary">
+
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-md border-b border-soft-border/50 shadow-sm transition-all duration-300" id="navbar">
+        <div class="flex justify-between items-center px-6 md:px-16 py-4 max-w-[1200px] mx-auto w-full">
+            <a class="font-display-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary flex items-center gap-2 group" href="#">
+                <span class="material-symbols-outlined text-3xl text-primary transition-transform duration-500 group-hover:rotate-12">eco</span>
+                საფეხური
+            </a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-8">
+                <a class="font-label-md text-label-md uppercase tracking-wider text-primary border-b-2 border-primary pb-1 transition-all" href="#">მთავარი</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#about-psychosynthesis">ფსიქოსინთეზი</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#services">სერვისები</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#workshops">კურსები</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#team">გუნდი</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#blog">ბლოგი</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#faq">FAQ</a>
+                <a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-all hover:border-b-2 hover:border-primary/30 pb-1" href="#contact">კონტაქტი</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="openBookingModal()" class="hidden sm:inline-block bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md text-label-md btn-primary-hover font-semibold">
+                    ჩაეწერეთ კონსულტაციაზე
+                </button>
+                <!-- Hamburger menu button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg hover:bg-surface-container-high transition-colors focus:outline-none" aria-label="Toggle Menu">
+                    <span class="material-symbols-outlined text-2xl text-primary" id="menu-icon">menu</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Dropdown Menu -->
+        <div class="hidden lg:hidden w-full bg-surface border-t border-soft-border/50 py-6 px-6 space-y-4 absolute top-full left-0 shadow-lg transition-all duration-300" id="mobile-menu">
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-primary font-semibold" href="#">მთავარი</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#about-psychosynthesis">რა არის ფსიქოსინთეზი</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#services">სერვისები</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#workshops">სასწავლო კურსები</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#team">დამფუძნებელი</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#blog">ბლოგი</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#faq">ხშირად დასმული კითხვები</a>
+            <a onclick="closeMobileMenu()" class="block font-label-md text-label-md uppercase text-on-surface-variant hover:text-primary transition-colors" href="#contact">კონტაქტი</a>
+            <button onclick="openBookingModal(); closeMobileMenu();" class="w-full bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-label-md text-center block font-semibold hover:opacity-90">
+                ჩაეწერეთ კონსულტაციაზე
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-surface">
+        <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#14422d" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-16 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 scroll-reveal">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-semibold tracking-wide">
+                    სულისთვის ადგილის მიცემა თანამედროვე ფსიქოლოგიაში
+                </div>
+                <h1 class="font-display-lg text-display-lg text-primary leading-tight font-bold">
+                    ფსიქოლოგიური საკონსულტაციო ცენტრი <span class="underline decoration-primary-fixed decoration-wavy underline-offset-8">საფეხური</span>
+                </h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg leading-relaxed">
+                    დაბრუნდით საკუთარ თავთან (Coming home to yourself). ფსიქოსინთეზი გთავაზობთ გზას მთლიანობის, შინაგანი კავშირების აღდგენისა და ცნობიერების ტრანსფორმაციისთვის.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button onclick="openBookingModal()" class="bg-primary text-on-primary px-8 py-4 rounded-xl font-label-md text-label-md font-bold btn-primary-hover flex items-center justify-center gap-2">
+                        ჩაეწერეთ კონსულტაციაზე
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </button>
+                    <a href="#about-psychosynthesis" class="border border-primary text-primary px-8 py-4 rounded-xl font-label-md text-label-md text-center hover:bg-primary/5 transition-all font-semibold block">
+                        გაიგეთ ფსიქოსინთეზის შესახებ
+                    </a>
+                </div>
+            </div>
+            
+            <div class="relative scroll-reveal duration-1000 delay-200">
+                <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative z-10 group border-4 border-white">
+                    <img alt="Psychological Consultation Center Sapekhuri Hero Image" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcXyY0V4AxfdpBgoZlKT8j5c4SA3lKFsg_RND-9ln826ooLb5sI37qVG1tbUtGaqaYszRMXf3mwv1dzVj0UnsdHWvriuODLNa7Q-m9VM6fqi2TAbiwculuR2LmU4vmQJh7yNFG1tjO17kyqpZrlVnhEngta9XSOez6HaPhWShGxWXt3pD5JAEJWY6X94pX2-0o6cyIQdzxFe4GIw7JrLIAJPeThHAlkF3GDR8QBSkRiqSdvusH2bgZoQ9LTrUbNvXInTYxizG6eCkv"/>
+                </div>
+                <!-- Decorative elements -->
+                <div class="absolute -bottom-8 -left-8 w-36 h-36 bg-tertiary-container/30 rounded-full blur-3xl z-0"></div>
+                <div class="absolute -top-8 -right-8 w-52 h-52 bg-primary-fixed/30 rounded-full blur-3xl z-0"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Marquee Banner / Value Strip -->
+    <div class="bg-primary py-5 overflow-hidden shadow-md marquee-container">
+        <div class="scrolling-text flex gap-16">
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">eco</span> ნდობა
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">favorite</span> თანაგრძნობა
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">sync_alt</span> ინტეგრაცია
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">psychology</span> ცნობიერება
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">self_improvement</span> შინაგანი ზრდა
+            </span>
+            
+            <!-- Duplicated for seamless infinite scroll -->
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">eco</span> ნდობა
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">favorite</span> თანაგრძნობა
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">sync_alt</span> ინტეგრაცია
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">psychology</span> ცნობიერება
+            </span>
+            <span class="text-on-primary font-display-lg text-headline-lg-mobile md:text-xl font-semibold flex items-center gap-4 select-none">
+                <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">self_improvement</span> შინაგანი ზრდა
+            </span>
+        </div>
+    </div>
+
+    <!-- What is Psychosynthesis Section -->
+    <section class="py-32 bg-surface-container-low border-b border-soft-border/50" id="about-psychosynthesis">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <div class="lg:col-span-5 space-y-6 scroll-reveal">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md font-semibold">
+                        ფილოსოფია და ხედვა
+                    </div>
+                    <h2 class="font-display-lg text-display-lg text-primary font-bold">
+                        რა არის ფსიქოსინთეზი?
+                    </h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        ფსიქოსინთეზი არის ჰოლისტური ფსიქოლოგიური მიმართულება, რომელიც შექმნა იტალიელმა ფსიქიატრმა რობერტო ასაჯოლიმ. იგი აფართოებს ტრადიციულ ფსიქოლოგიას და ადამიანს განიხილავს როგორც სხეულის, გონების, ემოციებისა და სულის ერთიანობას.
+                    </p>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        მისი მთავარი ლოგიკაა არა მხოლოდ სიმპტომების მკურნალობა, არამედ პიროვნების სხვადასხვა, ხშირად დაპირისპირებული ნაწილების (სუბპიროვნებების) აღმოჩენა, მიღება და მათი ჰარმონიული ინტეგრაცია ცენტრალური "მე"-ს გარშემო. ეს არის გზა საკუთარ თავთან დასაბრუნებლად.
+                    </p>
+                    <div class="pt-4">
+                        <button onclick="openBookingModal()" class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-label-md font-semibold hover:opacity-95 transition-all">
+                            გაიარეთ კონსულტაცია
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 scroll-reveal delay-200">
+                    <div class="bg-white p-8 rounded-2xl border border-soft-border shadow-sm hover:shadow-md transition-all duration-300 group hover:border-primary/20">
+                        <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-2xl font-bold">diversity_1</span>
+                        </div>
+                        <h3 class="font-headline-lg text-xl text-primary font-semibold mb-3">ვისთვის არის?</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            მათთვის, ვინც განიცდის ცხოვრებისეულ კრიზისებს, ეძებს უფრო ღრმა შინაგან აზრს, ებრძვის შფოთვას, გაუცხოებას ან სურს პიროვნული და სულიერი განვითარება.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-2xl border border-soft-border shadow-sm hover:shadow-md transition-all duration-300 group hover:border-primary/20">
+                        <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-2xl font-bold">account_tree</span>
+                        </div>
+                        <h3 class="font-headline-lg text-xl text-primary font-semibold mb-3">როგორ მიმდინარეობს?</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            სუბპიროვნებების (შიდა როლების) იდენტიფიცირებით, თვითიდენტიფიკაციით, ნებისყოფის გაძლიერებითა და სინთეზით – რაც აერთიანებს პიროვნულ და სულიერ განზომილებებს.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl border border-soft-border shadow-sm hover:shadow-md transition-all duration-300 group hover:border-primary/20 md:col-span-2">
+                        <div class="flex flex-col md:flex-row md:items-center gap-6">
+                            <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-2xl font-bold">school</span>
+                            </div>
+                            <div>
+                                <h3 class="font-headline-lg text-xl text-primary font-semibold mb-2">სასწავლო და სამუშაო შეხვედრები</h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                                    ფსიქოსინთეზი არ არის მხოლოდ თერაპია. იგი მოიცავს პრაქტიკულ საგანმანათლებლო პროგრამებს, პიროვნული განვითარების კურსებსა და ტრენინგებს როგორც პროფესიონალებისთვის, ასევე ნებისმიერი დაინტერესებული პირისთვის.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Bento Grid -->
+    <section class="py-32 bg-white border-b border-soft-border/50" id="services">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="text-center mb-20 space-y-4 scroll-reveal">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-semibold">
+                    ჩვენი მიმართულებები
+                </div>
+                <h2 class="font-display-lg text-display-lg text-primary font-bold">მხარდაჭერის სფეროები</h2>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                    თითოეული სერვისი შექმნილია თქვენი ფსიქოლოგიური მდგრადობის, შინაგანი ძიებისა და ჰარმონიისთვის.
+                </p>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px] scroll-reveal delay-200">
+                
+                <!-- Individual Therapy -->
+                <div class="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-3xl bg-primary p-10 flex flex-col justify-end text-on-primary shadow-sm hover:shadow-lg transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent z-10"></div>
+                    <div class="absolute inset-0 z-0 opacity-30 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center;"></div>
+                    <div class="relative z-20 space-y-3">
+                        <span class="material-symbols-outlined text-4xl text-primary-fixed-dim">person</span>
+                        <h3 class="font-display-lg text-2xl font-bold">ინდივიდუალური თერაპია</h3>
+                        <p class="font-body-md text-body-md opacity-85 max-w-lg leading-relaxed">
+                            უსაფრთხო და კონფიდენციალური პირადი სივრცე თქვენი ფიქრების, ემოციებისა და სირთულეების გამოსაკვლევად, სადაც პროფესიონალთან ერთად გადიხართ თითოეულ საფეხურს.
+                        </p>
+                        <div class="pt-2">
+                            <button onclick="openBookingModal('ინდივიდუალური თერაპია')" class="bg-primary-fixed text-on-primary-fixed px-5 py-2 rounded-lg font-label-md text-label-md font-semibold hover:opacity-90 transition-opacity">
+                                ჩაწერა
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Psychosynthesis & Personal Growth -->
+                <div class="group relative overflow-hidden rounded-3xl bg-secondary-container p-8 flex flex-col justify-between border border-soft-border hover:shadow-md transition-all duration-300">
+                    <div class="flex justify-between items-start">
+                        <span class="material-symbols-outlined text-primary text-4xl">self_improvement</span>
+                        <span class="material-symbols-outlined text-primary/30 text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-display-lg text-headline-lg-mobile text-primary font-bold">ფსიქოსინთეზი & ზრდა</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            სუბპიროვნებების ინტეგრაცია და პიროვნული განვითარება.
+                        </p>
+                    </div>
+                    <button onclick="openBookingModal('ფსიქოსინთეზი & პიროვნული ზრდა')" class="text-left font-label-md text-label-md text-primary font-bold underline underline-offset-4">
+                        სესიის დაჯავშნა
+                    </button>
+                </div>
+
+                <!-- Couples & Family -->
+                <div class="group relative overflow-hidden rounded-3xl bg-tertiary-container/10 p-8 flex flex-col justify-between border border-tertiary-container/30 hover:shadow-md transition-all duration-300">
+                    <div class="flex justify-between items-start">
+                        <span class="material-symbols-outlined text-tertiary text-4xl">family_restroom</span>
+                        <span class="material-symbols-outlined text-tertiary/30 text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-display-lg text-headline-lg-mobile text-primary font-bold">წყვილები & ოჯახი</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            ურთიერთობის გაუმჯობესება, კავშირის აღდგენა და კრიზისების მართვა.
+                        </p>
+                    </div>
+                    <button onclick="openBookingModal('წყვილთა და ოჯახის კონსულტაცია')" class="text-left font-label-md text-label-md text-primary font-bold underline underline-offset-4">
+                        სესიის დაჯავშნა
+                    </button>
+                </div>
+
+                <!-- Group Therapy & Support -->
+                <div class="md:col-span-3 p-8 rounded-3xl bg-surface-container flex flex-col md:flex-row items-center justify-between gap-8 border border-soft-border shadow-sm hover:border-primary/20 transition-colors duration-300">
+                    <div class="flex-1 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-3xl text-primary">groups</span>
+                            <h3 class="font-display-lg text-2xl text-primary font-bold">ჯგუფური თერაპია</h3>
+                        </div>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-2xl">
+                            გამოცდილების გაზიარება და მხარდაჭერა უსაფრთხო, თანაგრძნობით აღსავსე გარემოში. ჯგუფური დინამიკა გვეხმარება იმის გაცნობიერებაში, რომ ჩვენს გამოწვევებში მარტო არ ვართ.
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="openBookingModal('ჯგუფური თერაპია')" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md font-semibold hover:opacity-90 transition-opacity">
+                                ჯგუფში გაწევრიანება
+                            </button>
+                            <a href="#workshops" class="text-primary font-label-md text-label-md font-bold flex items-center gap-2 group self-center">
+                                მიმდინარე კურსები
+                                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">trending_flat</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex gap-4">
+                        <div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary shadow-inner">
+                            <span class="material-symbols-outlined text-2xl font-bold">favorite</span>
+                        </div>
+                        <div class="w-16 h-16 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary shadow-inner">
+                            <span class="material-symbols-outlined text-2xl font-bold">psychology</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning & Workshops Section -->
+    <section class="py-32 bg-surface-container-low border-b border-soft-border/50" id="workshops">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 scroll-reveal">
+                <div class="max-w-xl space-y-4">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md font-semibold">
+                        საგანმანათლებლო მიმართულება
+                    </div>
+                    <h2 class="font-display-lg text-display-lg text-primary font-bold">ტრენინგები & ვორქშოფები</h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        ჩვენ გთავაზობთ როგორც პიროვნული განვითარების კურსებს, ასევე სპეციალიზებულ საგანმანათლებლო პროგრამებს ფსიქოლოგიაში.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Workshop Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 scroll-reveal delay-200">
+                
+                <!-- Card 1 -->
+                <div class="bg-white rounded-3xl border border-soft-border overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="p-8 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="bg-primary-fixed text-on-primary-fixed text-xs font-semibold px-3 py-1 rounded-full">რეგისტრაცია ღიაა</span>
+                            <span class="text-on-surface-variant/70 font-label-md text-xs">20 ივლისი, 2026</span>
+                        </div>
+                        <h3 class="font-display-lg text-xl font-bold text-primary">შესავალი ფსიქოსინთეზში: გზა საკუთარ თავთან</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            3-დღიანი ინტენსიური ვორქშოფი, სადაც გაეცნობით ასაჯოლის მოდელს, სუბპიროვნებების იდენტიფიცირებას და მიიღებთ პრაქტიკულ ხელსაწყოებს შინაგანი ჰარმონიისთვის.
+                        </p>
+                    </div>
+                    <div class="p-8 pt-0">
+                        <button onclick="openBookingModal('ტრენინგი: შესავალი ფსიქოსინთეზში')" class="w-full bg-primary text-on-primary py-3 rounded-xl font-label-md text-label-md font-bold hover:bg-primary/95 transition-colors">
+                            რეგისტრაცია
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-3xl border border-soft-border overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="p-8 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="bg-primary-fixed text-on-primary-fixed text-xs font-semibold px-3 py-1 rounded-full">რეგისტრაცია ღიაა</span>
+                            <span class="text-on-surface-variant/70 font-label-md text-xs">5 აგვისტო, 2026</span>
+                        </div>
+                        <h3 class="font-display-lg text-xl font-bold text-primary">სუბპიროვნებების ინტეგრაციის პრაქტიკუმი</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            კურსი ორიენტირებულია ჩვენი შინაგანი კონფლიქტური ნაწილების (მაგ. კრიტიკოსი, დაუცველი ბავშვი) გამოვლენასა და მათ გაერთიანებაზე შემოქმედებითი მეთოდებით.
+                        </p>
+                    </div>
+                    <div class="p-8 pt-0">
+                        <button onclick="openBookingModal('ტრენინგი: სუბპიროვნებების ინტეგრაცია')" class="w-full bg-primary text-on-primary py-3 rounded-xl font-label-md text-label-md font-bold hover:bg-primary/95 transition-colors">
+                            რეგისტრაცია
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-3xl border border-soft-border overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="p-8 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="bg-surface-container-highest text-on-surface-variant text-xs font-semibold px-3 py-1 rounded-full">მალე დაიწყება</span>
+                            <span class="text-on-surface-variant/70 font-label-md text-xs">სექტემბერი, 2026</span>
+                        </div>
+                        <h3 class="font-display-lg text-xl font-bold text-primary">თერაპიული ხელოვნება და ფსიქოსინთეზი</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            სემინარების სერია, სადაც ხელოვნების თერაპიის, მედიტაციისა და ფსიქოსინთეზის სინერგიით შევისწავლით შინაგან არაცნობიერ რესურსებს.
+                        </p>
+                    </div>
+                    <div class="p-8 pt-0">
+                        <button onclick="openBookingModal('ტრენინგი: თერაპიული ხელოვნება')" class="w-full bg-secondary-container text-primary py-3 rounded-xl font-label-md text-label-md font-bold hover:opacity-95 transition-opacity">
+                            წინასწარი რეგისტრაცია
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section (Nino Kvariani) -->
+    <section class="py-32 bg-white border-b border-soft-border/50" id="team">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-5 relative scroll-reveal">
+                    <div class="rounded-3xl overflow-hidden shadow-2xl aspect-[3/4] bg-secondary-fixed border-4 border-white">
+                        <img alt="Nino Kvariani - Founder of Sapekhuri" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMqACZIRgHB2tquQwy-bmvmGpLLEy6fT5Ty7p_3i-x8RzVqA-iS54kTkKhNGKzeL4rZl4RA5egKvDM8FdzCfdygFmweUzfIQlDwJg1xsyBWGG-wX1rObugN4lyEQIdSdT48ubX3wZrnAIZmv4X-wpKGgs5KQKskOPXHHJypPgz4VTAj6Y15AvNhhmgrBwKi0panqHC3aefTh3mt3GqmEEHAdEENCPLXRjplczQ1kawzaz6a0WsR66u4mVkeG-_sYxiYU2EHA1n4So9"/>
+                    </div>
+                    <div class="absolute -bottom-8 -right-4 glass-card p-6 rounded-2xl shadow-xl max-w-[280px]">
+                        <p class="font-display-lg text-xl font-bold text-primary mb-1">ნინო კვარიანი</p>
+                        <p class="font-label-md text-xs text-on-surface-variant leading-relaxed">დამფუძნებელი, ლიცენზირებული ფსიქოლოგი, ფსიქოსინთეზისტი</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 space-y-8 lg:pl-12 scroll-reveal delay-200">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-semibold">
+                        პროფესიული ხედვა & ღირებულებები
+                    </div>
+                    <h2 class="font-display-lg text-display-lg text-primary font-bold">დამფუძნებლისგან</h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        "ჩემი მისიაა შევქმნა უსაფრთხო, ემპათიური და მומთმენი სივრცე, სადაც თითოეულ ადამიანს ექნება შესაძლებლობა აღმოაჩინოს საკუთარი თავი, დაძლიოს კრიზისი და განახორციელოს შინაგანი პოტენციალი. ფსიქოსინთეზი სწორედ ეს არის - გზა შინაგანი მთლიანობისკენ."
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="p-6 rounded-2xl bg-surface-container-low border border-soft-border hover:border-primary/20 transition-all">
+                            <span class="material-symbols-outlined text-primary mb-4 text-3xl">school</span>
+                            <h4 class="font-headline-lg text-lg text-primary font-semibold mb-2">აკადემიური ბაზა</h4>
+                            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                                მრავალწლიანი საერთაშორისო განათლება და სპეციალიზაცია ფსიქოსინთეზური თერაპიის წამყვან ევროპულ ცენტრებში.
+                            </p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-surface-container-low border border-soft-border hover:border-primary/20 transition-all">
+                            <span class="material-symbols-outlined text-primary mb-4 text-3xl">psychology</span>
+                            <h4 class="font-headline-lg text-lg text-primary font-semibold mb-2">ინდივიდუალური მიდგომა</h4>
+                            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                                ყოველი ადამიანი და მისი გზა უნიკალურია. ჩვენი მიდგომა მორგებულია თქვენს პირად საჭიროებებსა და რიტმზე.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Process Section -->
+    <section class="py-32 bg-surface-container-low border-b border-soft-border/50" id="process">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="text-center mb-20 space-y-4 scroll-reveal">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-semibold">
+                    თქვენი მოგზაურობის ეტაპები
+                </div>
+                <h2 class="font-display-lg text-display-lg text-primary font-bold">როგორ მიმდინარეობს პროცესი?</h2>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                    ჩვენთან მუშაობის პროცესი სრულიად გამჭვირვალეა და დაყოფილია 4 ძირითად საფეხურად.
+                </p>
+            </div>
+
+            <!-- Steps Progress Line Container -->
+            <div class="relative grid grid-cols-1 md:grid-cols-4 gap-8 scroll-reveal delay-200">
+                <!-- Vertical connector line on mobile, horizontal on desktop -->
+                <div class="hidden md:block absolute top-[45px] left-[12.5%] right-[12.5%] h-0.5 bg-soft-border/70 z-0">
+                    <div class="h-full bg-primary step-line-fill w-0" id="progress-line"></div>
+                </div>
+                
+                <!-- Step 1 -->
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-soft-border flex items-center justify-center text-primary shadow-sm group-hover:border-primary group-hover:scale-105 transition-all duration-300 mb-6">
+                        <span class="material-symbols-outlined text-3xl">chat</span>
+                    </div>
+                    <div class="absolute -top-3 bg-primary text-on-primary text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">1</div>
+                    <h3 class="font-display-lg text-lg font-bold text-primary mb-2">პირველი კონტაქტი</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-[220px]">
+                        ავსებთ მოკლე ონლაინ ფორმას ან გვიკავშირდებით ტელეფონით.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-soft-border flex items-center justify-center text-primary shadow-sm group-hover:border-primary group-hover:scale-105 transition-all duration-300 mb-6">
+                        <span class="material-symbols-outlined text-3xl">assignment</span>
+                    </div>
+                    <div class="absolute -top-3 bg-primary text-on-primary text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">2</div>
+                    <h3 class="font-display-lg text-lg font-bold text-primary mb-2">პირველადი შეფასება</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-[220px]">
+                        ვმართავთ შესავალ შეხვედრას თქვენი მოთხოვნებისა და საჭიროებების დასაზუსტებლად.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-soft-border flex items-center justify-center text-primary shadow-sm group-hover:border-primary group-hover:scale-105 transition-all duration-300 mb-6">
+                        <span class="material-symbols-outlined text-3xl">psychology_alt</span>
+                    </div>
+                    <div class="absolute -top-3 bg-primary text-on-primary text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">3</div>
+                    <h3 class="font-display-lg text-lg font-bold text-primary mb-2">რეგულარული შეხვედრები</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-[220px]">
+                        ვმუშაობთ ინდივიდუალურად ან ჯგუფურად წინასწარ შეთანხმებული ფორმატით.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative z-10 flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-soft-border flex items-center justify-center text-primary shadow-sm group-hover:border-primary group-hover:scale-105 transition-all duration-300 mb-6">
+                        <span class="material-symbols-outlined text-3xl">all_inclusive</span>
+                    </div>
+                    <div class="absolute -top-3 bg-primary text-on-primary text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">4</div>
+                    <h3 class="font-display-lg text-lg font-bold text-primary mb-2">ინტეგრაცია</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-[220px]">
+                        მიღებული ცნობიერების და შინაგანი რესურსების ყოველდღიურ ცხოვრებაში ინტეგრირება.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog & Resources Section -->
+    <section class="py-32 bg-white border-b border-soft-border/50" id="blog">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="flex justify-between items-end mb-16 gap-6 scroll-reveal">
+                <div class="max-w-xl space-y-4">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-semibold">
+                        რესურსები & ბლოგი
+                    </div>
+                    <h2 class="font-display-lg text-display-lg text-primary font-bold">საინტერესო სტატიები</h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        გაეცანით ჩვენს მასალებს ფსიქიკურ ჯანმრთელობაზე, პიროვნულ ზრდასა და ფსიქოსინთეზზე.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Blog Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 scroll-reveal delay-200">
+                
+                <!-- Blog 1 -->
+                <article class="group cursor-pointer bg-surface-container-low rounded-3xl overflow-hidden border border-soft-border flex flex-col justify-between hover:shadow-md transition-shadow duration-300" onclick="openBlogReader(1)">
+                    <div>
+                        <div class="aspect-[16/10] overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Blog post 1" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop"/>
+                            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-primary">პიროვნული ზრდა</div>
+                        </div>
+                        <div class="p-8 space-y-3">
+                            <div class="flex items-center gap-2 text-on-surface-variant/70 font-label-md text-xs">
+                                <span>15 მაისი, 2026</span>
+                                <span>•</span>
+                                <span>5 წთ კითხვა</span>
+                            </div>
+                            <h3 class="font-display-lg text-xl font-bold text-primary group-hover:text-primary-fixed-dim transition-colors">რამ შეიძლება წარმოშვას ფსიქოლოგიური გამოწვევები?</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+                                ჩვენი ემოციური სირთულეები ხშირად წარსულისა და აწმყოს სხვადასხვა ფაქტორების გადაკვეთაზე ჩნდება. გაიგეთ მეტი იმის შესახებ, თუ როგორ ვმართოთ ეს გამოწვევები...
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0 text-primary font-label-md text-label-md font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        სტატიის წაკითხვა
+                        <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                    </div>
+                </article>
+
+                <!-- Blog 2 -->
+                <article class="group cursor-pointer bg-surface-container-low rounded-3xl overflow-hidden border border-soft-border flex flex-col justify-between hover:shadow-md transition-shadow duration-300" onclick="openBlogReader(2)">
+                    <div>
+                        <div class="aspect-[16/10] overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Blog post 2" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop"/>
+                            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-primary">ურთიერთობები</div>
+                        </div>
+                        <div class="p-8 space-y-3">
+                            <div class="flex items-center gap-2 text-on-surface-variant/70 font-label-md text-xs">
+                                <span>10 მაისი, 2026</span>
+                                <span>•</span>
+                                <span>7 წთ კითხვა</span>
+                            </div>
+                            <h3 class="font-display-lg text-xl font-bold text-primary group-hover:text-primary-fixed-dim transition-colors">სოციალური შფოთვა: როგორ დავძლიოთ ბარიერები?</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+                                სოციალური შფოთვა გვიშლის ხელს სრულფასოვან კომუნიკაციაში. წაიკითხეთ პრაქტიკული სავარჯიშოები და რეკომენდაციები თავდაჯერებულობის მოსაპოვებლად...
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0 text-primary font-label-md text-label-md font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        სტატიის წაკითხვა
+                        <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                    </div>
+                </article>
+
+                <!-- Blog 3 -->
+                <article class="group cursor-pointer bg-surface-container-low rounded-3xl overflow-hidden border border-soft-border flex flex-col justify-between hover:shadow-md transition-shadow duration-300" onclick="openBlogReader(3)">
+                    <div>
+                        <div class="aspect-[16/10] overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Blog post 3" src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?q=80&w=800&auto=format&fit=crop"/>
+                            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-primary">ფსიქოსინთეზი</div>
+                        </div>
+                        <div class="p-8 space-y-3">
+                            <div class="flex items-center gap-2 text-on-surface-variant/70 font-label-md text-xs">
+                                <span>01 მაისი, 2026</span>
+                                <span>•</span>
+                                <span>6 წთ კითხვა</span>
+                            </div>
+                            <h3 class="font-display-lg text-xl font-bold text-primary group-hover:text-primary-fixed-dim transition-colors">სულისა და ფსიქიკის ინტეგრირება თერაპიაში</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+                                რატომ არის მნიშვნელოვანი სულისთვის ადგილის მიცემა თანამედროვე ფსიქოთერაპიაში? ფსიქოსინთეზის უნიკალური ხედვა სულიერ და პიროვნულ კავშირებზე...
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0 text-primary font-label-md text-label-md font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        სტატიის წაკითხვა
+                        <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-32 bg-surface-container-low border-b border-soft-border/50" id="faq">
+        <div class="max-w-[800px] mx-auto px-6 w-full">
+            <div class="text-center mb-16 space-y-4 scroll-reveal">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-semibold">
+                    გაქვთ კითხვები?
+                </div>
+                <h2 class="font-display-lg text-3xl md:text-display-lg text-primary font-bold">ხშირად დასმული კითხვები</h2>
+                <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    აქ ნახავთ პასუხებს ჩვენს მუშაობასთან დაკავშირებულ ძირითად კითხვებზე.
+                </p>
+            </div>
+
+            <!-- FAQ Accordion -->
+            <div class="space-y-4 scroll-reveal delay-200">
+                
+                <!-- Accordion 1 -->
+                <div class="border border-soft-border bg-white rounded-2xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left focus:outline-none group">
+                        <span class="font-display-lg text-base md:text-lg font-bold text-primary group-hover:text-primary/80 transition-colors">რით განსხვავდება ფსიქოსინთეზი სხვა თერაპიული მეთოდებისგან?</span>
+                        <span class="material-symbols-outlined text-primary transition-transform duration-300">add</span>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="p-6 pt-0 border-t border-soft-border font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            ფსიქოსინთეზი ადამიანს განიხილავს არა მხოლოდ როგორც პრობლემების მქონეს, არამედ როგორც სულიერ არსებას, რომელსაც აქვს განვითარების უსაზღვრო პოტენციალი. იგი აქცენტს აკეთებს პიროვნების სინთეზსა და მთლიანობაზე, ნებისყოფის გააქტიურებასა და სულიერი განზომილების ინტეგრაციაზე.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 2 -->
+                <div class="border border-soft-border bg-white rounded-2xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left focus:outline-none group">
+                        <span class="font-display-lg text-base md:text-lg font-bold text-primary group-hover:text-primary/80 transition-colors">რამდენად დაცულია კონფიდენციალობა?</span>
+                        <span class="material-symbols-outlined text-primary transition-transform duration-300">add</span>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="p-6 pt-0 border-t border-soft-border font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            კონფიდენციალობა ჩვენი მუშაობის უმთავრესი ეთიკური პრინციპია. ნებისმიერი ინფორმაცია, რომელსაც სესიაზე გააზიარებთ, რჩება მკაცრად საიდუმლოდ თერაპევტსა და თქვენ შორის, ფსიქოლოგთა პროფესიული ეთიკის კოდექსის სრული დაცვით.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 3 -->
+                <div class="border border-soft-border bg-white rounded-2xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left focus:outline-none group">
+                        <span class="font-display-lg text-base md:text-lg font-bold text-primary group-hover:text-primary/80 transition-colors">როგორ შემიძლია კონსულტაციაზე ჩაწერა?</span>
+                        <span class="material-symbols-outlined text-primary transition-transform duration-300">add</span>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="p-6 pt-0 border-t border-soft-border font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            კონსულტაციაზე ჩასაწერად შეგიძლიათ გამოიყენოთ საიტზე განთავსებული ღილაკი "ჩაეწერეთ კონსულტაციაზე", შეავსოთ ფორმა, აირჩიოთ სასურველი მიმართულება და დრო. ასევე შეგიძლიათ პირდაპირ დაგვიკავშირდეთ მითითებულ ტელეფონის ნომერზე ან ელ-ფოსტაზე.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 4 -->
+                <div class="border border-soft-border bg-white rounded-2xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left focus:outline-none group">
+                        <span class="font-display-lg text-base md:text-lg font-bold text-primary group-hover:text-primary/80 transition-colors">საჭიროა თუ არა რაიმე წინასწარი მომზადება პირველი შეხვედრისთვის?</span>
+                        <span class="material-symbols-outlined text-primary transition-transform duration-300">add</span>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="p-6 pt-0 border-t border-soft-border font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            არანაირი სპეციალური მომზადება საჭირო არ არის. პირველი შეხვედრა ეთმობა ერთმანეთის გაცნობას, თქვენი მოლოდინების, საჭიროებების განხილვას და ერთობლივი მუშაობის გზების დაგეგმვას. მთავარია თქვენი მზაობა გულახდილობისთვის.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Map Section -->
+    <section class="py-32 bg-primary text-on-primary" id="contact">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                
+                <div class="lg:col-span-5 space-y-10 scroll-reveal">
+                    <div class="space-y-4">
+                        <div class="inline-block px-4 py-1.5 rounded-full bg-white/10 text-on-primary font-label-md text-label-md font-semibold">
+                            დაგვიკავშირდით
+                        </div>
+                        <h2 class="font-display-lg text-display-lg font-bold">მზად ვართ დასახმარებლად</h2>
+                        <p class="font-body-lg text-body-lg opacity-80 leading-relaxed">
+                            მოგვწერეთ ნებისმიერი კითხვა ან მოთხოვნა, ჩვენი გუნდი მალე გიპასუხებთ.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-xl">location_on</span>
+                            </div>
+                            <div>
+                                <h4 class="font-headline-lg text-base font-bold">მისამართი</h4>
+                                <p class="font-body-md opacity-80 mt-1">გიორგი დანელიას ქ. 4, თბილისი, საქართველო</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-xl">call</span>
+                            </div>
+                            <div>
+                                <h4 class="font-headline-lg text-base font-bold">ტელეფონი</h4>
+                                <p class="font-body-md opacity-80 mt-1">+995 511 44 99 71</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-xl">mail</span>
+                            </div>
+                            <div>
+                                <h4 class="font-headline-lg text-base font-bold">ელ-ფოსტა</h4>
+                                <p class="font-body-md opacity-80 mt-1">info@sapekhuri.ge</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Map Container linking to real coordinates -->
+                    <div class="h-64 rounded-3xl overflow-hidden shadow-2xl relative group border border-white/10">
+                        <a href="https://maps.google.com/?q=4+Giorgi+Danelia+St,+Tbilisi" target="_blank" rel="noopener noreferrer" class="block w-full h-full relative">
+                            <img alt="Location Map" class="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-90 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvbmT673DV_cnReSX33v3Okw9yX9fwQQMv6t-QuTlummhvqc5nr2gYIll-5agBVHwPG8DwfK5DIssWqjnzTMxVlTW_JODkM-iLz_62I1F85zeQVRCn6bPiUEz9vBShvSPKLzXrhvtVb2ThdI1kM_Em2jqSa6ab3KKNje-eGGTH4wLBHM6p1TeeJ-q1oK-JvJ_u2MprXsVodEDweAitxbbPmfdAeYXFNNLy0SGNruLLYauUqkrfhYi6ymYgir-E49__1aRy3J8su5SU"/>
+                            <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                            <div class="absolute bottom-4 left-4 bg-white/95 backdrop-blur text-primary text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow">
+                                <span class="material-symbols-outlined text-sm font-bold">map</span>
+                                რუკაზე ნახვა
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-white/5 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/10 scroll-reveal delay-200">
+                    <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="font-label-md text-xs font-semibold text-on-primary">სახელი და გვარი *</label>
+                                <input id="contact-name" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-fixed focus:border-transparent text-on-primary placeholder:text-white/40 transition-all" placeholder="თქვენი სახელი" type="text"/>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="font-label-md text-xs font-semibold text-on-primary">ტელეფონი *</label>
+                                <input id="contact-phone" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-fixed focus:border-transparent text-on-primary placeholder:text-white/40 transition-all" placeholder="+995 5XX XX XX XX" type="tel"/>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-label-md text-xs font-semibold text-on-primary">ელ-ფოსტა</label>
+                            <input id="contact-email" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-fixed focus:border-transparent text-on-primary placeholder:text-white/40 transition-all" placeholder="email@example.com" type="email"/>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-label-md text-xs font-semibold text-on-primary">შეტყობინება *</label>
+                            <textarea id="contact-message" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-fixed focus:border-transparent text-on-primary placeholder:text-white/40 transition-all" placeholder="როგორ შეგვიძლია დაგეხმაროთ?" rows="5"></textarea>
+                        </div>
+                        
+                        <button class="w-full bg-white text-primary py-4 rounded-xl font-label-md text-base font-bold hover:bg-primary-fixed transition-colors duration-300 shadow-md flex items-center justify-center gap-2" type="submit">
+                            შეტყობინების გაგზავნა
+                            <span class="material-symbols-outlined text-lg font-bold">send</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-surface-container py-24 border-t border-soft-border">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-16 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                
+                <div class="space-y-6">
+                    <a class="font-display-lg text-2xl text-primary font-bold flex items-center gap-2" href="#">
+                        <span class="material-symbols-outlined text-primary text-2xl">eco</span>
+                        საფეხური
+                    </a>
+                    <p class="font-body-md text-body-md text-on-surface-variant max-w-xs leading-relaxed">
+                        © 2026 ფსიქოლოგიური საკონსულტაციო ცენტრი "საფეხური". მხარდაჭერა და განვითარება ყოველ საფეხურზე.
+                    </p>
+                </div>
+                
+                <div class="space-y-6">
+                    <h4 class="font-label-md text-sm text-primary uppercase tracking-wider font-semibold">სერვისები</h4>
+                    <ul class="space-y-4 font-body-md text-on-surface-variant text-sm">
+                        <li><a class="hover:text-primary transition-colors" href="#services">ინდივიდუალური თერაპია</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#services">ფსიქოსინთეზი & პიროვნული ზრდა</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#services">ოჯახური კონსულტაცია</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#workshops">საგანმანათლებლო კურსები</a></li>
+                    </ul>
+                </div>
+                
+                <div class="space-y-6">
+                    <h4 class="font-label-md text-sm text-primary uppercase tracking-wider font-semibold">კავშირი</h4>
+                    <div class="flex flex-col space-y-4 font-body-md text-on-surface-variant text-sm">
+                        <a class="flex items-center gap-2 hover:text-primary transition-colors font-semibold underline decoration-primary/30" href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                            <span class="material-symbols-outlined text-lg">link</span>
+                            Facebook გვერდი
+                        </a>
+                        <a class="hover:text-primary transition-colors" href="#faq">კონფიდენციალურობა</a>
+                        <a class="hover:text-primary transition-colors" href="#contact">წესები & პირობები</a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="border-t border-soft-border/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-on-surface-variant/70">
+                <p>ყველა უფლება დაცულია.</p>
+                <p class="flex items-center gap-1">
+                    დამზადებულია სიყვარულით საქართველოში
+                    <span class="material-symbols-outlined text-xs text-red-600" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-primary/20 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl shadow-2xl border border-soft-border w-full max-w-[550px] overflow-hidden transform scale-95 transition-all duration-300 flex flex-col" id="booking-modal-card">
+            
+            <!-- Modal Header -->
+            <div class="bg-primary text-on-primary p-6 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-fixed-dim">edit_calendar</span>
+                    <h3 class="font-display-lg text-lg font-bold">კონსულტაციაზე ჩაწერა</h3>
+                </div>
+                <button onclick="closeBookingModal()" class="text-on-primary/80 hover:text-on-primary hover:bg-white/10 p-1.5 rounded-full transition-colors flex items-center">
+                    <span class="material-symbols-outlined text-xl">close</span>
+                </button>
+            </div>
+            
+            <!-- Modal Form -->
+            <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="p-6 md:p-8 space-y-5 overflow-y-auto max-h-[80vh]">
+                <p class="text-xs text-on-surface-variant/80">გთხოვთ, შეავსოთ ველები. ჩვენი კოორდინატორი უახლოეს დროში დაგიკავშირდებათ დეტალების დასაზუსტებლად.</p>
+                
+                <div class="space-y-1.5">
+                    <label class="font-label-md text-xs font-semibold text-primary">სახელი და გვარი *</label>
+                    <input id="booking-name" required class="w-full bg-surface-container-low border border-soft-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-background placeholder:text-on-surface-variant/40 text-sm transition-all" placeholder="თქვენი სახელი" type="text"/>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="font-label-md text-xs font-semibold text-primary">ტელეფონი *</label>
+                        <input id="booking-phone" required class="w-full bg-surface-container-low border border-soft-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-background placeholder:text-on-surface-variant/40 text-sm transition-all" placeholder="+995 5XX XX XX XX" type="tel"/>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="font-label-md text-xs font-semibold text-primary">ელ-ფოსტა</label>
+                        <input id="booking-email" class="w-full bg-surface-container-low border border-soft-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-background placeholder:text-on-surface-variant/40 text-sm transition-all" placeholder="email@example.com" type="email"/>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="font-label-md text-xs font-semibold text-primary">სერვისი *</label>
+                        <select id="booking-service" required class="w-full bg-surface-container-low border border-soft-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-background text-sm transition-all">
+                            <option value="ინდივიდუალური თერაპია">ინდივიდუალური თერაპია</option>
+                            <option value="ფსიქოსინთეზი & პიროვნული ზრდა">ფსიქოსინთეზი & პიროვნული ზრდა</option>
+                            <option value="წყვილთა და ოჯახის კონსულტაცია">წყვილთა და ოჯახის კონსულტაცია</option>
+                            <option value="ჯგუფური თერაპია">ჯგუფური თერაპია</option>
+                            <option value="სოციალური შფოთვა და თვითდაჯერებულობა">სოციალური შფოთვა და თვითდაჯერებულობა</option>
+                            <option value="ტრენინგი: შესავალი ფსიქოსინთეზში">ტრენინგი: შესავალი ფსიქოსინთეზში</option>
+                            <option value="ტრენინგი: სუბპიროვნებების ინტეგრაცია">ტრენინგი: სუბპიროვნებების ინტეგრაცია</option>
+                            <option value="ტრენინგი: თერაპიული ხელოვნება">ტრენინგი: თერაპიული ხელოვნება</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="font-label-md text-xs font-semibold text-primary">სასურველი თარიღი</label>
+                        <input id="booking-date" class="w-full bg-surface-container-low border border-soft-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-background text-sm transition-all" type="date"/>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="font-label-md text-xs font-semibold text-primary">დამატებითი შეტყობინება</label>
+                    <textarea id="booking-message" class="w-full bg-surface-container-low border border-soft-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-background placeholder:text-on-surface-variant/40 text-sm transition-all" placeholder="სხვა დეტალი ან კითხვა" rows="3"></textarea>
+                </div>
+
+                <button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-sm font-bold hover:bg-primary/95 transition-colors shadow-md flex items-center justify-center gap-2" type="submit">
+                    ჯავშნის გაგზავნა
+                    <span class="material-symbols-outlined text-lg">check_circle</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Blog Reader Fullscreen/Modal -->
+    <div id="blog-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-primary/20 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl shadow-2xl border border-soft-border w-full max-w-[800px] overflow-hidden transform scale-95 transition-all duration-300 flex flex-col max-h-[90vh]" id="blog-modal-card">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-soft-border flex justify-between items-center bg-surface-container-low">
+                <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                    <span class="material-symbols-outlined text-primary">menu_book</span>
+                    ბლოგის სტატია
+                </div>
+                <button onclick="closeBlogModal()" class="text-on-surface-variant hover:text-primary hover:bg-surface-container-high p-1.5 rounded-full transition-colors flex items-center">
+                    <span class="material-symbols-outlined text-xl">close</span>
+                </button>
+            </div>
+            
+            <!-- Scrollable Post Area -->
+            <div class="p-6 md:p-10 overflow-y-auto space-y-6 flex-1 text-on-background" id="blog-modal-content">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-sm pointer-events-none"></div>
+
+    <!-- Application Logic -->
+    <script>
+        // Data for Blog Posts
+        const blogPosts = {
+            1: {
+                title: "რამ შეიძლება წარმოშვას ფსიქოლოგიური გამოწვევები?",
+                category: "პიროვნული ზრდა",
+                date: "15 მაისი, 2026",
+                readTime: "5 წთ კითხვა",
+                image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop",
+                content: `
+                    <p class="font-body-lg text-lg leading-relaxed text-on-surface-variant font-semibold mb-6">
+                        ჩვენი ფსიქოლოგიური მდგომარეობა არის რთული და მრავალმხრივი ფენომენი, რომელზეც გავლენას ახდენს როგორც შინაგანი, ისე გარეგანი სამყარო.
+                    </p>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        თანამედროვე სწრაფ და სტრესულ გარემოში, სადაც ინფორმაციული ნაკადები და მოთხოვნები ყოველდღიურად იზრდება, ადამიანები ხშირად კარგავენ კავშირს საკუთარ თავთან. ფსიქოლოგიური პრობლემების სათავე ხშირად სწორედ ამ გაუცხოებაშია. როდესაც ჩვენ უგულებელყოფთ ჩვენს ემოციურ საჭიროებებს, შინაგანი ხმა იწყებს საუბარს შფოთვის, დეპრესიის ან ფიზიკური სიმპტომების სახით.
+                    </p>
+                    <h4 class="font-display-lg text-lg font-bold text-primary mt-6 mb-3">სუბპიროვნებებს შორის კონფლიქტი</h4>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        ფსიქოსინთეზის თვალსაზრისით, თითოეული ჩვენგანი შედგება სხვადასხვა "სუბპიროვნებისგან" – ეს არის შინაგანი როლები, რომლებსაც ცხოვრებაში ვირგებთ. მაგალითად, "მზრუნველი", "პერფექციონისტი", "კრიტიკოსი" ან "შეშინებული ბავშვი". ფსიქოლოგიური გამოწვევები ხშირად წარმოიშობა მაშინ, როდესაც ეს ნაწილები კონფლიქტში მოდიან ერთმანეთთან, ან როდესაც რომელიმე მათგანი დომინირებს და თრგუნავს დანარჩენს.
+                    </p>
+                    <h4 class="font-display-lg text-lg font-bold text-primary mt-6 mb-3">გზა გამოსავლისკენ</h4>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        გამოსავალი იწყება თვითდაკვირვებითა და ცნობიერების ამაღლებით. ფსიქოთერაპია გვეხმარება გავაცნობიეროთ ეს შინაგანი დინამიკა, მივცეთ თითოეულ ნაწილს ხმის უფლება, მაგრამ არ მივცეთ მათ საშუალება მთლიანად მართონ ჩვენი ცხოვრება. ეს არის გრძელი, თუმცა უმნიშვნელოვანესი საფეხური შინაგანი მშვიდობისკენ.
+                    </p>
+                `
+            },
+            2: {
+                title: "სოციალური შფოთვა: როგორ დავძლიოთ ბარიერები?",
+                category: "ურთიერთობები",
+                date: "10 მაისი, 2026",
+                readTime: "7 წთ კითხვა",
+                image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop",
+                content: `
+                    <p class="font-body-lg text-lg leading-relaxed text-on-surface-variant font-semibold mb-6">
+                        სოციალური შფოთვა გაცილებით მეტია, ვიდრე უბრალო სიმორცხვე. ეს არის შიში სხვების მხრიდან განსჯის ან უარყოფის.
+                    </p>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        ბევრი ადამიანი განიცდის დაძაბულობას საჯარო გამოსვლისას, ახალი ადამიანების გაცნობისას ან თუნდაც უბრალო სოციალური ინტერაქციის დროს. სოციალურმა შფოთვამ შეიძლება სერიოზულად შეზღუდოს ჩვენი კარიერული თუ პირადი ცხოვრება. თუმცა, მნიშვნელოვანია გვახსოვდეს, რომ ეს არის მდგომარეობა, რომლის მართვა და დაძლევა სრულიად შესაძლებელია.
+                    </p>
+                    <h4 class="font-display-lg text-lg font-bold text-primary mt-6 mb-3">ფსიქოსინთეზი და სოციალური შფოთვა</h4>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        ფსიქოსინთეზური მიდგომით, სოციალური შფოთვა ხშირად უკავშირდება ჩვენს შინაგან "მსჯავრდებულს" ან "შეშინებულ ბავშვს", რომელიც ეძებს სრულყოფილებას, რათა თავი უსაფრთხოდ იგრძნოს. თერაპიის პროცესში ჩვენ ვსწავლობთ ამ შიშის დეიდენტიფიკაციას – ვხვდებით, რომ "მე მაქვს შიში, მაგრამ მე არ ვარ ეს შიში". ჩნდება დამკვირვებლის პოზიცია, რომელიც საშუალებას გვაძლევს უფრო მშვიდად შევხედოთ სიტუაციას.
+                    </p>
+                    <h4 class="font-display-lg text-lg font-bold text-primary mt-6 mb-3">რამდენიმე პრაქტიკული რეკომენდაცია:</h4>
+                    <ul class="list-disc pl-6 space-y-2 text-on-surface-variant font-body-md mb-4">
+                        <li><strong>ყურადღების გადატანა:</strong> შფოთვის დროს ჩვენი ყურადღება მიმართულია შიგნით – საკუთარ ფიზიკურ სიმპტომებზე. შეეცადეთ ყურადღება გარეთ გადაიტანოთ, დააკვირდეთ გარემოს, ხმებს, ადამიანებს.</li>
+                        <li><strong>ნელი სუნთქვა:</strong> ღრმა და ნელი მუცლით სუნთქვა ააქტიურებს პარასიმპათიკურ ნერვულ სისტემას და ამცირებს სტრესის ჰორმონებს.</li>
+                        <li><strong>მცირე ნაბიჯები:</strong> ნუ მოითხოვთ საკუთარი თავისგან მაშინვე რთულ სიტუაციებში ყოფნას. დაიწყეთ მცირე სოციალური ამოცანებით და ნელ-ნელა გაზარდეთ სირთულე.</li>
+                    </ul>
+                `
+            },
+            3: {
+                title: "სულისა და ფსიქიკის ინტეგრირება თერაპიაში",
+                category: "ფსიქოსინთეზი",
+                date: "01 მაისი, 2026",
+                readTime: "6 წთ კითხვა",
+                image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?q=80&w=800&auto=format&fit=crop",
+                content: `
+                    <p class="font-body-lg text-lg leading-relaxed text-on-surface-variant font-semibold mb-6">
+                        ტრადიციული ფსიქოთერაპია ხშირად კონცენტრირებულია პათოლოგიებსა და პრობლემებზე. ფსიქოსინთეზი კი სთავაზობს ადგილს სულისთვის თანამედროვე მეცნიერებაში.
+                    </p>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        რობერტო ასაჯოლის სჯეროდა, რომ ადამიანს აქვს არა მხოლოდ ქვედა არაცნობიერი (ჩვენი რეპრესირებული ემოციები, ბავშვობის ტრავმები), არამედ ზედა არაცნობიერი (სუპერცნობიერი), რომელიც არის შემოქმედების, ინტუიციის, ესთეტიკური განცდებისა და სულიერების წყარო. თუ ჩვენ უგულებელყოფთ ამ ზედა სფეროს, ჩვენი ცხოვრება ხდება უაზრო, თუნდაც მატერიალურად წარმატებული ვიყოთ.
+                    </p>
+                    <h4 class="font-display-lg text-lg font-bold text-primary mt-6 mb-3">Coming Home to Yourself</h4>
+                    <p class="font-body-md text-base leading-relaxed text-on-surface-variant mb-4">
+                        "დაბრუნება საკუთარ სახლში" – ეს არის მეტაფორა, რომელიც აღწერს ჩვენი ნამდვილი, ტრანსცენდენტული "მე"-ს (Self) აღმოჩენას. ეს "მე" არის სტაბილურობის, სიმშვიდისა და სიყვარულის ცენტრი. ფსიქოსინთეზი გვეხმარება ამ ცენტრთან მუდმივი კავშირის დამყარებაში, რაც გვაძლევს ძალას გავუძლოთ ცხოვრების ნებისმიერ ქარიშხალს და ვიპოვოთ ჩვენი ნამდვილი მოწოდება.
+                    </p>
+                `
+            }
+        };
+
+        // Custom Toast Notification Function
+        function showToast(message, type = "success") {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            
+            // Set styles based on type
+            const bgClass = type === "success" ? "bg-primary" : "bg-error";
+            const textClass = "text-on-primary";
+            const icon = type === "success" ? "check_circle" : "error";
+            
+            toast.className = `flex items-center gap-3 p-4 rounded-2xl shadow-xl ${bgClass} ${textClass} pointer-events-auto transform translate-y-4 opacity-0 transition-all duration-300 max-w-sm border border-white/10`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-xl">${icon}</span>
+                <span class="font-body-md text-sm font-semibold">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.remove("translate-y-4", "opacity-0");
+            }, 10);
+            
+            // Dismiss after 4 seconds
+            setTimeout(() => {
+                toast.classList.add("translate-y-4", "opacity-0");
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("menu-icon");
+            if (menu.classList.contains("hidden")) {
+                menu.classList.remove("hidden");
+                icon.textContent = "close";
+            } else {
+                menu.classList.add("hidden");
+                icon.textContent = "menu";
+            }
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("menu-icon");
+            menu.classList.add("hidden");
+            icon.textContent = "menu";
+        }
+
+        // Booking Modal Management
+        function openBookingModal(defaultService = "") {
+            const modal = document.getElementById("booking-modal");
+            const card = document.getElementById("booking-modal-card");
+            const select = document.getElementById("booking-service");
+            
+            if (defaultService && select) {
+                select.value = defaultService;
+            }
+            
+            modal.classList.remove("pointer-events-none", "opacity-0");
+            card.classList.remove("scale-95");
+            card.classList.add("scale-100");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById("booking-modal");
+            const card = document.getElementById("booking-modal-card");
+            
+            modal.classList.add("pointer-events-none", "opacity-0");
+            card.classList.remove("scale-100");
+            card.classList.add("scale-95");
+            document.body.classList.remove("overflow-hidden");
+            
+            // Reset form
+            document.getElementById("booking-form").reset();
+        }
+
+        // Booking Submit Handler
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById("booking-name").value.trim();
+            const phone = document.getElementById("booking-phone").value.trim();
+            const email = document.getElementById("booking-email").value.trim();
+            const service = document.getElementById("booking-service").value;
+            const date = document.getElementById("booking-date").value;
+            
+            if (!name || !phone) {
+                showToast("გთხოვთ შეავსოთ სავალდებულო ველები (*)", "error");
+                return;
+            }
+            
+            // Successful action simulation
+            closeBookingModal();
+            showToast(`მადლობა, ${name}! განაცხადი სერვისზე "${service}" მიღებულია. კოორდინატორი მალე დაგიკავშირდებათ.`, "success");
+        }
+
+        // Blog Reader Management
+        function openBlogReader(id) {
+            const post = blogPosts[id];
+            if (!post) return;
+            
+            const modal = document.getElementById("blog-modal");
+            const card = document.getElementById("blog-modal-card");
+            const content = document.getElementById("blog-modal-content");
+            
+            content.innerHTML = `
+                <div class="aspect-[21/9] rounded-2xl overflow-hidden mb-8 shadow-inner">
+                    <img class="w-full h-full object-cover" src="${post.image}" alt="${post.title}"/>
+                </div>
+                <div class="flex items-center gap-4 text-on-surface-variant/70 font-label-md text-xs">
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-bold">${post.category}</span>
+                    <span>${post.date}</span>
+                    <span>•</span>
+                    <span>${post.readTime}</span>
+                </div>
+                <h2 class="font-display-lg text-2xl md:text-3xl font-bold text-primary leading-tight mt-4">${post.title}</h2>
+                <div class="prose max-w-none mt-6 border-t border-soft-border/50 pt-6">
+                    ${post.content}
+                </div>
+                <div class="pt-8 flex justify-end">
+                    <button onclick="openBookingModal('კონსულტაცია ბლოგიდან: ${post.title}')" class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-sm font-bold btn-primary-hover">
+                        ჩაეწერეთ კონსულტაციაზე
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.remove("pointer-events-none", "opacity-0");
+            card.classList.remove("scale-95");
+            card.classList.add("scale-100");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function closeBlogModal() {
+            const modal = document.getElementById("blog-modal");
+            const card = document.getElementById("blog-modal-card");
+            
+            modal.classList.add("pointer-events-none", "opacity-0");
+            card.classList.remove("scale-100");
+            card.classList.add("scale-95");
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        // FAQ Collapsible Logic
+        function toggleFaq(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector(".material-symbols-outlined");
+            const card = btn.parentElement;
+            
+            if (content.style.maxHeight && content.style.maxHeight !== "0px") {
+                // Close
+                content.style.maxHeight = "0px";
+                icon.textContent = "add";
+                card.classList.remove("border-primary/40", "shadow-md");
+            } else {
+                // Open (close all others first)
+                document.querySelectorAll("#faq .max-h-0, #faq div[style*='max-height']").forEach(el => {
+                    if (el !== content) {
+                        el.style.maxHeight = "0px";
+                        const otherBtn = el.previousElementSibling;
+                        if (otherBtn) {
+                            const otherIcon = otherBtn.querySelector(".material-symbols-outlined");
+                            if (otherIcon) otherIcon.textContent = "add";
+                            otherBtn.parentElement.classList.remove("border-primary/40", "shadow-md");
+                        }
+                    }
+                });
+                
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.textContent = "remove";
+                card.classList.add("border-primary/40", "shadow-md");
+            }
+        }
+
+        // Contact Form Submission Handler
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById("contact-name").value.trim();
+            const phone = document.getElementById("contact-phone").value.trim();
+            const email = document.getElementById("contact-email").value.trim();
+            const message = document.getElementById("contact-message").value.trim();
+            
+            if (!name || !phone || !message) {
+                showToast("გთხოვთ შეავსოთ ყველა სავალდებულო ველი (*)", "error");
+                return;
+            }
+            
+            // Success feedback
+            showToast(`შეტყობინება წარმატებით გაიგზავნა! მალე დაგიკავშირდებით.`, "success");
+            document.getElementById("contact-form").reset();
+        }
+
+        // Scroll Reveal Animation Logic using Intersection Observer
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("opacity-100", "translate-y-0");
+                    entry.target.classList.remove("opacity-0", "translate-y-10");
+                    
+                    // Specific logic for progress line in Process section
+                    if (entry.target.id === "process") {
+                        const line = document.getElementById("progress-line");
+                        if (line) {
+                            setTimeout(() => {
+                                line.classList.remove("w-0");
+                                line.classList.add("w-[75%]"); // Connect up to step 4
+                            }, 300);
+                        }
+                    }
+                    
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll(".scroll-reveal").forEach(el => {
+            el.classList.add("transition-all", "duration-1000", "opacity-0", "translate-y-10");
+            revealObserver.observe(el);
+        });
+
+        // Apply scroll-reveal automatically to sections to ensure a flowing premium entry
+        document.querySelectorAll("section").forEach(section => {
+            section.classList.add("scroll-reveal");
+            revealObserver.observe(section);
+        });
+
+        // Close Modals on click outside the card
+        window.addEventListener("click", (e) => {
+            const bookingModal = document.getElementById("booking-modal");
+            const blogModal = document.getElementById("blog-modal");
+            
+            if (e.target === bookingModal) {
+                closeBookingModal();
+            }
+            if (e.target === blogModal) {
+                closeBlogModal();
+            }
+        });
+        
+        // Active Nav Link highlight on scroll
+        window.addEventListener("scroll", () => {
+            const sections = document.querySelectorAll("section, header");
+            const navLinks = document.querySelectorAll("#navbar a[href^='#']");
+            let current = "";
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 120) {
+                    const id = section.getAttribute("id");
+                    current = id ? "#" + id : "#";
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove("text-primary", "border-b-2", "border-primary");
+                link.classList.add("text-on-surface-variant");
+                if (link.getAttribute("href") === current) {
+                    link.classList.add("text-primary", "border-b-2", "border-primary");
+                    link.classList.remove("text-on-surface-variant");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
