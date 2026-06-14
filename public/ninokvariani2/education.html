@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ka">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Educational Activities and Events | Georgian Institute of Psychosynthesis</title>
+    <title>საგანმანათლებლო საქმიანობა | საქართველოს ფსიქოსინთეზის ინსტიტუტი</title>
+    <meta name="description" content="საქართველოს ფსიქოსინთეზის ინსტიტუტის საგანმანათლებლო პროგრამები, ღონისძიებები და სემინარები. GIP Educational Activities and Events."/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;600;700&family=Hanken+Grotesk:wght@500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script id="tailwind-config">
@@ -81,82 +82,24 @@
                     "container-max": "1200px"
             },
             "fontFamily": {
-                    "headline-lg-mobile": [
-                            "Literata"
-                    ],
-                    "body-md": [
-                            "Literata"
-                    ],
-                    "display-lg": [
-                            "Literata"
-                    ],
-                    "headline-lg": [
-                            "Literata"
-                    ],
-                    "label-md": [
-                            "Hanken Grotesk"
-                    ],
-                    "label-sm": [
-                            "Hanken Grotesk"
-                    ],
-                    "body-lg": [
-                            "Literata"
-                    ]
+                    "headline-lg-mobile": ["Literata"],
+                    "body-md": ["Literata"],
+                    "display-lg": ["Literata"],
+                    "headline-lg": ["Literata"],
+                    "label-md": ["Hanken Grotesk"],
+                    "label-sm": ["Hanken Grotesk"],
+                    "body-lg": ["Literata"]
             },
             "fontSize": {
-                    "headline-lg-mobile": [
-                            "28px",
-                            {
-                                     "lineHeight": "1.2",
-                                     "fontWeight": "600"
-                            }
-                    ],
-                    "body-md": [
-                            "16px",
-                            {
-                                     "lineHeight": "1.6",
-                                     "fontWeight": "400"
-                            }
-                    ],
-                    "display-lg": [
-                            "48px",
-                            {
-                                     "lineHeight": "1.1",
-                                     "letterSpacing": "-0.02em",
-                                     "fontWeight": "700"
-                            }
-                    ],
-                    "headline-lg": [
-                            "32px",
-                            {
-                                     "lineHeight": "1.2",
-                                     "fontWeight": "600"
-                            }
-                    ],
-                    "label-md": [
-                            "14px",
-                            {
-                                     "lineHeight": "1.2",
-                                     "letterSpacing": "0.05em",
-                                     "fontWeight": "600"
-                            }
-                    ],
-                    "label-sm": [
-                            "12px",
-                            {
-                                     "lineHeight": "1.2",
-                                     "fontWeight": "500"
-                            }
-                    ],
-                    "body-lg": [
-                            "18px",
-                            {
-                                     "lineHeight": "1.6",
-                                     "fontWeight": "400"
-                            }
-                    ]
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
             }
-        },
+          },
         },
       }
     </script>
@@ -173,26 +116,22 @@
             color: #F4F5F0 !important;
         }
 
-        /* Navbars */
         .gip-navbar {
             background-color: rgba(22, 52, 34, 0.95) !important;
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(233, 193, 118, 0.18) !important;
         }
 
-        /* Cards */
         .gip-card {
             background-color: #2D4B37 !important;
             border: 1px solid rgba(233, 193, 118, 0.18) !important;
             backdrop-filter: blur(8px);
         }
 
-        /* Images saturation, contrast, brightness */
         img {
             filter: saturate(0.9) contrast(1.05) brightness(0.95) !important;
         }
 
-        /* Buttons styling */
         .gip-btn-primary {
             background-color: #E9C176 !important;
             color: #163422 !important;
@@ -216,7 +155,6 @@
             color: #E9C176 !important;
         }
 
-        /* Gradients */
         .gip-hero-overlay {
             background: linear-gradient(180deg, rgba(22,52,34,0.4), rgba(22,52,34,0.9)) !important;
         }
@@ -224,7 +162,22 @@
             background: linear-gradient(180deg, rgba(22, 52, 34, 0.1), rgba(22, 52, 34, 0.8)) !important;
         }
 
-        /* Links hover */
+        .nav-link-hover {
+            position: relative;
+        }
+        .nav-link-hover::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #e9c176;
+            transition: width 0.3s ease;
+        }
+        .nav-link-hover:hover::after {
+            width: 100%;
+        }
         .nav-link-hover:hover {
             color: #E9C176 !important;
         }
@@ -251,33 +204,10 @@
         .card-hover:hover .image-zoom {
             transform: scale(1.05);
         }
-        .nav-link-hover {
-            position: relative;
-        }
-        .nav-link-hover::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: #e9c176;
-            transition: width 0.3s ease;
-        }
-        .nav-link-hover:hover::after {
-            width: 100%;
-        }
-        
-        /* Entrance Animations */
+
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
@@ -287,7 +217,6 @@
         .delay-300 { animation-delay: 300ms; }
         .delay-500 { animation-delay: 500ms; }
 
-        /* Footer Scroll Fade-in */
         .fade-in-on-scroll {
             opacity: 0;
             transform: translateY(20px);
@@ -297,44 +226,101 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Language Switcher */
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(233, 193, 118, 0.08);
+            border: 1px solid rgba(233, 193, 118, 0.25);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-family: 'Hanken Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .lang-switcher:hover {
+            background: rgba(233, 193, 118, 0.15);
+            border-color: rgba(233, 193, 118, 0.5);
+        }
+
+        .lang-btn {
+            color: #ADCFB4;
+            padding: 2px 6px;
+            border-radius: 999px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .lang-btn.active {
+            background: #E9C176;
+            color: #163422;
+        }
+
+        .lang-divider {
+            color: rgba(233, 193, 118, 0.35);
+            font-size: 10px;
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface font-body-md antialiased pt-[88px]">
+
     <!-- TopNavBar -->
     <nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto gip-navbar shadow-sm" style="max-width: 1200px; left: 50%; transform: translateX(-50%);">
         <a class="text-headline-lg font-headline-lg text-primary hover:text-secondary transition-colors duration-300 shrink-0 mr-8" href="index.html">
             GIP
         </a>
         <div class="hidden md:flex space-x-8 items-center">
-            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="index.html">About</a>
-            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="education.html">Education</a>
-            <a class="text-label-md font-label-md text-primary border-b-2 border-primary pb-1 uppercase" href="education.html">Events</a>
-            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="education.html">Articles</a>
-            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="index.html#contact">Contact</a>
+            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="index.html" data-i18n="nav_about"></a>
+            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="education.html" data-i18n="nav_education"></a>
+            <a class="text-label-md font-label-md text-primary border-b-2 border-primary pb-1 uppercase" href="education.html" data-i18n="nav_events"></a>
+            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="education.html" data-i18n="nav_articles"></a>
+            <a class="text-label-md font-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300 nav-link-hover uppercase" href="index.html#contact" data-i18n="nav_contact"></a>
         </div>
-        <button onclick="window.location.href='login.html'" class="hidden md:block text-label-md font-label-md gip-btn-secondary px-6 py-2 rounded uppercase">
-            Admin
-        </button>
-        <button onclick="toggleMobileMenu()" class="md:hidden text-primary">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <div class="hidden md:flex items-center gap-4">
+            <!-- Language Switcher Desktop -->
+            <div class="lang-switcher" id="lang-switcher-desktop" role="group" aria-label="Language switcher">
+                <span class="lang-btn" id="btn-ka-desktop" onclick="setLanguage('ka')" role="button" tabindex="0">🇬🇪 ქართ</span>
+                <span class="lang-divider">|</span>
+                <span class="lang-btn" id="btn-en-desktop" onclick="setLanguage('en')" role="button" tabindex="0">🇬🇧 EN</span>
+            </div>
+            <button onclick="window.location.href='login.html'" class="text-label-md font-label-md gip-btn-secondary px-6 py-2 rounded uppercase" data-i18n="nav_admin"></button>
+        </div>
+        <div class="flex items-center gap-3 md:hidden">
+            <!-- Language Switcher Mobile -->
+            <div class="lang-switcher" id="lang-switcher-mobile" role="group" aria-label="Language switcher">
+                <span class="lang-btn" id="btn-ka-mobile" onclick="setLanguage('ka')" role="button" tabindex="0">🇬🇪</span>
+                <span class="lang-divider">|</span>
+                <span class="lang-btn" id="btn-en-mobile" onclick="setLanguage('en')" role="button" tabindex="0">🇬🇧</span>
+            </div>
+            <button onclick="toggleMobileMenu()" class="text-primary">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
     </nav>
 
     <!-- Mobile Drawer -->
     <div id="mobile-drawer" class="fixed inset-0 z-50 bg-[#163422]/60 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
         <div class="fixed right-0 top-0 h-full w-64 bg-surface-container p-lg flex flex-col gap-lg shadow-xl border-l border-outline-variant">
             <div class="flex justify-between items-center">
-                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">GIP Menu</span>
+                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary" data-i18n="mobile_menu_title"></span>
                 <button onclick="toggleMobileMenu()" class="text-on-surface"><span class="material-symbols-outlined text-3xl">close</span></button>
             </div>
             <ul class="flex flex-col gap-md">
-                <li><a class="text-on-surface hover:text-primary block py-sm" href="index.html" onclick="toggleMobileMenu()">About</a></li>
-                <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()">Education</a></li>
-                <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()">Events</a></li>
-                <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()">Articles</a></li>
-                <li><a class="text-on-surface hover:text-primary block py-sm" href="index.html#contact" onclick="toggleMobileMenu()">Contact</a></li>
+                <li><a class="text-on-surface hover:text-primary block py-sm" href="index.html" onclick="toggleMobileMenu()" data-i18n="nav_about"></a></li>
+                <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()" data-i18n="nav_education"></a></li>
+                <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()" data-i18n="nav_events"></a></li>
+                <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()" data-i18n="nav_articles"></a></li>
+                <li><a class="text-on-surface hover:text-primary block py-sm" href="index.html#contact" onclick="toggleMobileMenu()" data-i18n="nav_contact"></a></li>
                 <li class="pt-md">
-                    <button onclick="window.location.href='login.html'" class="w-full gip-btn-primary py-sm rounded transition-colors">Admin</button>
+                    <button onclick="window.location.href='login.html'" class="w-full gip-btn-primary py-sm rounded transition-colors" data-i18n="nav_admin"></button>
                 </li>
             </ul>
         </div>
@@ -342,8 +328,8 @@
 
     <!-- Header Section -->
     <header class="w-full py-lg px-gutter max-w-container-max mx-auto flex flex-col items-center text-center">
-        <h1 class="font-display-lg text-display-lg text-primary mb-4">საგანმანათლებლო საქმიანობა და ღონისძიებები</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Educational Activities and Events at the Georgian Institute of Psychosynthesis.</p>
+        <h1 class="font-display-lg text-display-lg text-primary mb-4" data-i18n="page_title"></h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl" data-i18n="page_subtitle"></p>
     </header>
 
     <!-- Main Content Area -->
@@ -354,8 +340,8 @@
             <div class="w-full lg:w-8/12">
                 <!-- Filter Toggle -->
                 <div class="flex space-x-4 mb-10 border-b border-outline-variant pb-4">
-                    <button class="font-label-md text-label-md text-primary border-b-2 border-primary pb-2 uppercase tracking-widest transition-all duration-300">Events</button>
-                    <button class="font-label-md text-label-md text-on-surface-variant border-b-2 border-transparent hover:border-secondary hover:text-secondary pb-2 uppercase tracking-widest transition-all duration-300" onclick="alert('Articles section is populated inside GIP library')">Articles</button>
+                    <button class="font-label-md text-label-md text-primary border-b-2 border-primary pb-2 uppercase tracking-widest transition-all duration-300" data-i18n="filter_events"></button>
+                    <button class="font-label-md text-label-md text-on-surface-variant border-b-2 border-transparent hover:border-secondary hover:text-secondary pb-2 uppercase tracking-widest transition-all duration-300" onclick="alert(document.documentElement.lang === 'ka' ? 'სტატიები განახლდება GIP ბიბლიოთეკაში' : 'Articles section is populated inside GIP library')" data-i18n="filter_articles"></button>
                 </div>
                 <!-- Bento Grid for Events -->
                 <div class="bento-grid">
@@ -366,23 +352,23 @@
                         </div>
                         <div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
                             <div class="mb-4 flex gap-2">
-                                <span class="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-3 py-1 rounded-full uppercase">Program</span>
-                                <span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-3 py-1 rounded-full uppercase">Upcoming</span>
+                                <span class="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-3 py-1 rounded-full uppercase" data-i18n="ev1_badge_program"></span>
+                                <span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-3 py-1 rounded-full uppercase" data-i18n="ev1_badge_status"></span>
                             </div>
-                            <h2 class="font-headline-lg text-headline-lg text-primary mb-4">Intensive Therapy Group</h2>
-                            <p class="font-body-md text-body-md text-on-surface-variant mb-6">Join our intensive therapy group led by esteemed trainers from the Stockholm Academy. Explore deep psychological frameworks in a supportive, natural setting.</p>
+                            <h2 class="font-headline-lg text-headline-lg text-primary mb-4" data-i18n="ev1_title"></h2>
+                            <p class="font-body-md text-body-md text-on-surface-variant mb-6" data-i18n="ev1_desc"></p>
                             <div class="flex items-center text-sm text-on-surface-variant mb-6 space-x-4">
                                 <div class="flex items-center">
                                     <span class="material-symbols-outlined mr-1 text-[20px]">calendar_month</span>
-                                    <span>Oct 15 - 20, 2024</span>
+                                    <span data-i18n="ev1_date"></span>
                                 </div>
                                 <div class="flex items-center">
                                     <span class="material-symbols-outlined mr-1 text-[20px]">location_on</span>
-                                    <span>Tbilisi</span>
+                                    <span data-i18n="ev1_location"></span>
                                 </div>
                             </div>
-                            <button onclick="openApplyModal('Intensive Therapy Group')" class="w-fit inline-flex items-center text-secondary font-bold hover:text-primary transition-colors duration-300">
-                                Apply Now <span class="material-symbols-outlined ml-2">arrow_forward</span>
+                            <button onclick="openApplyModal(document.querySelector('[data-i18n=ev1_title]').textContent)" class="w-fit inline-flex items-center text-secondary font-bold hover:text-primary transition-colors duration-300">
+                                <span data-i18n="btn_apply"></span> <span class="material-symbols-outlined ml-2">arrow_forward</span>
                             </button>
                         </div>
                     </article>
@@ -391,15 +377,15 @@
                         <div class="image-zoom-container h-48 bg-[#1E402D] relative">
                             <img alt="Imagery Session" class="w-full h-full object-cover image-zoom opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ5oEBURN5VfPLCORmo_6FHounphfXpGN88YJvJiTYbmgbG7kBmKordTSTP7EbZG0c9AzwWSmfuOYudisjnSuuZ82PEbK1efZqrzr2No4rb_9t6GG-zENYFq5hztvrOGUvdIIg5_iSN3AO0sR_BNbLxlDA9a_AnQtgnjMuNb25pfANTVAjqZQ55kOz3brZChC4JoUPWujhwDl-e4Tr8lIxe3H7e8N0JbM4ijjGmWseXU3gCaDac27BDJdTpQalBQLCI3kj0I9Nbo4" style="object-position: top;"/>
                             <div class="absolute inset-0 bg-gradient-to-t from-[#163422]/80 to-transparent"></div>
-                            <span class="absolute bottom-4 left-4 text-on-primary-container font-label-sm text-label-sm bg-primary-container/90 px-2 py-1 rounded backdrop-blur-sm uppercase">Module</span>
+                            <span class="absolute bottom-4 left-4 text-on-primary-container font-label-sm text-label-sm bg-primary-container/90 px-2 py-1 rounded backdrop-blur-sm uppercase" data-i18n="ev2_badge"></span>
                         </div>
                         <div class="p-6 flex-grow flex flex-col justify-between">
                             <div>
-                                <h3 class="font-headline-lg text-[24px] leading-tight text-primary mb-3">Guided Imagery Module</h3>
-                                <p class="font-body-md text-body-md text-on-surface-variant mb-4">Led by Jan Taal. A profound exploration of imagery in therapeutic practice, bridging clinical methodology with holistic insight.</p>
+                                <h3 class="font-headline-lg text-[24px] leading-tight text-primary mb-3" data-i18n="ev2_title"></h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mb-4" data-i18n="ev2_desc"></p>
                             </div>
-                            <button onclick="openApplyModal('Guided Imagery Module')" class="inline-flex items-center text-secondary font-bold hover:text-primary transition-colors duration-300 mt-auto w-fit">
-                                Register <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+                            <button onclick="openApplyModal(document.querySelector('[data-i18n=ev2_title]').textContent)" class="inline-flex items-center text-secondary font-bold hover:text-primary transition-colors duration-300 mt-auto w-fit">
+                                <span data-i18n="btn_register"></span> <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
                             </button>
                         </div>
                     </article>
@@ -409,15 +395,15 @@
                             <div class="w-full h-full bg-primary-container flex items-center justify-center">
                                 <span class="material-symbols-outlined text-on-primary-container text-5xl opacity-50">psychiatry</span>
                             </div>
-                            <span class="absolute bottom-4 left-4 text-secondary-container font-label-sm text-label-sm bg-secondary/90 px-2 py-1 rounded backdrop-blur-sm uppercase">Workshop</span>
+                            <span class="absolute bottom-4 left-4 text-secondary-container font-label-sm text-label-sm bg-secondary/90 px-2 py-1 rounded backdrop-blur-sm uppercase" data-i18n="ev3_badge"></span>
                         </div>
                         <div class="p-6 flex-grow flex flex-col justify-between">
                             <div>
-                                <h3 class="font-headline-lg text-[24px] leading-tight text-primary mb-3">Foundations of Psychosynthesis</h3>
-                                <p class="font-body-md text-body-md text-on-surface-variant mb-4">An introductory workshop for mental health professionals seeking to integrate Assagioli's principles into modern practice.</p>
+                                <h3 class="font-headline-lg text-[24px] leading-tight text-primary mb-3" data-i18n="ev3_title"></h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mb-4" data-i18n="ev3_desc"></p>
                             </div>
-                            <button onclick="openApplyModal('Foundations of Psychosynthesis')" class="inline-flex items-center text-secondary font-bold hover:text-primary transition-colors duration-300 mt-auto w-fit">
-                                Register <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+                            <button onclick="openApplyModal(document.querySelector('[data-i18n=ev3_title]').textContent)" class="inline-flex items-center text-secondary font-bold hover:text-primary transition-colors duration-300 mt-auto w-fit">
+                                <span data-i18n="btn_register"></span> <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
                             </button>
                         </div>
                     </article>
@@ -428,20 +414,18 @@
                 <div class="gip-card rounded-xl p-8 sticky top-32">
                     <div class="mb-6">
                         <span class="material-symbols-outlined text-secondary text-4xl mb-4">group</span>
-                        <h3 class="font-headline-lg text-[28px] text-primary mb-2">Join our Community</h3>
-                        <p class="font-body-md text-body-md text-on-surface-variant">Connect with professionals and individuals dedicated to holistic growth and psychological integration.</p>
+                        <h3 class="font-headline-lg text-[28px] text-primary mb-2" data-i18n="sidebar_title"></h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="sidebar_desc"></p>
                     </div>
-                    <form onsubmit="event.preventDefault(); alert('Subscribed!')" class="space-y-4">
+                    <form onsubmit="event.preventDefault(); alert(document.documentElement.lang === 'ka' ? 'გამოწერა დასტურდება!' : 'Subscribed!')" class="space-y-4">
                         <div>
-                            <label class="sr-only" for="email">Email Address</label>
-                            <input class="w-full border-0 border-b border-outline-variant bg-transparent px-0 py-3 text-on-surface focus:ring-0 focus:border-primary transition-colors duration-300 font-body-md" id="email" placeholder="Your email address" type="email" required/>
+                            <label class="sr-only" for="email" data-i18n="sidebar_email_label"></label>
+                            <input class="w-full border-0 border-b border-outline-variant bg-transparent px-0 py-3 text-on-surface focus:ring-0 focus:border-primary transition-colors duration-300 font-body-md" id="email" data-i18n-placeholder="sidebar_email_placeholder" placeholder="თქვენი ელ-ფოსტა" type="email" required/>
                         </div>
-                        <button class="w-full gip-btn-primary font-label-md text-label-md uppercase tracking-widest py-4 rounded hover:shadow-md hover:-translate-y-0.5" type="submit">
-                            Subscribe to Updates
-                        </button>
+                        <button class="w-full gip-btn-primary font-label-md text-label-md uppercase tracking-widest py-4 rounded hover:shadow-md hover:-translate-y-0.5" type="submit" data-i18n="sidebar_subscribe_btn"></button>
                     </form>
                     <div class="mt-8 pt-6 border-t border-outline-variant">
-                        <h4 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-4">Follow Us</h4>
+                        <h4 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-4" data-i18n="sidebar_follow"></h4>
                         <div class="flex space-x-4">
                             <a class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-primary hover:bg-primary-container hover:text-on-primary-container transition-colors duration-300" href="#">
                                 <span class="material-symbols-outlined">public</span>
@@ -458,12 +442,12 @@
 
     <!-- Application Modal -->
     <div id="apply-modal" class="fixed inset-0 z-50 bg-[#163422]/70 backdrop-blur-sm hidden flex items-center justify-center p-md">
-        <div class="gip-card rounded-xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in duration-300">
+        <div class="gip-card rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
             <!-- Header -->
             <div class="bg-primary-container p-md flex justify-between items-center text-[#163422]">
                 <div>
-                    <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container" id="modal-program-title">Program Registration</h3>
-                    <p class="text-on-primary-container/80 text-xs font-label-sm mt-1" id="modal-program-subtitle">Applying for</p>
+                    <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container" id="modal-program-title" data-i18n="modal_title"></h3>
+                    <p class="text-on-primary-container/80 text-xs font-label-sm mt-1" id="modal-program-subtitle"></p>
                 </div>
                 <button onclick="closeApplyModal()" class="text-on-primary-container hover:text-white"><span class="material-symbols-outlined text-3xl">close</span></button>
             </div>
@@ -471,20 +455,20 @@
             <form id="apply-form" onsubmit="submitApplication(event)" class="p-lg space-y-md">
                 <input type="hidden" id="modal-program-input" name="program"/>
                 <div>
-                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="student-name">Full Name</label>
-                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary" id="student-name" name="name" required placeholder="Your Name" type="text"/>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="student-name" data-i18n="modal_name_label"></label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary" id="student-name" name="name" required data-i18n-placeholder="modal_name_placeholder" placeholder="სახელი და გვარი" type="text"/>
                 </div>
                 <div>
-                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="student-email">Email Address</label>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="student-email" data-i18n="modal_email_label"></label>
                     <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary" id="student-email" name="email" required placeholder="you@example.com" type="email"/>
                 </div>
                 <div>
-                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="student-statement">Motivation Statement</label>
-                    <textarea class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary h-28" id="student-statement" name="statement" required placeholder="Why do you wish to join this session?"></textarea>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="student-statement" data-i18n="modal_statement_label"></label>
+                    <textarea class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary h-28" id="student-statement" name="statement" required data-i18n-placeholder="modal_statement_placeholder" placeholder="რატომ გსურთ ამ სემინარში მონაწილეობა?"></textarea>
                 </div>
                 <div class="pt-sm flex justify-end gap-sm">
-                    <button type="button" onclick="closeApplyModal()" class="border border-outline-variant text-on-surface-variant font-label-sm text-label-sm px-lg py-sm rounded hover:bg-surface-variant/30">Cancel</button>
-                    <button type="submit" class="gip-btn-primary font-label-md text-label-md px-lg py-sm rounded transition-colors">Submit Application</button>
+                    <button type="button" onclick="closeApplyModal()" class="border border-outline-variant text-on-surface-variant font-label-sm text-label-sm px-lg py-sm rounded hover:bg-surface-variant/30" data-i18n="modal_cancel"></button>
+                    <button type="submit" class="gip-btn-primary font-label-md text-label-md px-lg py-sm rounded transition-colors" data-i18n="modal_submit"></button>
                 </div>
             </form>
         </div>
@@ -493,25 +477,215 @@
     <!-- Footer -->
     <footer class="w-full py-xl px-gutter flex flex-wrap justify-between gap-gutter max-w-container-max mx-auto bg-surface-container-low text-on-surface fade-in-on-scroll border-t border-outline-variant">
         <div class="w-full md:w-auto mb-8 md:mb-0">
-            <h2 class="text-headline-lg font-headline-lg text-secondary mb-4">Georgian Institute of Psychosynthesis</h2>
-            <p class="text-body-md font-body-md text-on-surface-variant max-w-sm mb-6">Promoting psychological depth and holistic growth through rigorous training and personal integration.</p>
-            <p class="text-label-sm font-label-sm text-on-surface-variant">© 2024 Georgian Institute of Psychosynthesis. All rights reserved.</p>
+            <h2 class="text-headline-lg font-headline-lg text-secondary mb-4" data-i18n="footer_full_name"></h2>
+            <p class="text-body-md font-body-md text-on-surface-variant max-w-sm mb-6" data-i18n="footer_tagline"></p>
+            <p class="text-label-sm font-label-sm text-on-surface-variant" data-i18n="footer_copyright"></p>
         </div>
         <div class="flex flex-col space-y-4">
-            <h3 class="text-label-md font-label-md text-secondary uppercase tracking-widest">Connect</h3>
-            <a class="text-body-md font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Facebook</a>
+            <h3 class="text-label-md font-label-md text-secondary uppercase tracking-widest" data-i18n="footer_connect_title"></h3>
+            <a class="text-body-md font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#" data-i18n="footer_facebook"></a>
             <a class="text-body-md font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="mailto:info@psychosynthesis.ge">info@psychosynthesis.ge</a>
             <a class="text-body-md font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="tel:599506232">599 50 62 32</a>
-            <span class="text-body-md font-body-md text-on-surface-variant">Tbilisi, Georgia</span>
+            <span class="text-body-md font-body-md text-on-surface-variant" data-i18n="footer_location"></span>
         </div>
         <div class="flex flex-col space-y-4">
-            <h3 class="text-label-md font-label-md text-secondary uppercase tracking-widest">Stay Updated</h3>
-            <a class="text-body-md font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Newsletter Signup</a>
+            <h3 class="text-label-md font-label-md text-secondary uppercase tracking-widest" data-i18n="footer_updates_title"></h3>
+            <a class="text-body-md font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#" data-i18n="footer_newsletter"></a>
         </div>
     </footer>
 
     <script>
+        // =========================================================
+        //  GIP - i18n Dictionary (education.html)
+        // =========================================================
+        const translations = {
+            ka: {
+                // Nav
+                nav_about:       "ჩვენ შესახებ",
+                nav_education:   "განათლება",
+                nav_events:      "ღონისძიებები",
+                nav_articles:    "სტატიები",
+                nav_contact:     "კონტაქტი",
+                nav_admin:       "ადმინი",
+                mobile_menu_title: "GIP მენიუ",
+
+                // Page header
+                page_title:    "საგანმანათლებლო საქმიანობა და ღონისძიებები",
+                page_subtitle: "საქართველოს ფსიქოსინთეზის ინსტიტუტის პროგრამები, სემინარები და განახლებები.",
+
+                // Filter
+                filter_events:   "ღონისძიებები",
+                filter_articles: "სტატიები",
+
+                // Event 1
+                ev1_badge_program: "პროგრამა",
+                ev1_badge_status:  "მოახლოებული",
+                ev1_title:    "ინტენსიური თერაპიული ჯგუფი",
+                ev1_desc:     "შემოგვიერთდით ინტენსიური თერაპიული ჯგუფში, რომელსაც ხელმძღვანელობენ სტოკჰოლმის აკადემიის სპეციალისტები. გამოიკვლიეთ ღრმა ფსიქოლოგიური ჩარჩოები მხარდამჭერ, ბუნებრივ გარემოში.",
+                ev1_date:     "15-20 ოქტომბერი, 2024",
+                ev1_location: "თბილისი",
+
+                // Event 2
+                ev2_badge: "მოდული",
+                ev2_title: "გიდირებული გამოსახულების მოდული",
+                ev2_desc:  "ჯან ტაალის ხელმძღვანელობით. გამოსახულების თერაპიული პრაქტიკის ღრმა კვლევა კლინიკური მეთოდოლოგიისა და ჰოლისტური შეხედულების გაერთიანებით.",
+
+                // Event 3
+                ev3_badge: "სემინარი",
+                ev3_title: "ფსიქოსინთეზის საფუძვლები",
+                ev3_desc:  "სამინარო ფსიქიკური ჯანმრთელობის პროფესიონალებისთვის, რომლებიც ასაჯოლის პრინციპების თანამედროვე პრაქტიკაში ინტეგრირებას ეძიებენ.",
+
+                // Buttons
+                btn_apply:    "გამოიყენეთ ახლა",
+                btn_register: "დარეგისტრირდი",
+
+                // Sidebar
+                sidebar_title:           "შემოგვიერთდით",
+                sidebar_desc:            "დაუკავშირდით ჰოლისტური ზრდისა და ფსიქოლოგიური ინტეგრაციისადმი მიძღვნილ პროფესიონალებს.",
+                sidebar_email_label:     "ელ-ფოსტა",
+                sidebar_email_placeholder: "თქვენი ელ-ფოსტა",
+                sidebar_subscribe_btn:   "განახლებების გამოწერა",
+                sidebar_follow:          "გამოგვყევით",
+
+                // Modal
+                modal_title:               "პროგრამის რეგისტრაცია",
+                modal_name_label:          "სრული სახელი",
+                modal_name_placeholder:    "სახელი და გვარი",
+                modal_email_label:         "ელ-ფოსტის მისამართი",
+                modal_statement_label:     "მოტივაციური წერილი",
+                modal_statement_placeholder: "რატომ გსურთ ამ სემინარში მონაწილეობა?",
+                modal_cancel:              "გაუქმება",
+                modal_submit:              "განაცხადის გაგზავნა",
+                modal_applying_for:        "განაცხადი: ",
+
+                // Footer
+                footer_full_name:     "საქართველოს ფსიქოსინთეზის ინსტიტუტი",
+                footer_tagline:       "ფსიქოლოგიური სიღრმისა და ჰოლისტური ზრდის ხელშეწყობა კავკასიის რეგიონში.",
+                footer_connect_title: "კავშირი",
+                footer_facebook:      "Facebook",
+                footer_location:      "თბილისი, საქართველო",
+                footer_updates_title: "განახლებები",
+                footer_newsletter:    "სიახლეების გამოწერა",
+                footer_copyright:     "© 2024 საქართველოს ფსიქოსინთეზის ინსტიტუტი. ყველა უფლება დაცულია.",
+            },
+
+            en: {
+                // Nav
+                nav_about:       "About",
+                nav_education:   "Education",
+                nav_events:      "Events",
+                nav_articles:    "Articles",
+                nav_contact:     "Contact",
+                nav_admin:       "Admin",
+                mobile_menu_title: "GIP Menu",
+
+                // Page header
+                page_title:    "Educational Activities and Events",
+                page_subtitle: "Programs, workshops, and updates from the Georgian Institute of Psychosynthesis.",
+
+                // Filter
+                filter_events:   "Events",
+                filter_articles: "Articles",
+
+                // Event 1
+                ev1_badge_program: "Program",
+                ev1_badge_status:  "Upcoming",
+                ev1_title:    "Intensive Therapy Group",
+                ev1_desc:     "Join our intensive therapy group led by esteemed trainers from the Stockholm Academy. Explore deep psychological frameworks in a supportive, natural setting.",
+                ev1_date:     "Oct 15 - 20, 2024",
+                ev1_location: "Tbilisi",
+
+                // Event 2
+                ev2_badge: "Module",
+                ev2_title: "Guided Imagery Module",
+                ev2_desc:  "Led by Jan Taal. A profound exploration of imagery in therapeutic practice, bridging clinical methodology with holistic insight.",
+
+                // Event 3
+                ev3_badge: "Workshop",
+                ev3_title: "Foundations of Psychosynthesis",
+                ev3_desc:  "An introductory workshop for mental health professionals seeking to integrate Assagioli's principles into modern practice.",
+
+                // Buttons
+                btn_apply:    "Apply Now",
+                btn_register: "Register",
+
+                // Sidebar
+                sidebar_title:           "Join our Community",
+                sidebar_desc:            "Connect with professionals and individuals dedicated to holistic growth and psychological integration.",
+                sidebar_email_label:     "Email Address",
+                sidebar_email_placeholder: "Your email address",
+                sidebar_subscribe_btn:   "Subscribe to Updates",
+                sidebar_follow:          "Follow Us",
+
+                // Modal
+                modal_title:               "Program Registration",
+                modal_name_label:          "Full Name",
+                modal_name_placeholder:    "Your Name",
+                modal_email_label:         "Email Address",
+                modal_statement_label:     "Motivation Statement",
+                modal_statement_placeholder: "Why do you wish to join this session?",
+                modal_cancel:              "Cancel",
+                modal_submit:              "Submit Application",
+                modal_applying_for:        "Applying for: ",
+
+                // Footer
+                footer_full_name:     "Georgian Institute of Psychosynthesis",
+                footer_tagline:       "Promoting psychological depth and holistic growth through rigorous training and personal integration.",
+                footer_connect_title: "Connect",
+                footer_facebook:      "Facebook",
+                footer_location:      "Tbilisi, Georgia",
+                footer_updates_title: "Stay Updated",
+                footer_newsletter:    "Newsletter Signup",
+                footer_copyright:     "© 2024 Georgian Institute of Psychosynthesis. All rights reserved.",
+            }
+        };
+
+        // =========================================================
+        //  Apply translations (text + placeholders)
+        // =========================================================
+        function applyTranslations(lang) {
+            const dict = translations[lang];
+            if (!dict) return;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key] !== undefined) {
+                    el.textContent = dict[key];
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[key] !== undefined) {
+                    el.placeholder = dict[key];
+                }
+            });
+            document.documentElement.lang = lang;
+        }
+
+        function updateLangButtons(lang) {
+            ['ka', 'en'].forEach(l => {
+                const desktopBtn = document.getElementById('btn-' + l + '-desktop');
+                const mobileBtn  = document.getElementById('btn-' + l + '-mobile');
+                if (desktopBtn) desktopBtn.classList.toggle('active', l === lang);
+                if (mobileBtn)  mobileBtn.classList.toggle('active',  l === lang);
+            });
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem('gip_lang', lang);
+            applyTranslations(lang);
+            updateLangButtons(lang);
+        }
+
+        // =========================================================
+        //  Init
+        // =========================================================
         document.addEventListener("DOMContentLoaded", () => {
+            // Language init
+            const savedLang = localStorage.getItem('gip_lang') || 'ka';
+            applyTranslations(savedLang);
+            updateLangButtons(savedLang);
+
+            // Scroll fade-in for footer
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -519,7 +693,6 @@
                     }
                 });
             }, { threshold: 0.1 });
-            
             document.querySelectorAll('.fade-in-on-scroll').forEach(el => observer.observe(el));
         });
 
@@ -527,19 +700,17 @@
             const drawer = document.getElementById('mobile-drawer');
             if (drawer.classList.contains('hidden')) {
                 drawer.classList.remove('hidden');
-                setTimeout(() => {
-                    drawer.classList.remove('opacity-0');
-                }, 10);
+                setTimeout(() => { drawer.classList.remove('opacity-0'); }, 10);
             } else {
                 drawer.classList.add('opacity-0');
-                setTimeout(() => {
-                    drawer.classList.add('hidden');
-                }, 300);
+                setTimeout(() => { drawer.classList.add('hidden'); }, 300);
             }
         }
 
         function openApplyModal(programName) {
-            document.getElementById('modal-program-subtitle').innerText = 'Applying for: ' + programName;
+            const lang = document.documentElement.lang || 'ka';
+            const prefix = translations[lang]?.modal_applying_for || 'Applying for: ';
+            document.getElementById('modal-program-subtitle').innerText = prefix + programName;
             document.getElementById('modal-program-input').value = programName;
             const modal = document.getElementById('apply-modal');
             modal.classList.remove('hidden');
@@ -563,12 +734,15 @@
                 date: new Date().toLocaleDateString()
             };
 
-            // Get existing applications
             let apps = JSON.parse(localStorage.getItem('gip_applications') || '[]');
             apps.push(application);
             localStorage.setItem('gip_applications', JSON.stringify(apps));
 
-            alert('Thank you! Your registration application for "' + application.program + '" has been submitted.');
+            const lang = document.documentElement.lang || 'ka';
+            const msg = lang === 'ka'
+                ? 'მადლობა! თქვენი განაცხადი "' + application.program + '" გაიგზავნა.'
+                : 'Thank you! Your registration application for "' + application.program + '" has been submitted.';
+            alert(msg);
             closeApplyModal();
         }
     </script>
