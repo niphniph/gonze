@@ -26,6 +26,67 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        body {
+            background: #163422 !important;
+            color: #F4F5F0 !important;
+        }
+
+        /* Navbars */
+        .gip-navbar {
+            background-color: rgba(22, 52, 34, 0.95) !important;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(233, 193, 118, 0.18) !important;
+        }
+
+        /* Cards */
+        .gip-card {
+            background-color: #2D4B37 !important;
+            border: 1px solid rgba(233, 193, 118, 0.18) !important;
+            backdrop-filter: blur(8px);
+        }
+
+        /* Images saturation, contrast, brightness */
+        img {
+            filter: saturate(0.9) contrast(1.05) brightness(0.95) !important;
+        }
+
+        /* Buttons styling */
+        .gip-btn-primary {
+            background-color: #E9C176 !important;
+            color: #163422 !important;
+            transition: all 0.3s ease;
+        }
+
+        .gip-btn-primary:hover {
+            background-color: #C8EBD0 !important;
+            color: #163422 !important;
+        }
+
+        .gip-btn-secondary {
+            border: 1px solid #E9C176 !important;
+            color: #E9C176 !important;
+            background-color: transparent !important;
+            transition: all 0.3s ease;
+        }
+
+        .gip-btn-secondary:hover {
+            background-color: rgba(233, 193, 118, 0.1) !important;
+            color: #E9C176 !important;
+        }
+
+        /* Gradients */
+        .gip-hero-overlay {
+            background: linear-gradient(180deg, rgba(22,52,34,0.4), rgba(22,52,34,0.9)) !important;
+        }
+        .gip-image-overlay {
+            background: linear-gradient(180deg, rgba(22, 52, 34, 0.1), rgba(22, 52, 34, 0.8)) !important;
+        }
+
+        /* Links hover */
+        .nav-link-hover:hover {
+            color: #E9C176 !important;
+        }
+
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
@@ -43,7 +104,7 @@
 
         .hover-lift:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(22, 52, 34, 0.4), 0 8px 10px -6px rgba(22, 52, 34, 0.4);
         }
     </style>
     <script id="tailwind-config">
@@ -53,52 +114,56 @@
           extend: {
             "colors": {
                     "error": "#ffb4ab",
-                    "on-secondary-fixed-variant": "#5d4201",
+                    "on-secondary-fixed-variant": "#163422",
                     "error-container": "#93000a",
-                    "on-background": "#e5e2db",
-                    "on-surface-variant": "#bfc8cb",
-                    "on-secondary-fixed": "#261900",
-                    "tertiary-container": "#52695d",
-                    "on-tertiary-fixed-variant": "#354c40",
-                    "outline-variant": "#3f484a",
-                    "on-primary": "#00363e",
-                    "secondary-fixed": "#ffdea5",
+                    "on-background": "#F4F5F0",
+                    "on-surface-variant": "#ADCFB4",
+                    "on-secondary-fixed": "#163422",
+                    "tertiary-container": "#2D4B37",
+                    "on-tertiary-fixed-variant": "#ADCFB4",
+                    "outline-variant": "rgba(233,193,118,0.18)",
+                    "on-primary": "#163422",
+                    "secondary-fixed": "#E9C176",
                     "on-error": "#690005",
-                    "inverse-surface": "#e5e2db",
-                    "on-tertiary": "#1f352b",
-                    "surface-container": "#20201c",
-                    "secondary-container": "#604403",
-                    "inverse-primary": "#1a6774",
-                    "tertiary-fixed-dim": "#b3ccbe",
-                    "surface-dim": "#131410",
-                    "primary-container": "#226d7a",
-                    "surface": "#131410",
-                    "tertiary": "#b3ccbe",
-                    "inverse-on-surface": "#31312c",
-                    "on-secondary": "#412d00",
-                    "surface-container-high": "#2a2a26",
-                    "on-primary-container": "#a8ecfb",
-                    "on-secondary-container": "#dab36a",
-                    "surface-variant": "#353530",
-                    "on-primary-fixed-variant": "#004e5a",
-                    "on-tertiary-container": "#cee7d8",
-                    "secondary-fixed-dim": "#e9c176",
-                    "surface-container-lowest": "#0e0e0b",
-                    "background": "#131410",
-                    "on-surface": "#e5e2db",
-                    "secondary": "#e9c176",
-                    "outline": "#899295",
-                    "surface-bright": "#3a3935",
-                    "primary-fixed-dim": "#8dd1e0",
-                    "surface-tint": "#8dd1e0",
-                    "surface-container-highest": "#353530",
-                    "primary": "#8dd1e0",
+                    "inverse-surface": "#F4F5F0",
+                    "on-tertiary": "#163422",
+                    "surface-container": "#2D4B37",
+                    "secondary-container": "#2D4B37",
+                    "inverse-primary": "#E9C176",
+                    "tertiary-fixed-dim": "#C8EBD0",
+                    "surface-dim": "#1E402D",
+                    "primary-container": "#E9C176",
+                    "surface": "#163422",
+                    "tertiary": "#C8EBD0",
+                    "inverse-on-surface": "#163422",
+                    "on-secondary": "#163422",
+                    "surface-container-high": "#234735",
+                    "on-primary-container": "#163422",
+                    "on-secondary-container": "#163422",
+                    "surface-variant": "#1E402D",
+                    "on-primary-fixed-variant": "#E9C176",
+                    "on-tertiary-container": "#163422",
+                    "secondary-fixed-dim": "#E9C176",
+                    "surface-container-lowest": "#163422",
+                    "background": "#163422",
+                    "on-surface": "#F4F5F0",
+                    "secondary": "#E9C176",
+                    "outline": "rgba(233,193,118,0.18)",
+                    "surface-bright": "#234735",
+                    "primary-fixed-dim": "#E9C176",
+                    "surface-tint": "#E9C176",
+                    "surface-container-highest": "#2D4B37",
+                    "primary": "#E9C176",
                     "on-error-container": "#ffdad6",
-                    "on-tertiary-fixed": "#092016",
-                    "surface-container-low": "#1c1c18",
-                    "primary-fixed": "#a9edfc",
-                    "on-primary-fixed": "#001f25",
-                    "tertiary-fixed": "#cfe9d9"
+                    "on-tertiary-fixed": "#163422",
+                    "surface-container-low": "#1E402D",
+                    "primary-fixed": "#E9C176",
+                    "on-primary-fixed": "#163422",
+                    "tertiary-fixed": "#C8EBD0",
+                    "light-sage": "#C8EBD0",
+                    "accent-gold": "#E9C176",
+                    "text-primary": "#F4F5F0",
+                    "text-secondary": "#ADCFB4"
             },
             "borderRadius": {
                     "DEFAULT": "0.125rem",
@@ -125,7 +190,7 @@
                     ],
                     "display-lg": [
                             "Literata"
-                      ],
+                    ],
                     "headline-lg": [
                             "Literata"
                     ],
@@ -143,52 +208,52 @@
                     "headline-lg-mobile": [
                             "28px",
                             {
-                                    "lineHeight": "1.2",
-                                    "fontWeight": "600"
+                                     "lineHeight": "1.2",
+                                     "fontWeight": "600"
                             }
                     ],
                     "body-md": [
                             "16px",
                             {
-                                    "lineHeight": "1.6",
-                                    "fontWeight": "400"
+                                     "lineHeight": "1.6",
+                                     "fontWeight": "400"
                             }
                     ],
                     "display-lg": [
                             "48px",
                             {
-                                    "lineHeight": "1.1",
-                                    "letterSpacing": "-0.02em",
-                                    "fontWeight": "700"
+                                     "lineHeight": "1.1",
+                                     "letterSpacing": "-0.02em",
+                                     "fontWeight": "700"
                             }
                     ],
                     "headline-lg": [
                             "32px",
                             {
-                                    "lineHeight": "1.2",
-                                    "fontWeight": "600"
+                                     "lineHeight": "1.2",
+                                     "fontWeight": "600"
                             }
                     ],
                     "label-md": [
                             "14px",
                             {
-                                    "lineHeight": "1.2",
-                                    "letterSpacing": "0.05em",
-                                    "fontWeight": "600"
+                                     "lineHeight": "1.2",
+                                     "letterSpacing": "0.05em",
+                                     "fontWeight": "600"
                             }
                     ],
                     "label-sm": [
                             "12px",
                             {
-                                    "lineHeight": "1.2",
-                                    "fontWeight": "500"
+                                     "lineHeight": "1.2",
+                                     "fontWeight": "500"
                             }
                     ],
                     "body-lg": [
                             "18px",
                             {
-                                    "lineHeight": "1.6",
-                                    "fontWeight": "400"
+                                     "lineHeight": "1.6",
+                                     "fontWeight": "400"
                             }
                     ]
             }
@@ -199,7 +264,7 @@
 </head>
 <body class="bg-background text-on-background antialiased font-body-md overflow-x-hidden">
     <!-- TopNavBar -->
-    <nav class="bg-surface/80 backdrop-blur-md text-on-surface border-b border-outline-variant shadow-sm fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 mx-auto md:flex hidden" style="max-width: 1200px; left: 50%; transform: translateX(-50%);">
+    <nav class="gip-navbar text-on-surface shadow-sm fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 mx-auto md:flex hidden" style="max-width: 1200px; left: 50%; transform: translateX(-50%);">
         <div class="text-headline-lg font-headline-lg text-primary shrink-0 mr-8 cursor-pointer" onclick="window.location.href='index.html'">
             GIP
         </div>
@@ -216,7 +281,7 @@
     </nav>
 
     <!-- Mobile Nav -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant px-6 py-4 flex justify-between items-center md:hidden">
+    <nav class="fixed top-0 left-0 w-full z-50 gip-navbar px-6 py-4 flex justify-between items-center md:hidden">
         <div class="font-headline-lg text-headline-lg-mobile text-primary cursor-pointer" onclick="window.location.href='index.html'">GIP</div>
         <button onclick="toggleMobileMenu()" class="text-on-surface">
             <span class="material-symbols-outlined">menu</span>
@@ -224,7 +289,7 @@
     </nav>
 
     <!-- Mobile Drawer -->
-    <div id="mobile-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
+    <div id="mobile-drawer" class="fixed inset-0 z-50 bg-[#163422]/60 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
         <div class="fixed right-0 top-0 h-full w-64 bg-surface-container p-lg flex flex-col gap-lg shadow-xl border-l border-outline-variant">
             <div class="flex justify-between items-center">
                 <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">GIP Menu</span>
@@ -237,7 +302,7 @@
                 <li><a class="text-on-surface hover:text-primary block py-sm" href="education.html" onclick="toggleMobileMenu()">Articles</a></li>
                 <li><a class="text-on-surface hover:text-primary block py-sm" href="#contact" onclick="toggleMobileMenu()">Contact</a></li>
                 <li class="pt-md">
-                    <button onclick="window.location.href='login.html'" class="w-full bg-primary-container text-on-primary-container py-sm rounded hover:bg-primary-fixed transition-colors">Admin</button>
+                    <button onclick="window.location.href='login.html'" class="w-full gip-btn-primary py-sm rounded transition-colors">Admin</button>
                 </li>
             </ul>
         </div>
@@ -254,16 +319,16 @@
                 Fostering holistic growth and professional training in the Caucasus. We provide rigorous academic foundations balanced with deep psychological and spiritual exploration.
             </p>
             <div class="flex gap-4">
-                <button onclick="window.location.href='education.html'" class="bg-primary-container text-on-primary-container font-label-md text-label-md px-8 py-4 rounded hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors duration-300 flex items-center gap-2 shadow-lg">
+                <button onclick="window.location.href='education.html'" class="gip-btn-primary font-label-md text-label-md px-8 py-4 rounded flex items-center gap-2 shadow-lg">
                     Discover Our Mission
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </button>
             </div>
         </div>
         <div class="flex-1 w-full relative fade-in-up" style="transition-delay: 200ms;">
-            <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-black/50">
+            <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-[#163422]/50">
                 <img alt="GIP Campus Representation" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJFeuUHOxQNi2hVJpkRCTpc_sUvwqp_RJVdKFWqderbJU94Ah_RwwCmENl5z8imYRCEhyYGn3iSFxiJWm8fgVYykFzPUw_K0Wwpav337AxpwdpKmmINTXzp4H-bO5EpZ8W4ardBwBsMWdiEWu8ImRpoctzddg9lGlcV7r_6vz3vhHc3jUYZGaC1h4Kj7pt7yQEg6uvwFZOPr_KbulVIIvUA5KaoESapExw5-wC7G7k7WJ8EV7FmJgMs6jDEAHLIbx7MD2MdLfciD0"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent mix-blend-multiply"></div>
+                <div class="absolute inset-0 gip-image-overlay"></div>
             </div>
             <!-- Decorative Element -->
             <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-primary/20 rounded-full blur-3xl -z-10"></div>
@@ -271,7 +336,7 @@
     </section>
 
     <!-- Mission Section -->
-    <section class="py-xl bg-surface-container">
+    <section class="py-xl bg-surface-container-high">
         <div class="max-w-container-max mx-auto px-gutter grid md:grid-cols-12 gap-gutter items-center">
             <div class="md:col-span-5 fade-in-up">
                 <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6">Pioneering in the Caucasus</h2>
@@ -322,7 +387,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Card 1 -->
-            <div class="bg-surface-container rounded-xl border border-outline-variant overflow-hidden hover-lift flex flex-col fade-in-up group">
+            <div class="gip-card rounded-xl overflow-hidden hover-lift flex flex-col fade-in-up group">
                 <div class="h-64 overflow-hidden relative">
                     <img alt="Angelika Dilschmann" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJFeuUHOxQNi2hVJpkRCTpc_sUvwqp_RJVdKFWqderbJU94Ah_RwwCmENl5z8imYRCEhyYGn3iSFxiJWm8fgVYykFzPUw_K0Wwpav337AxpwdpKmmINTXzp4H-bO5EpZ8W4ardBwBsMWdiEWu8ImRpoctzddg9lGlcV7r_6vz3vhHc3jUYZGaC1h4Kj7pt7yQEg6uvwFZOPr_KbulVIIvUA5KaoESapExw5-wC7G7k7WJ8EV7FmJgMs6jDEAHLIbx7MD2MdLfciD0"/>
                     <div class="absolute top-4 left-4">
@@ -339,7 +404,7 @@
                 </div>
             </div>
             <!-- Card 2 -->
-            <div class="bg-surface-container rounded-xl border border-outline-variant overflow-hidden hover-lift flex flex-col fade-in-up group" style="transition-delay: 100ms;">
+            <div class="gip-card rounded-xl overflow-hidden hover-lift flex flex-col fade-in-up group" style="transition-delay: 100ms;">
                 <div class="h-64 overflow-hidden relative">
                     <img alt="Veronica Stienborg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlDCLp-EcjaBoMgK6XQvw2yEOiCLo-yrNwmZTbJ9LpF_7Vjpc9FBuVfFowRjp3bS7K72yfoShSpoXWmKcNiL344MnGy2EGtB8zx3lAErhhh5-Y6j4mjPbNf54zY5AT5797voNdXd3bdZKHoLU0cUVdEtc4E9JrkLH8WMtvYb5qZP4xSdr6Wq94goDDUd1mx5YhJqozfBktRuidxjGGx-TqiI7YzAbSkDxX7oipmPwpILqdVrlOslcgBbz_ojGGPZiZHnbrdHtXndk"/>
                     <div class="absolute top-4 left-4">
@@ -356,7 +421,7 @@
                 </div>
             </div>
             <!-- Card 3 -->
-            <div class="bg-surface-container rounded-xl border border-outline-variant overflow-hidden hover-lift flex flex-col fade-in-up group" style="transition-delay: 200ms;">
+            <div class="gip-card rounded-xl overflow-hidden hover-lift flex flex-col fade-in-up group" style="transition-delay: 200ms;">
                 <div class="h-64 overflow-hidden relative bg-surface-container-high flex items-center justify-center">
                     <span class="material-symbols-outlined text-outline-variant text-6xl">psychology_alt</span>
                     <div class="absolute top-4 left-4">
@@ -376,7 +441,7 @@
     </section>
 
     <!-- Contact & Map Section -->
-    <section id="contact" class="py-xl bg-surface-container border-t border-outline-variant relative overflow-hidden">
+    <section id="contact" class="py-xl bg-surface-container-low border-t border-outline-variant relative overflow-hidden">
         <div class="max-w-container-max mx-auto px-gutter grid md:grid-cols-2 gap-16 items-center">
             <div class="fade-in-up">
                 <h2 class="font-headline-lg text-headline-lg text-on-surface mb-8">Connect With Us</h2>
@@ -424,7 +489,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="w-full py-xl px-gutter flex flex-wrap justify-between gap-gutter max-w-container-max mx-auto bg-surface-container-high text-on-surface text-body-md font-body-md">
+    <footer class="w-full py-xl px-gutter flex flex-wrap justify-between gap-gutter max-w-container-max mx-auto bg-surface-container-low text-on-surface text-body-md font-body-md">
         <div class="flex flex-col gap-4 max-w-sm">
             <div class="text-headline-lg font-headline-lg text-primary">GIP</div>
             <p class="text-on-surface-variant text-sm">Fostering psychological depth and holistic growth in the Caucasus region.</p>
