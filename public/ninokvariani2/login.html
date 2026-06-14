@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Admin Login - Georgian Institute of Psychosynthesis</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#5d4201",
+                      "on-secondary-fixed": "#261900",
+                      "on-background": "#191d19",
+                      "surface": "#f7faf3",
+                      "inverse-surface": "#2d312d",
+                      "outline": "#727972",
+                      "on-primary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#414942",
+                      "on-primary-fixed": "#022110",
+                      "surface-variant": "#e0e3dd",
+                      "surface-tint": "#466550",
+                      "surface-container-high": "#e6e9e2",
+                      "secondary-fixed": "#ffdea5",
+                      "on-error": "#ffffff",
+                      "surface-container": "#ecefe8",
+                      "on-secondary-container": "#785a1a",
+                      "tertiary-fixed-dim": "#c1c9bf",
+                      "primary-fixed-dim": "#adcfb4",
+                      "on-tertiary-container": "#adb5ac",
+                      "surface-container-highest": "#e0e3dd",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#eff2eb",
+                      "surface-bright": "#f7faf3",
+                      "background": "#f7faf3",
+                      "secondary": "#775a19",
+                      "on-surface-variant": "#424843",
+                      "on-primary-fixed-variant": "#2f4d39",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#191d19",
+                      "primary-fixed": "#c8ebd0",
+                      "inverse-primary": "#adcfb4",
+                      "on-tertiary-fixed": "#161d17",
+                      "surface-container-low": "#f2f5ee",
+                      "error": "#ba1a1a",
+                      "primary": "#163422",
+                      "secondary-fixed-dim": "#e9c176",
+                      "on-primary-container": "#99baa1",
+                      "secondary-container": "#fed488",
+                      "tertiary": "#29312a",
+                      "tertiary-container": "#3f4740",
+                      "tertiary-fixed": "#dde5db",
+                      "surface-dim": "#d8dbd4",
+                      "primary-container": "#2d4b37",
+                      "outline-variant": "#c2c8c0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "max-width": "1280px",
+                      "base": "4px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sm": "8px",
+                      "xl": "48px",
+                      "margin": "32px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Literata"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "body-lg": [
+                              "Literata"
+                      ],
+                      "title-md": [
+                              "Playfair Display"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            },
+          },
+        }
+    </script>
+    <style>
+        .forest-bg {
+            background-color: #163422; /* primary */
+            background-image: radial-gradient(circle at center, #2d4b37 0%, #163422 100%);
+        }
+        .login-card {
+            background-color: #2d4b37; /* primary-container */
+            box-shadow: 0 20px 40px -10px rgba(22, 52, 34, 0.5), inset 0 1px 0 0 rgba(255, 222, 165, 0.1); /* Deep forest shadow + Gold tint inset */
+        }
+        .input-gold-focus:focus {
+            border-color: #ffdea5; /* secondary-fixed */
+            box-shadow: 0 0 8px rgba(255, 222, 165, 0.3);
+            outline: none;
+        }
+        .btn-primary-hover:hover {
+            box-shadow: inset 0 0 10px rgba(255, 222, 165, 0.2);
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake-element {
+            animation: shake 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="forest-bg min-h-screen flex items-center justify-center p-md md:p-margin text-on-primary font-body-md antialiased">
+    <!-- Suppressed TopNavBar and Footer for Linear/Transactional screen (Login) -->
+    <main class="w-full max-w-md">
+        <div id="login-container" class="login-card rounded-xl p-lg md:p-xl flex flex-col items-center">
+            <!-- Logo / Brand -->
+            <div class="mb-lg flex flex-col items-center text-center">
+                <span class="material-symbols-outlined text-secondary-fixed text-[48px] mb-sm" data-weight="fill" style="font-variation-settings: 'FILL' 1;">psychiatry</span>
+                <h1 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg text-secondary-fixed mb-xs">Admin Portal</h1>
+                <p class="font-body-md text-body-md text-primary-fixed-dim">Georgian Institute of Psychosynthesis</p>
+            </div>
+
+            <!-- Error Banner -->
+            <div id="error-banner" class="w-full bg-error-container text-on-error-container text-sm p-3 rounded mb-md hidden flex items-center gap-sm">
+                <span class="material-symbols-outlined text-[20px]">error</span>
+                <span id="error-message">Invalid credentials. Please try again.</span>
+            </div>
+
+            <!-- Login Form -->
+            <form onsubmit="handleLogin(event)" class="w-full space-y-md">
+                <div>
+                    <label class="block font-label-sm text-label-sm text-primary-fixed-dim mb-xs" for="email">Institutional Email</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary-fixed-dim pointer-events-none">mail</span>
+                        <input class="w-full bg-primary border border-outline/30 rounded-DEFAULT py-3 pl-10 pr-3 text-on-primary placeholder-outline-variant/50 input-gold-focus transition-all duration-300 font-body-md text-body-md" id="email" name="email" placeholder="admin@gip.edu" required="" type="email"/>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-primary-fixed-dim mb-xs" for="password">Access Key</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary-fixed-dim pointer-events-none">key</span>
+                        <input class="w-full bg-primary border border-outline/30 rounded-DEFAULT py-3 pl-10 pr-3 text-on-primary placeholder-outline-variant/50 input-gold-focus transition-all duration-300 font-body-md text-body-md" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-sm">
+                    <label class="flex items-center space-x-2 cursor-pointer group">
+                        <input class="form-checkbox h-4 w-4 text-secondary-fixed bg-primary border-outline/30 rounded-xs focus:ring-secondary-fixed focus:ring-opacity-50" type="checkbox"/>
+                        <span class="font-label-sm text-label-sm text-primary-fixed-dim group-hover:text-secondary-fixed transition-colors">Remember credentials</span>
+                    </label>
+                    <a class="font-label-sm text-label-sm text-secondary-fixed hover:text-secondary-fixed-dim underline-offset-4 hover:underline transition-all" href="#" onclick="alert('Please contact the System Administrator to reset your access key.')">Forgot access?</a>
+                </div>
+                <div class="pt-lg">
+                    <button class="w-full bg-primary border border-secondary-fixed/20 text-secondary-fixed font-title-md text-title-md py-3 rounded-DEFAULT flex justify-center items-center space-x-2 btn-primary-hover transition-all duration-300 cursor-pointer" type="submit">
+                        <span>Authenticate</span>
+                        <span class="material-symbols-outlined text-[20px]">login</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-lg pt-lg border-t border-outline/20 w-full text-center">
+                <p class="font-label-sm text-label-sm text-primary-fixed-dim">
+                    Restricted access. Authorized personnel only.<br/>
+                    <span class="opacity-50">Secure Connection Established</span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Redirect if already logged in
+        if (localStorage.getItem('gip_admin_logged_in') === 'true') {
+            window.location.href = 'dashboard.html';
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const email = form.email.value;
+            const password = form.password.value;
+            const banner = document.getElementById('error-banner');
+            const card = document.getElementById('login-container');
+
+            // Set login credentials
+            if (email === 'admin@gip.edu' && password === 'admin123') {
+                localStorage.setItem('gip_admin_logged_in', 'true');
+                localStorage.setItem('gip_admin_email', email);
+                banner.classList.add('hidden');
+                window.location.href = 'dashboard.html';
+            } else {
+                // Show errors with shaking animation
+                banner.classList.remove('hidden');
+                card.classList.remove('shake-element');
+                void card.offsetWidth; // Trigger reflow to restart animation
+                card.classList.add('shake-element');
+            }
+        }
+    </script>
+</body>
+</html>

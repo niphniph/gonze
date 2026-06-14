@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Admin Dashboard - Georgian Institute of Psychosynthesis</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#5d4201",
+                        "on-secondary-fixed": "#261900",
+                        "on-background": "#191d19",
+                        "surface": "#f7faf3",
+                        "inverse-surface": "#2d312d",
+                        "outline": "#727972",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#414942",
+                        "on-primary-fixed": "#022110",
+                        "surface-variant": "#e0e3dd",
+                        "surface-tint": "#466550",
+                        "surface-container-high": "#e6e9e2",
+                        "secondary-fixed": "#ffdea5",
+                        "on-error": "#ffffff",
+                        "surface-container": "#ecefe8",
+                        "on-secondary-container": "#785a1a",
+                        "tertiary-fixed-dim": "#c1c9bf",
+                        "primary-fixed-dim": "#adcfb4",
+                        "on-tertiary-container": "#adb5ac",
+                        "surface-container-highest": "#e0e3dd",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eff2eb",
+                        "surface-bright": "#f7faf3",
+                        "background": "#f7faf3",
+                        "secondary": "#775a19",
+                        "on-surface-variant": "#424843",
+                        "on-primary-fixed-variant": "#2f4d39",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191d19",
+                        "primary-fixed": "#c8ebd0",
+                        "inverse-primary": "#adcfb4",
+                        "on-tertiary-fixed": "#161d17",
+                        "surface-container-low": "#f2f5ee",
+                        "error": "#ba1a1a",
+                        "primary": "#163422",
+                        "secondary-fixed-dim": "#e9c176",
+                        "on-primary-container": "#99baa1",
+                        "secondary-container": "#fed488",
+                        "tertiary": "#29312a",
+                        "tertiary-container": "#3f4740",
+                        "tertiary-fixed": "#dde5db",
+                        "surface-dim": "#d8dbd4",
+                        "primary-container": "#2d4b37",
+                        "outline-variant": "#c2c8c0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "max-width": "1280px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "xl": "48px",
+                        "margin": "32px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Literata"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Literata"],
+                        "title-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "1.4", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f7faf3;
+            color: #191d19;
+        }
+        .parchment-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="parchment-texture min-h-screen flex font-body-md antialiased">
+    <!-- Auth Guard Check script before anything renders -->
+    <script>
+        if (localStorage.getItem('gip_admin_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-primary text-primary-fixed-dim flex flex-col justify-between border-r border-secondary/20 shadow-xl flex-shrink-0">
+        <div class="flex flex-col">
+            <!-- Brand Header -->
+            <div class="p-lg border-b border-secondary/20 flex items-center gap-sm">
+                <span class="material-symbols-outlined text-secondary-fixed text-[36px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">psychiatry</span>
+                <div>
+                    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary-fixed-dim leading-none">GIP</h1>
+                    <span class="text-xs uppercase tracking-widest opacity-60">Admin Portal</span>
+                </div>
+            </div>
+            <!-- Navigation Links -->
+            <nav class="p-md space-y-xs">
+                <button onclick="switchTab('overview')" id="tab-btn-overview" class="w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all bg-primary-container text-white">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>Overview</span>
+                </button>
+                <button onclick="switchTab('programs')" id="tab-btn-programs" class="w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all text-primary-fixed-dim">
+                    <span class="material-symbols-outlined">school</span>
+                    <span>Programs</span>
+                </button>
+                <button onclick="switchTab('admissions')" id="tab-btn-admissions" class="w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all text-primary-fixed-dim relative">
+                    <span class="material-symbols-outlined">group</span>
+                    <span>Admissions</span>
+                    <span id="pending-badge" class="absolute right-3 bg-secondary text-primary-fixed font-label-sm text-xs px-2 py-0.5 rounded-full hidden">0</span>
+                </button>
+                <button onclick="switchTab('research')" id="tab-btn-research" class="w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all text-primary-fixed-dim">
+                    <span class="material-symbols-outlined">history_edu</span>
+                    <span>Research</span>
+                </button>
+                <button onclick="switchTab('settings')" id="tab-btn-settings" class="w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all text-primary-fixed-dim">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>Settings</span>
+                </button>
+            </nav>
+        </div>
+        
+        <!-- Profile / Logout Area -->
+        <div class="p-md border-t border-secondary/20 flex flex-col gap-sm">
+            <div class="flex items-center gap-sm">
+                <span class="material-symbols-outlined text-[32px] text-secondary-fixed">account_circle</span>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-semibold text-white truncate" id="admin-email-display">admin@gip.edu</p>
+                    <span class="text-xs opacity-50">Administrator</span>
+                </div>
+            </div>
+            <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-xs bg-primary-container border border-secondary/20 text-secondary-fixed py-2 rounded hover:bg-primary-fixed-dim hover:text-primary transition-all font-label-sm text-label-sm">
+                <span class="material-symbols-outlined text-sm">logout</span>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Container -->
+    <div class="flex-grow flex flex-col h-screen overflow-y-auto">
+        <!-- Top Bar -->
+        <header class="bg-surface/90 border-b border-outline-variant/30 px-lg py-md flex justify-between items-center z-10">
+            <h2 id="header-title" class="font-headline-lg text-headline-lg text-primary">Overview</h2>
+            <div class="flex items-center gap-md">
+                <span class="text-sm text-on-surface-variant font-label-sm" id="current-date-time">Sunday, June 14, 2026</span>
+                <button onclick="window.open('index.html')" class="flex items-center gap-xs font-label-sm text-label-sm border border-secondary text-secondary px-sm py-1.5 rounded hover:bg-secondary/5 transition-all">
+                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+                    <span>Live Site</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <main class="p-lg max-w-max-width w-full mx-auto space-y-lg flex-grow">
+            
+            <!-- OVERVIEW TAB -->
+            <section id="tab-overview" class="space-y-lg">
+                <!-- Stat Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+                    <div class="bg-surface rounded-xl p-lg border border-secondary/15 shadow-sm flex items-center gap-md">
+                        <div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-3xl">school</span>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase text-on-surface-variant font-label-sm tracking-wider">Active Programs</span>
+                            <h3 id="stat-programs-count" class="text-3xl font-bold text-primary mt-1">4</h3>
+                        </div>
+                    </div>
+                    <div class="bg-surface rounded-xl p-lg border border-secondary/15 shadow-sm flex items-center gap-md">
+                        <div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+                            <span class="material-symbols-outlined text-3xl">group</span>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase text-on-surface-variant font-label-sm tracking-wider">Pending Admissions</span>
+                            <h3 id="stat-admissions-count" class="text-3xl font-bold text-primary mt-1">2</h3>
+                        </div>
+                    </div>
+                    <div class="bg-surface rounded-xl p-lg border border-secondary/15 shadow-sm flex items-center gap-md">
+                        <div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-3xl">history_edu</span>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase text-on-surface-variant font-label-sm tracking-wider">Publications</span>
+                            <h3 id="stat-research-count" class="text-3xl font-bold text-primary mt-1">3</h3>
+                        </div>
+                    </div>
+                    <div class="bg-surface rounded-xl p-lg border border-secondary/15 shadow-sm flex items-center gap-md">
+                        <div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+                            <span class="material-symbols-outlined text-3xl">psychiatry</span>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase text-on-surface-variant font-label-sm tracking-wider">Faculty &amp; Staff</span>
+                            <h3 class="text-3xl font-bold text-primary mt-1">3</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Split view -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+                    <!-- Left: Recent Registrations -->
+                    <div class="bg-surface rounded-xl border border-secondary/15 p-lg shadow-sm lg:col-span-2 space-y-md">
+                        <div class="flex justify-between items-center border-b border-outline-variant/30 pb-sm">
+                            <h4 class="font-title-md text-title-md text-primary">Recent Application Submissions</h4>
+                            <button onclick="switchTab('admissions')" class="text-secondary text-sm font-semibold hover:underline">View All</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="text-on-surface-variant border-b border-outline-variant/20 uppercase tracking-widest text-[11px] font-label-sm">
+                                        <th class="pb-2">Name</th>
+                                        <th class="pb-2">Program</th>
+                                        <th class="pb-2">Date</th>
+                                        <th class="pb-2 text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-apps-tbody">
+                                    <!-- Rendered dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Quick Info Panel -->
+                    <div class="bg-surface rounded-xl border border-secondary/15 p-lg shadow-sm space-y-md">
+                        <div class="border-b border-outline-variant/30 pb-sm">
+                            <h4 class="font-title-md text-title-md text-primary">System Notes</h4>
+                        </div>
+                        <div class="space-y-sm text-sm text-on-surface-variant">
+                            <div class="p-sm bg-surface-container-low rounded border border-secondary/5">
+                                <span class="font-bold text-primary block">Upcoming Deadline</span>
+                                <p class="text-xs">Intensive Therapy Group cohort admissions closes on Sept 30, 2024.</p>
+                            </div>
+                            <div class="p-sm bg-surface-container-low rounded border border-secondary/5">
+                                <span class="font-bold text-primary block">Archival Project</span>
+                                <p class="text-xs">Prof. Jan Kovář is uploading 20 new psychological journals next week.</p>
+                            </div>
+                            <div class="p-sm bg-surface-container-low rounded border border-secondary/5">
+                                <span class="font-bold text-primary block">Session Type</span>
+                                <p class="text-xs text-secondary font-semibold">Local Storage Sandbox Active</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROGRAMS TAB -->
+            <section id="tab-programs" class="space-y-lg hidden">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-title-md text-title-md text-primary">Course Catalog Management</h3>
+                    <button onclick="openProgramModal()" class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-md py-2 rounded hover:bg-primary-container transition-colors flex items-center gap-xs shadow">
+                        <span class="material-symbols-outlined text-sm">add</span>
+                        <span>Add New Program</span>
+                    </button>
+                </div>
+                <div class="bg-surface rounded-xl border border-secondary/15 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant/20 uppercase tracking-widest text-[11px] font-label-sm">
+                                    <th class="p-lg">Program Title</th>
+                                    <th class="p-lg">Type</th>
+                                    <th class="p-lg">Start Date</th>
+                                    <th class="p-lg">Status</th>
+                                    <th class="p-lg text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="programs-tbody">
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADMISSIONS TAB -->
+            <section id="tab-admissions" class="space-y-lg hidden">
+                <div class="flex justify-between items-center border-b border-outline-variant/30 pb-sm">
+                    <h3 class="font-title-md text-title-md text-primary">Enrollment &amp; Admissions Center</h3>
+                    <span id="admissions-total-badge" class="bg-primary text-secondary-fixed text-xs font-label-sm px-2.5 py-1 rounded-full">0 Applications</span>
+                </div>
+                <div id="admissions-empty-state" class="bg-surface rounded-xl border border-secondary/15 p-xl text-center space-y-md shadow-sm hidden">
+                    <span class="material-symbols-outlined text-primary text-[80px] opacity-30">patient_list</span>
+                    <h4 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">No Applications Found</h4>
+                    <p class="text-on-surface-variant max-w-sm mx-auto">There are currently no prospective student applications registered. Apply to courses on the programs page to see them list here.</p>
+                </div>
+                <div id="admissions-table-container" class="bg-surface rounded-xl border border-secondary/15 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant/20 uppercase tracking-widest text-[11px] font-label-sm">
+                                    <th class="p-lg">Applicant Name</th>
+                                    <th class="p-lg">Email</th>
+                                    <th class="p-lg">Requested Program</th>
+                                    <th class="p-lg">Date</th>
+                                    <th class="p-lg">Status</th>
+                                    <th class="p-lg text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admissions-tbody">
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESEARCH TAB -->
+            <section id="tab-research" class="space-y-lg hidden">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-title-md text-title-md text-primary">Archival Publication Manager</h3>
+                    <button onclick="openResearchModal()" class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-md py-2 rounded hover:bg-primary-container transition-colors flex items-center gap-xs shadow">
+                        <span class="material-symbols-outlined text-sm">add</span>
+                        <span>Add Publication</span>
+                    </button>
+                </div>
+                <div class="bg-surface rounded-xl border border-secondary/15 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant/20 uppercase tracking-widest text-[11px] font-label-sm">
+                                    <th class="p-lg">Publication Title</th>
+                                    <th class="p-lg">Author</th>
+                                    <th class="p-lg">Year</th>
+                                    <th class="p-lg">Journal/Publisher</th>
+                                    <th class="p-lg text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="research-tbody">
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS TAB -->
+            <section id="tab-settings" class="space-y-lg hidden">
+                <div class="bg-surface rounded-xl border border-secondary/15 p-lg shadow-sm space-y-md max-w-2xl">
+                    <div class="border-b border-outline-variant/30 pb-sm">
+                        <h3 class="font-title-md text-title-md text-primary">System Settings</h3>
+                    </div>
+                    <form onsubmit="saveSettings(event)" class="space-y-md">
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="institution-title">Institute Website Name</label>
+                            <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="institution-title" value="Georgian Institute of Psychosynthesis" required type="text"/>
+                        </div>
+                        <div>
+                            <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="admin-contact">System Administrator Email</label>
+                            <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="admin-contact" value="admin@gip.edu" required type="email"/>
+                        </div>
+                        <div class="flex items-center space-x-2 pt-sm">
+                            <input type="checkbox" id="setting-maintenance" class="form-checkbox h-4 w-4 text-primary bg-transparent border-outline-variant rounded focus:ring-primary"/>
+                            <label for="setting-maintenance" class="font-label-sm text-label-sm text-on-surface-variant">Enable Maintenance Mode (locks registration forms)</label>
+                        </div>
+                        <div class="pt-sm flex justify-end">
+                            <button type="submit" class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-lg py-sm rounded hover:bg-primary-container transition-colors shadow">Save System Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- View Motivation Modal -->
+    <div id="motivation-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-md">
+        <div class="bg-surface rounded-xl border border-secondary/20 shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in duration-300">
+            <div class="bg-primary p-md flex justify-between items-center text-white">
+                <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary-fixed-dim">Motivation Statement</h3>
+                <button onclick="closeMotivationModal()" class="text-secondary-fixed-dim hover:text-white"><span class="material-symbols-outlined text-2xl">close</span></button>
+            </div>
+            <div class="p-lg space-y-md">
+                <p class="text-xs uppercase text-on-surface-variant tracking-wider font-label-sm font-bold" id="motivation-author"></p>
+                <div class="bg-surface-container-low p-md rounded border border-outline-variant/30 max-h-60 overflow-y-auto text-sm text-on-background italic" id="motivation-body"></div>
+                <div class="flex justify-end pt-sm">
+                    <button onclick="closeMotivationModal()" class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-lg py-sm rounded hover:bg-primary-container">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Program Modal -->
+    <div id="program-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-md">
+        <div class="bg-surface rounded-xl border border-secondary/20 shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in duration-300">
+            <div class="bg-primary p-md flex justify-between items-center text-white">
+                <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary-fixed-dim" id="program-modal-title">Add New Program</h3>
+                <button onclick="closeProgramModal()" class="text-secondary-fixed-dim hover:text-white"><span class="material-symbols-outlined text-2xl">close</span></button>
+            </div>
+            <form id="program-form" onsubmit="submitProgram(event)" class="p-lg space-y-md">
+                <input type="hidden" id="program-edit-id"/>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="program-name">Program Title</label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="program-name" required placeholder="e.g. Intensive Therapy Group" type="text"/>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="program-type">Type</label>
+                    <select class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="program-type">
+                        <option value="Featured Program">Featured Program</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Seminar Series">Seminar Series</option>
+                        <option value="Colloquium">Colloquium</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="program-date">Start Date</label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="program-date" required placeholder="e.g. October 15, 2024" type="text"/>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="program-status">Status</label>
+                    <select class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="program-status">
+                        <option value="Active">Active</option>
+                        <option value="Invitation Only">Invitation Only</option>
+                        <option value="Draft">Draft</option>
+                    </select>
+                </div>
+                <div class="pt-sm flex justify-end gap-sm">
+                    <button type="button" onclick="closeProgramModal()" class="border border-outline-variant text-on-surface-variant font-label-sm text-label-sm px-lg py-sm rounded hover:bg-surface-variant/30">Cancel</button>
+                    <button type="submit" class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-lg py-sm rounded hover:bg-primary-container">Save Program</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Research Modal -->
+    <div id="research-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-md">
+        <div class="bg-surface rounded-xl border border-secondary/20 shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in duration-300">
+            <div class="bg-primary p-md flex justify-between items-center text-white">
+                <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary-fixed-dim" id="research-modal-title">Add Publication</h3>
+                <button onclick="closeResearchModal()" class="text-secondary-fixed-dim hover:text-white"><span class="material-symbols-outlined text-2xl">close</span></button>
+            </div>
+            <form id="research-form" onsubmit="submitResearch(event)" class="p-lg space-y-md">
+                <input type="hidden" id="research-edit-id"/>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="research-title">Publication Title</label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="research-title" required placeholder="e.g. Psychosynthesis and Dynamics" type="text"/>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="research-author">Author(s)</label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="research-author" required placeholder="e.g. Dr. Rostova" type="text"/>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="research-year">Year</label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="research-year" required placeholder="e.g. 2024" type="text"/>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="research-journal">Journal / Publisher</label>
+                    <input class="w-full bg-transparent border border-outline-variant rounded p-3 text-on-background focus:ring-secondary focus:border-secondary" id="research-journal" required placeholder="e.g. GIP Depth Archives" type="text"/>
+                </div>
+                <div class="pt-sm flex justify-end gap-sm">
+                    <button type="button" onclick="closeResearchModal()" class="border border-outline-variant text-on-surface-variant font-label-sm text-label-sm px-lg py-sm rounded hover:bg-surface-variant/30">Cancel</button>
+                    <button type="submit" class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-lg py-sm rounded hover:bg-primary-container">Save Publication</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS Scripts for Dashboard logic -->
+    <script>
+        // Set profile details
+        document.getElementById('admin-email-display').innerText = localStorage.getItem('gip_admin_email') || 'admin@gip.edu';
+        document.getElementById('current-date-time').innerText = new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Database Prep
+        if (!localStorage.getItem('gip_programs')) {
+            const defaultPrograms = [
+                { id: 1, name: 'Intensive Therapy Group', type: 'Featured Program', date: 'Oct 15, 2024', status: 'Active' },
+                { id: 2, name: 'Botanical Metaphors in Healing', type: 'Workshop', date: 'Nov 12, 2024', status: 'Active' },
+                { id: 3, name: 'Foundations of Synthesis', type: 'Seminar Series', date: 'Dec 05, 2024', status: 'Active' },
+                { id: 4, name: 'Winter Colloquium', type: 'Colloquium', date: 'Jan 20, 2025', status: 'Invitation Only' }
+            ];
+            localStorage.setItem('gip_programs', JSON.stringify(defaultPrograms));
+        }
+
+        if (!localStorage.getItem('gip_applications')) {
+            const defaultApps = [
+                { id: 101, name: 'Elena Bagdavadze', email: 'elena.b@gip.edu', program: 'Intensive Therapy Group', statement: 'I am a practicing psychotherapist and want to integrate transpersonal psychosynthesis methods into my somatic work.', status: 'Approved', date: '2026-06-12' },
+                { id: 102, name: 'David Kipiani', email: 'david.kip@gmail.com', program: 'Botanical Metaphors in Healing', statement: 'Highly interested in eco-therapy, depth psychology, and botanical analogies.', status: 'Pending', date: '2026-06-13' },
+                { id: 103, name: 'Sophia Lominadze', email: 'sophia.l@yahoo.com', program: 'Foundations of Synthesis', statement: 'Interested in transitioning from traditional psychoanalysis to psychosynthetic depth models.', status: 'Pending', date: '2026-06-14' }
+            ];
+            localStorage.setItem('gip_applications', JSON.stringify(defaultApps));
+        }
+
+        if (!localStorage.getItem('gip_research')) {
+            const defaultResearch = [
+                { id: 201, title: 'Psychosynthesis and Transpersonal Dynamics', author: 'Dr. Angelika Rostova', year: '2023', journal: 'GIP Depth Archives' },
+                { id: 202, title: 'The Organic Growth of Psyche: Botanical Analogs', author: 'Veronica Tsereteli', year: '2024', journal: 'GIP Clinical Review' },
+                { id: 203, title: 'Historical Foundations of Depth Psychology', author: 'Prof. Jan Kovář', year: '2022', journal: 'International Journal of Psychosynthesis' }
+            ];
+            localStorage.setItem('gip_research', JSON.stringify(defaultResearch));
+        }
+
+        // Global State Variables
+        let currentTab = 'overview';
+
+        // Initialize display
+        updateUI();
+
+        function updateUI() {
+            // Stats
+            const programs = JSON.parse(localStorage.getItem('gip_programs') || '[]');
+            const apps = JSON.parse(localStorage.getItem('gip_applications') || '[]');
+            const research = JSON.parse(localStorage.getItem('gip_research') || '[]');
+
+            document.getElementById('stat-programs-count').innerText = programs.length;
+            document.getElementById('stat-research-count').innerText = research.length;
+
+            const pendingApps = apps.filter(a => a.status === 'Pending');
+            document.getElementById('stat-admissions-count').innerText = pendingApps.length;
+            
+            // Pending Badge in Sidebar
+            const badge = document.getElementById('pending-badge');
+            if (pendingApps.length > 0) {
+                badge.innerText = pendingApps.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            document.getElementById('admissions-total-badge').innerText = apps.length + ' Applications';
+
+            // Render tables
+            renderOverviewTable(apps);
+            renderProgramsTable(programs);
+            renderAdmissionsTable(apps);
+            renderResearchTable(research);
+        }
+
+        // TAB SWITCHER
+        function switchTab(tabId) {
+            // Hide previous tab, remove active btn class
+            document.getElementById('tab-' + currentTab).classList.add('hidden');
+            document.getElementById('tab-btn-' + currentTab).className = "w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all text-primary-fixed-dim";
+
+            // Show new tab, add active class
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-btn-' + tabId).className = "w-full flex items-center gap-md px-md py-3 rounded-lg text-left font-title-md hover:bg-primary-container hover:text-white transition-all bg-primary-container text-white";
+
+            // Update title
+            document.getElementById('header-title').innerText = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+
+            currentTab = tabId;
+            updateUI();
+        }
+
+        // TABLE RENDERERS
+        function renderOverviewTable(apps) {
+            const tbody = document.getElementById('recent-apps-tbody');
+            tbody.innerHTML = '';
+            // Show last 4 entries
+            const list = [...apps].reverse().slice(0, 4);
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-lg text-center text-on-surface-variant/50">No applications registered.</td></tr>`;
+                return;
+            }
+
+            list.forEach(a => {
+                let statusClass = "text-yellow-600 bg-yellow-50";
+                if (a.status === 'Approved') statusClass = "text-green-600 bg-green-50";
+                if (a.status === 'Rejected') statusClass = "text-red-600 bg-red-50";
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-outline-variant/10 text-on-surface";
+                tr.innerHTML = `
+                    <td class="py-md font-semibold">${escapeHtml(a.name)}</td>
+                    <td class="py-md">${escapeHtml(a.program)}</td>
+                    <td class="py-md opacity-75">${a.date}</td>
+                    <td class="py-md text-right"><span class="px-2 py-0.5 rounded font-label-sm text-xs ${statusClass}">${a.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderProgramsTable(programs) {
+            const tbody = document.getElementById('programs-tbody');
+            tbody.innerHTML = '';
+
+            programs.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors";
+                tr.innerHTML = `
+                    <td class="p-lg font-semibold text-primary">${escapeHtml(p.name)}</td>
+                    <td class="p-lg">${p.type}</td>
+                    <td class="p-lg">${p.date}</td>
+                    <td class="p-lg"><span class="px-2.5 py-1 rounded font-label-sm text-xs ${p.status === 'Active' ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'}">${p.status}</span></td>
+                    <td class="p-lg text-right space-x-2">
+                        <button onclick="editProgram(${p.id})" class="text-primary hover:text-secondary font-label-sm text-xs font-semibold">Edit</button>
+                        <button onclick="deleteProgram(${p.id})" class="text-error hover:text-red-800 font-label-sm text-xs font-semibold">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderAdmissionsTable(apps) {
+            const tbody = document.getElementById('admissions-tbody');
+            const emptyState = document.getElementById('admissions-empty-state');
+            const tableContainer = document.getElementById('admissions-table-container');
+            
+            tbody.innerHTML = '';
+
+            if (apps.length === 0) {
+                emptyState.classList.remove('hidden');
+                tableContainer.classList.add('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                tableContainer.classList.remove('hidden');
+            }
+
+            [...apps].reverse().forEach(a => {
+                let statusClass = "bg-yellow-100 text-yellow-800";
+                if (a.status === 'Approved') statusClass = "bg-green-100 text-green-800";
+                if (a.status === 'Rejected') statusClass = "bg-red-100 text-red-800";
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors";
+                tr.innerHTML = `
+                    <td class="p-lg font-semibold text-primary">${escapeHtml(a.name)}</td>
+                    <td class="p-lg">${escapeHtml(a.email)}</td>
+                    <td class="p-lg font-body-md">${escapeHtml(a.program)}</td>
+                    <td class="p-lg text-xs opacity-60">${a.date}</td>
+                    <td class="p-lg"><span class="px-2.5 py-1 rounded-full font-label-sm text-xs ${statusClass}">${a.status}</span></td>
+                    <td class="p-lg text-right flex items-center justify-end gap-md">
+                        <button onclick="viewMotivation(${a.id})" class="text-primary hover:text-secondary font-label-sm text-xs font-semibold">View Statement</button>
+                        ${a.status === 'Pending' ? `
+                            <button onclick="approveApp(${a.id})" class="text-green-700 hover:text-green-900 font-label-sm text-xs font-bold flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">check_circle</span>Approve</button>
+                            <button onclick="rejectApp(${a.id})" class="text-red-700 hover:text-red-900 font-label-sm text-xs font-bold flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">cancel</span>Reject</button>
+                        ` : ''}
+                        <button onclick="deleteApp(${a.id})" class="text-error hover:text-red-800 font-label-sm text-xs"><span class="material-symbols-outlined text-sm">delete</span></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderResearchTable(research) {
+            const tbody = document.getElementById('research-tbody');
+            tbody.innerHTML = '';
+
+            research.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors";
+                tr.innerHTML = `
+                    <td class="p-lg font-semibold text-primary">${escapeHtml(r.title)}</td>
+                    <td class="p-lg italic">${escapeHtml(r.author)}</td>
+                    <td class="p-lg">${r.year}</td>
+                    <td class="p-lg opacity-80">${escapeHtml(r.journal)}</td>
+                    <td class="p-lg text-right space-x-2">
+                        <button onclick="editResearch(${r.id})" class="text-primary hover:text-secondary font-label-sm text-xs font-semibold">Edit</button>
+                        <button onclick="deleteResearch(${r.id})" class="text-error hover:text-red-800 font-label-sm text-xs font-semibold">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ADMISSIONS ACTIONS
+        function viewMotivation(appId) {
+            const apps = JSON.parse(localStorage.getItem('gip_applications') || '[]');
+            const app = apps.find(a => a.id === appId);
+            if (app) {
+                document.getElementById('motivation-author').innerText = app.name + ' - Applying for ' + app.program;
+                document.getElementById('motivation-body').innerText = `"${app.statement}"`;
+                document.getElementById('motivation-modal').classList.remove('hidden');
+            }
+        }
+
+        function closeMotivationModal() {
+            document.getElementById('motivation-modal').classList.add('hidden');
+        }
+
+        function approveApp(appId) {
+            const apps = JSON.parse(localStorage.getItem('gip_applications') || '[]');
+            const app = apps.find(a => a.id === appId);
+            if (app) {
+                app.status = 'Approved';
+                localStorage.setItem('gip_applications', JSON.stringify(apps));
+                updateUI();
+            }
+        }
+
+        function rejectApp(appId) {
+            const apps = JSON.parse(localStorage.getItem('gip_applications') || '[]');
+            const app = apps.find(a => a.id === appId);
+            if (app) {
+                app.status = 'Rejected';
+                localStorage.setItem('gip_applications', JSON.stringify(apps));
+                updateUI();
+            }
+        }
+
+        function deleteApp(appId) {
+            if (confirm("Are you sure you want to delete this applicant file?")) {
+                let apps = JSON.parse(localStorage.getItem('gip_applications') || '[]');
+                apps = apps.filter(a => a.id !== appId);
+                localStorage.setItem('gip_applications', JSON.stringify(apps));
+                updateUI();
+            }
+        }
+
+        // PROGRAMS MODAL ACTIONS
+        function openProgramModal() {
+            document.getElementById('program-modal-title').innerText = "Add New Program";
+            document.getElementById('program-form').reset();
+            document.getElementById('program-edit-id').value = '';
+            document.getElementById('program-modal').classList.remove('hidden');
+        }
+
+        function closeProgramModal() {
+            document.getElementById('program-modal').classList.add('hidden');
+        }
+
+        function editProgram(progId) {
+            const programs = JSON.parse(localStorage.getItem('gip_programs') || '[]');
+            const p = programs.find(item => item.id === progId);
+            if (p) {
+                document.getElementById('program-modal-title').innerText = "Edit Program Details";
+                document.getElementById('program-edit-id').value = p.id;
+                document.getElementById('program-name').value = p.name;
+                document.getElementById('program-type').value = p.type;
+                document.getElementById('program-date').value = p.date;
+                document.getElementById('program-status').value = p.status;
+                document.getElementById('program-modal').classList.remove('hidden');
+            }
+        }
+
+        function submitProgram(event) {
+            event.preventDefault();
+            const id = document.getElementById('program-edit-id').value;
+            const name = document.getElementById('program-name').value;
+            const type = document.getElementById('program-type').value;
+            const date = document.getElementById('program-date').value;
+            const status = document.getElementById('program-status').value;
+
+            let programs = JSON.parse(localStorage.getItem('gip_programs') || '[]');
+
+            if (id) {
+                // Update
+                const p = programs.find(item => item.id === parseInt(id));
+                if (p) {
+                    p.name = name;
+                    p.type = type;
+                    p.date = date;
+                    p.status = status;
+                }
+            } else {
+                // Insert
+                programs.push({
+                    id: Date.now(),
+                    name,
+                    type,
+                    date,
+                    status
+                });
+            }
+
+            localStorage.setItem('gip_programs', JSON.stringify(programs));
+            closeProgramModal();
+            updateUI();
+        }
+
+        function deleteProgram(progId) {
+            if (confirm("Are you sure you want to remove this program from GIP curriculum?")) {
+                let programs = JSON.parse(localStorage.getItem('gip_programs') || '[]');
+                programs = programs.filter(p => p.id !== progId);
+                localStorage.setItem('gip_programs', JSON.stringify(programs));
+                updateUI();
+            }
+        }
+
+        // RESEARCH MODAL ACTIONS
+        function openResearchModal() {
+            document.getElementById('research-modal-title').innerText = "Add Publication";
+            document.getElementById('research-form').reset();
+            document.getElementById('research-edit-id').value = '';
+            document.getElementById('research-modal').classList.remove('hidden');
+        }
+
+        function closeResearchModal() {
+            document.getElementById('research-modal').classList.add('hidden');
+        }
+
+        function editResearch(resId) {
+            const research = JSON.parse(localStorage.getItem('gip_research') || '[]');
+            const r = research.find(item => item.id === resId);
+            if (r) {
+                document.getElementById('research-modal-title').innerText = "Edit Publication Details";
+                document.getElementById('research-edit-id').value = r.id;
+                document.getElementById('research-title').value = r.title;
+                document.getElementById('research-author').value = r.author;
+                document.getElementById('research-year').value = r.year;
+                document.getElementById('research-journal').value = r.journal;
+                document.getElementById('research-modal').classList.remove('hidden');
+            }
+        }
+
+        function submitResearch(event) {
+            event.preventDefault();
+            const id = document.getElementById('research-edit-id').value;
+            const title = document.getElementById('research-title').value;
+            const author = document.getElementById('research-author').value;
+            const year = document.getElementById('research-year').value;
+            const journal = document.getElementById('research-journal').value;
+
+            let research = JSON.parse(localStorage.getItem('gip_research') || '[]');
+
+            if (id) {
+                // Update
+                const r = research.find(item => item.id === parseInt(id));
+                if (r) {
+                    r.title = title;
+                    r.author = author;
+                    r.year = year;
+                    r.journal = journal;
+                }
+            } else {
+                // Insert
+                research.push({
+                    id: Date.now(),
+                    title,
+                    author,
+                    year,
+                    journal
+                });
+            }
+
+            localStorage.setItem('gip_research', JSON.stringify(research));
+            closeResearchModal();
+            updateUI();
+        }
+
+        function deleteResearch(resId) {
+            if (confirm("Are you sure you want to delete this publication record?")) {
+                let research = JSON.parse(localStorage.getItem('gip_research') || '[]');
+                research = research.filter(r => r.id !== resId);
+                localStorage.setItem('gip_research', JSON.stringify(research));
+                updateUI();
+            }
+        }
+
+        // SETTINGS & LOGOUT
+        function saveSettings(event) {
+            event.preventDefault();
+            alert("Settings updated. Live website reflects GIP portal changes.");
+        }
+
+        function handleLogout() {
+            localStorage.setItem('gip_admin_logged_in', 'false');
+            window.location.href = 'index.html';
+        }
+
+        // ESCAPE HTML HELPER
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+    </script>
+</body>
+</html>
