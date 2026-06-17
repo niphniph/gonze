@@ -19,4 +19,5 @@ function moveFolder(folderName) {
 moveFolder('bottleorder');
 moveFolder('ninokvariani');
 moveFolder('ninokvariani2');
+moveFolder('diet');
 
