@@ -125,10 +125,18 @@ export async function onRequestPost(context) {
 
     const updatedProfiles = await updateRes.json();
 
-    // Return the generated plan details
+    // Return the generated plan details formatted exactly as requested
+    const savedMealPlan = {
+      id: userId,
+      userId: userId,
+      content: generatedMealPlan,
+      status: "active",
+      updatedAt: new Date().toISOString()
+    };
+
     return new Response(JSON.stringify({
       success: true,
-      mealPlan: generatedMealPlan,
+      mealPlan: savedMealPlan,
       workoutPlan: generatedWorkoutPlan,
       calculatedPlan: calculated,
       userData: planUserData,
