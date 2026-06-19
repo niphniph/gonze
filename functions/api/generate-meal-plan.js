@@ -22,10 +22,10 @@ export async function onRequestPost(context) {
       });
     }
 
-    const { userId, answers } = requestData;
+    const { userId, guestId, answers, language } = requestData;
 
-    if (!userId) {
-      return new Response(JSON.stringify({ error: "Missing userId" }), {
+    if (!userId && !guestId) {
+      return new Response(JSON.stringify({ error: "Missing userId or guestId" }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
@@ -47,26 +47,35 @@ export async function onRequestPost(context) {
     }
 
     const prompt = `
-Create a personalized 7-day meal plan based on this user data:
+You are a professional nutritionist.
 
-Age: ${answers.age || answers.ageValue || "not provided"}
-Gender: ${answers.gender || "not provided"}
-Weight: ${answers.weight || answers.currentWeightValue || "not provided"}
-Height: ${answers.height || answers.heightValue || "not provided"}
-Goal: ${answers.goal || answers.mainGoal || "not provided"}
+Create a personalized 7-day meal plan in Georgian language.
+
+User questionnaire:
+Age: ${answers.age || answers.Age || answers.ageValue || "not provided"}
+Gender: ${answers.gender || answers.Gender || "not provided"}
+Weight: ${answers.weight || answers.Weight || answers.currentWeightValue || "not provided"}
+Height: ${answers.height || answers.Height || answers.heightValue || "not provided"}
+Goal: ${answers.goal || answers.Goal || answers.mainGoal || "not provided"}
 Activity level: ${answers.activity || answers.activityLevel || "not provided"}
 Diet preference: ${answers.diet || answers.dietPreference || "not provided"}
 Allergies: ${answers.allergies || "none"}
-Disliked foods: ${answers.dislikedFoods || answers.foodsToAvoid || "none"}
+Disliked foods: ${answers.dislikedFoods || answers.dislikes || answers.foodsToAvoid || "none"}
+Meals per day: ${answers.mealsPerDay || "not provided"}
+Budget: ${answers.budget || answers.budgetLevel || "not provided"}
+Cooking time: ${answers.cookingTime || "not provided"}
 
-Return the meal plan in Georgian language.
+Return:
+1. Short user summary
+2. 7-day meal plan
+3. Breakfast, lunch, dinner, snacks for every day
+4. Approximate daily calories
+5. Protein/carbs/fat estimate
+6. Grocery list
+7. Practical preparation tips
+8. Notes based on allergies/disliked foods
 
-Include:
-- breakfast, lunch, dinner, and snacks for each day
-- approximate daily calories
-- simple grocery list
-- practical instructions
-- short explanation why this plan fits the user
+Use clear Georgian language.
 `;
 
     let openaiRes;
@@ -84,13 +93,14 @@ Include:
           messages: [
             {
               role: "system",
-              content: "You are a professional nutritionist and meal plan generator."
+              content: "You generate safe, practical, personalized meal plans. You are not a doctor. Avoid medical diagnosis."
             },
             {
               role: "user",
               content: prompt
             }
-          ]
+          ],
+          temperature: 0.7
         })
       });
     } catch (err) {
@@ -111,13 +121,14 @@ Include:
           messages: [
             {
               role: "system",
-              content: "You are a professional nutritionist and meal plan generator."
+              content: "You generate safe, practical, personalized meal plans. You are not a doctor. Avoid medical diagnosis."
             },
             {
               role: "user",
               content: prompt
             }
-          ]
+          ],
+          temperature: 0.7
         })
       });
     }
@@ -133,12 +144,12 @@ Include:
     const openaiData = await openaiRes.json();
     const mealPlanText = openaiData.choices[0].message.content;
 
-    // Optional: save to database if authorized
+    // Optional: save to database if authorized and possible
+    const supabaseUrl = env.SUPABASE_URL || env.VITE_SUPABASE_URL || "https://qklbpwzeihwurtldfjqr.supabase.co";
+    const supabaseAnonKey = env.SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || "sb_publishable_CqP3cfW9qc4seogWd_xA3Q_kvX_esJr";
     const authHeader = request.headers.get("Authorization");
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      const supabaseUrl = env.SUPABASE_URL || env.VITE_SUPABASE_URL || "https://qklbpwzeihwurtldfjqr.supabase.co";
-      const supabaseAnonKey = env.SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || "sb_publishable_CqP3cfW9qc4seogWd_xA3Q_kvX_esJr";
 
+    if (userId && authHeader && authHeader.startsWith("Bearer ")) {
       try {
         const updateRes = await fetch(`${supabaseUrl}/rest/v1/profiles?id=eq.${userId}`, {
           method: "PATCH",
@@ -155,11 +166,37 @@ Include:
 
         if (!updateRes.ok) {
           const errText = await updateRes.text();
-          console.warn(`Failed to update meal plan in Supabase: ${errText}`);
+          console.warn(`Failed to update meal plan in Supabase profile: ${errText}`);
         }
       } catch (err) {
-        console.warn("Database save failed in generate-meal-plan:", err.message);
+        console.warn("Database profiles save failed in generate-meal-plan:", err.message);
       }
+    }
+
+    // Try logging in a separate meal_plans table if it exists
+    try {
+      const headers = {
+        "apikey": supabaseAnonKey,
+        "Content-Type": "application/json"
+      };
+      if (authHeader) {
+        headers["Authorization"] = authHeader;
+      }
+      const mealPlansRes = await fetch(`${supabaseUrl}/rest/v1/meal_plans`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          user_id: userId || null,
+          guest_id: guestId || null,
+          answers: answers,
+          meal_plan: mealPlanText
+        })
+      });
+      if (!mealPlansRes.ok) {
+        console.warn(`Failed to log in meal_plans: ${await mealPlansRes.text()}`);
+      }
+    } catch (dbError) {
+      console.warn("Meal plan DB save skipped:", dbError.message);
     }
 
     return new Response(JSON.stringify({ mealPlan: mealPlanText }), {
