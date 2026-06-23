@@ -35,5 +35,6 @@ moveFolder('bottleorder');
 moveFolder('ninokvariani');
 moveFolder('ninokvariani2');
 moveFolder('diet');
+moveFolder('portfolio');
 moveFile('_redirects');
 
