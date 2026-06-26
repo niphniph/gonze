@@ -66,19 +66,19 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
           
           {/* Brand Logo */}
           <div className="px-6 mb-8 flex justify-between items-center">
-            <h1 className="font-headline-md text-headline-md font-extrabold text-white tracking-tight">Tracker</h1>
+            <h1 className="font-display-lg text-2xl font-black text-primary-fixed-dim tracking-tight">Tracker</h1>
             
             {/* Language Switcher */}
             <div className="flex items-center gap-1 bg-black/35 rounded-lg p-0.5 border border-border-hairline">
               <button 
                 onClick={() => setLanguage('ka')} 
-                className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-all cursor-pointer ${language === 'ka' ? 'bg-accent-indigo text-white shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
+                className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-all cursor-pointer ${language === 'ka' ? 'bg-primary-fixed-dim text-black shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
               >
                 GE
               </button>
               <button 
                 onClick={() => setLanguage('en')} 
-                className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-all cursor-pointer ${language === 'en' ? 'bg-accent-indigo text-white shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
+                className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-all cursor-pointer ${language === 'en' ? 'bg-primary-fixed-dim text-black shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
               >
                 EN
               </button>
@@ -87,7 +87,7 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
 
           {/* Profile Header */}
           <div className="px-6 mb-6 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-accent-indigo flex items-center justify-center overflow-hidden border border-white/10 shadow-lg">
+            <div className="w-10 h-10 rounded-full bg-primary-fixed-dim/10 flex items-center justify-center overflow-hidden border border-white/10 shadow-lg">
               <img 
                 className="w-full h-full object-cover" 
                 alt="Profile Avatar"
@@ -96,7 +96,7 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
             </div>
             <div className="flex flex-col min-w-0">
               <span className="font-body-md text-body-md font-bold text-text-primary truncate">{profile.name}</span>
-              <span className="text-[9px] text-accent-indigo font-bold tracking-widest uppercase truncate">{profile.email}</span>
+              <span className="text-[9px] text-primary-fixed-dim font-bold tracking-widest uppercase truncate">{profile.email}</span>
             </div>
           </div>
 
@@ -115,13 +115,13 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
                       <button
                         key={item.id}
                         onClick={() => setActivePage(item.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-150 cursor-pointer ${
+                        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-full transition-all duration-150 cursor-pointer ${
                           isActive 
-                            ? 'text-white font-bold bg-white/5 border-r-2 border-accent-indigo shadow-md shadow-accent-indigo/5' 
+                            ? 'text-primary-fixed-dim font-bold bg-primary-fixed-dim/10 shadow-sm border border-primary-fixed-dim/10' 
                             : 'text-text-secondary hover:bg-white/5 hover:text-text-primary font-medium'
                         }`}
                       >
-                        <Icon size={18} className={isActive ? 'text-accent-indigo' : ''} />
+                        <Icon size={18} className={isActive ? 'text-primary-fixed-dim' : ''} />
                         <span className="font-body-md text-body-md">{item.label}</span>
                       </button>
                     );
@@ -144,11 +144,11 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
               onClick={() => setActivePage(item.id)}
               className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
                 isActive 
-                  ? 'text-primary bg-primary-container/20 px-3 py-1 shadow-sm' 
+                  ? 'text-primary-fixed-dim bg-primary-fixed-dim/10 px-3 py-1 shadow-sm border border-primary-fixed-dim/10' 
                   : 'text-text-secondary hover:text-text-primary'
               }`}
             >
-              <Icon size={18} className={isActive ? 'text-accent-indigo' : ''} />
+              <Icon size={18} className={isActive ? 'text-primary-fixed-dim' : ''} />
               <span className="text-[10px] mt-0.5">{item.label}</span>
             </button>
           );

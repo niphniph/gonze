@@ -124,7 +124,7 @@ export const Dashboard = ({ language, setActivePage }) => {
     value: expenseByCategory[cat]
   }));
 
-  const COLORS = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#8B5CF6', '#06B6D4'];
+  const COLORS = ['#00dbe9', '#d1bcff', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#8B5CF6'];
 
   // 4. Last 7 Days Habit Compliance
   const last7Days = [];
@@ -251,93 +251,94 @@ export const Dashboard = ({ language, setActivePage }) => {
   return (
     <div className="min-h-screen text-text-primary px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
       
-      {/* Greetings Header */}
-      <section className="flex justify-between items-end">
-        <div>
-          <p className="font-label-sm text-label-sm text-text-secondary uppercase tracking-widest mb-1">{t('მიმოხილვა', 'Overview')}</p>
-          <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-text-primary tracking-tight">
-            {t(`დილა მშვიდობისა, ${profile.name.split(' ')[0]}`, `Good morning, ${profile.name.split(' ')[0]}`)}
-          </h2>
-        </div>
-        <div className="flex flex-col items-end">
-          <span className="font-label-xs text-label-xs text-accent-indigo uppercase font-bold tracking-widest">{t('AI ქულა', 'AI Score')}</span>
-          <span className="font-headline-md text-headline-md font-black text-text-primary">
-            {aiScore}<span className="text-text-secondary font-medium text-sm">/100</span>
-          </span>
-        </div>
-      </section>
-
-      {/* Today's Focus & Priority Card */}
+      {/* Hero Section & AI Score */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        <div className="lg:col-span-8 relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-indigo to-primary opacity-20 blur rounded-xl transition duration-1000 group-hover:opacity-40"></div>
-          <div className="relative glass-card rounded-xl p-6 overflow-hidden focus-gradient h-full flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-start mb-4">
-                <span className="bg-accent-indigo/15 text-accent-indigo px-3 py-1 rounded-full font-label-xs text-label-xs uppercase tracking-wider border border-accent-indigo/20">
-                  {t('პრიორიტეტი #1', 'Priority #1')}
-                </span>
-                <span className="material-symbols-outlined text-accent-indigo" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-              </div>
-              
-              <h3 className="font-title-md text-xl md:text-2xl text-text-primary mb-2 font-bold leading-snug">
-                {priority1Task ? priority1Task.text : t('დღეს ყველა პრიორიტეტული დავალება შესრულებულია!', 'All priority tasks completed for today!')}
-              </h3>
-              <p className="font-body-md text-body-md text-text-secondary mb-6">
-                {priority1Task 
-                  ? t(`კატეგორია: ${priority1Task.category}. საჭიროებს ღრმა ფოკუსირებას.`, `Category: ${priority1Task.category}. Requires deep work concentration.`)
-                  : t('შეინარჩუნეთ პროდუქტიულობა, დაამატეთ ახალი დავალებები ქვემოთ.', 'Maintain your momentum, add new tasks below.')}
-              </p>
-            </div>
-            
-            <div className="flex items-center justify-between mt-auto">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full border-2 border-surface-container overflow-hidden">
-                  <img className="w-full h-full object-cover" alt="user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt-_JfINy3vL-V4v3kSjinfRAHgopEwUG-5H604EnPUuo-up30xeKmKY0sFvlFYnMEeaXP_5I1HVRZVy8br5FCSh2DQ35MA5PbSvCx7huXODgwF5Ih2cDfhcYZG2ZGL-pDY7sFOHg3XeWn6vu0WbF79DG5Zsxm7xJkZ4QepQyUYKmuppRc_Pp-2M8XYuAShfuLPuJVJdvjxrPt7EmBc0xVmtwdCaY_ITxdDqA0fTj88EbNNERsWMDQgqvJZIEDIDAgXlsnZlpA-5M"/>
-                </div>
-                <div className="w-8 h-8 rounded-full border-2 border-surface-container bg-surface-bright flex items-center justify-center text-[10px] font-bold text-text-secondary">
-                  +1
-                </div>
-              </div>
-              
-              {priority1Task && (
-                <button 
-                  onClick={() => setShowTimerModal(true)}
-                  className="bg-text-primary text-background px-5 py-2.5 rounded-lg font-label-sm text-label-sm font-bold transition-all hover:bg-white active:scale-95 cursor-pointer shadow-lg"
-                >
-                  {t('ფოკუსის დაწყება', 'Start Session')}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* AI Recommendation Insights */}
-        <div className="lg:col-span-4 glass-card rounded-xl p-6 relative overflow-hidden border-accent-indigo/20 flex flex-col justify-between">
-          <div className="absolute top-0 right-0 p-4 opacity-5">
-            <span className="material-symbols-outlined text-[80px]" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-          </div>
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="material-symbols-outlined text-accent-indigo text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-              <p className="font-label-xs text-label-xs text-accent-indigo uppercase font-bold tracking-widest">{t('AI ინსაითები', 'AI Insights')}</p>
-            </div>
-            
-            <p className="font-body-lg text-body-lg text-text-primary mb-6 leading-relaxed">
-              {todayTasksPct > 60 
-                ? t("თქვენი დღევანდელი ფოკუსი მშვენიერ დონეზეა. შესანიშნავი პროგრესია!", "Your focus levels are high today. Excellent progress so far!") 
-                : t("თქვენი ყველაზე პროდუქტიული საათებია 14:00 - 16:00. დაგეგმეთ ღრმა მუშაობა.", "Your focus peaks between 2 PM — 4 PM. We suggest clearing your calendar.")}
+        {/* Greeting & Priority Card */}
+        <div className="lg:col-span-8 flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <h3 className="font-display-lg text-3xl md:text-4xl font-bold text-text-primary tracking-tight">
+              {t(`დილა მშვიდობისა, ${profile.name.split(' ')[0]}`, `Good morning, ${profile.name.split(' ')[0]}`)}
+            </h3>
+            <p className="font-body-lg text-text-secondary">
+              {t('მზად ხართ ახალი მიზნების მისაღწევად? დღეს გაქვთ შეხვედრები.', 'Ready to dominate your goals? You have meetings scheduled for today.')}
             </p>
           </div>
+          
+          {/* Priority Hero Card */}
+          <div className="glass-card rounded-xl p-8 md:p-10 relative overflow-hidden group cursor-pointer border-l-4 border-l-primary-fixed-dim flex flex-col justify-between">
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="px-4 py-1 bg-primary-fixed-dim/20 text-primary-fixed-dim text-[10px] font-bold rounded-full uppercase tracking-widest border border-primary-fixed-dim/30">
+                  {t('პრიორიტეტი #1', 'Priority #1')}
+                </span>
+                {priority1Task && (
+                  <span className="text-text-secondary text-[11px] font-medium uppercase tracking-wider">
+                    {t('დღეს შესასრულებელი', 'Due Today')}
+                  </span>
+                )}
+              </div>
+              <h4 className="font-display-lg text-xl md:text-3xl font-bold text-text-primary mb-6 max-w-2xl leading-tight">
+                {priority1Task ? priority1Task.text : t('დღეს ყველა პრიორიტეტული დავალება შესრულებულია!', 'All priority tasks completed for today!')}
+              </h4>
+              <div className="flex items-center gap-4">
+                {priority1Task ? (
+                  <>
+                    <button 
+                      onClick={() => setShowTimerModal(true)}
+                      className="bg-primary-fixed-dim hover:bg-primary-container text-black font-black py-3 px-8 rounded-full text-body-md transition-all duration-300 active:scale-95 shadow-xl shadow-primary-fixed-dim/10 cursor-pointer"
+                    >
+                      {t('ფოკუსის დაწყება', 'Start Session')}
+                    </button>
+                    <button 
+                      onClick={() => setActivePage('planner')}
+                      className="bg-surface-container-highest hover:bg-surface-bright border border-outline-variant/30 text-text-primary font-bold py-3 px-8 rounded-full text-body-md transition-all duration-300 cursor-pointer"
+                    >
+                      {t('პლანერი', 'Planner')}
+                    </button>
+                  </>
+                ) : (
+                  <button 
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-primary-fixed-dim hover:bg-primary-container text-black font-black py-3 px-8 rounded-full text-body-md transition-all duration-300 active:scale-95 cursor-pointer shadow-xl shadow-primary-fixed-dim/10"
+                  >
+                    {t('ახალი დავალება', 'New Task')}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <div className="flex flex-col gap-1.5 mt-auto">
-            <div className="flex justify-between text-[11px] text-text-secondary">
-              <span>{t('დღევანდელი პროგრესი', 'Today\'s Progress')}</span>
-              <span>{Math.round(todayTasksPct)}%</span>
+        {/* AI Score Card / Efficiency Rating */}
+        <div className="lg:col-span-4">
+          <div className="glass-card rounded-xl p-8 md:p-10 flex flex-col items-center justify-center h-full text-center">
+            <div className="relative w-40 h-40 mb-8 flex items-center justify-center">
+              <svg className="w-full h-full transform -rotate-90">
+                <circle className="text-surface-container-highest" cx="80" cy="80" fill="transparent" r="72" stroke="currentColor" strokeWidth="10"></circle>
+                <circle 
+                  className="text-primary-fixed-dim transition-all duration-1000" 
+                  cx="80" 
+                  cy="80" 
+                  fill="transparent" 
+                  r="72" 
+                  stroke="currentColor" 
+                  strokeDasharray="452" 
+                  strokeDashoffset={452 - (452 * aiScore) / 100}
+                  strokeLinecap="round" 
+                  strokeWidth="10"
+                ></circle>
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="font-display-lg text-4xl font-black text-text-primary">{aiScore}</span>
+                <span className="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest">/ 100</span>
+              </div>
             </div>
-            <div className="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
-              <div className="h-full bg-accent-indigo transition-all duration-300" style={{ width: `${todayTasksPct}%` }}></div>
-            </div>
+            <h5 className="font-headline-md text-xl font-bold text-text-primary mb-2">{t('ეფექტურობის რეიტინგი', 'Efficiency Rating')}</h5>
+            <p className="font-body-md text-text-secondary leading-relaxed">
+              {aiScore > 80 
+                ? t('თქვენი პროდუქტიულობა შესანიშნავია! ასე გააგრძელეთ.', 'Your focus score is higher than last week. Top performance!')
+                : t('AI გირჩევთ გამოიყენოთ პომოდოროს ტაიმერი ფოკუსისთვის.', 'AI suggests using Pomodoro Focus Sessions to boost your rating.')}
+            </p>
           </div>
         </div>
       </section>
@@ -348,10 +349,10 @@ export const Dashboard = ({ language, setActivePage }) => {
         {/* Tasks Stats Card */}
         <div 
           onClick={() => setActivePage('tasks')}
-          className="glass-card rounded-xl p-stack-md flex flex-col justify-between aspect-square cursor-pointer transition-all hover:scale-[1.02] hover:border-accent-indigo/40 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] group"
+          className="glass-card rounded-xl p-stack-md flex flex-col justify-between aspect-square cursor-pointer transition-all hover:scale-[1.02] hover:border-primary-fixed-dim/40 hover:shadow-[0_0_20px_rgba(0,219,233,0.15)] group"
         >
           <div className="flex justify-between items-center">
-            <span className="material-symbols-outlined text-text-secondary group-hover:text-accent-indigo transition-colors">assignment</span>
+            <span className="material-symbols-outlined text-text-secondary group-hover:text-primary-fixed-dim transition-colors">assignment</span>
             <span className="font-label-xs text-label-xs text-green-400">+{Math.round(todayTasksPct)}%</span>
           </div>
           <div>
@@ -367,7 +368,7 @@ export const Dashboard = ({ language, setActivePage }) => {
         >
           <div className="flex justify-between items-center">
             <span className="material-symbols-outlined text-text-secondary group-hover:text-accent-emerald transition-colors" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
-            <span className="font-label-xs text-label-xs text-accent-indigo">{t('აქტიური', 'Active')}</span>
+            <span className="font-label-xs text-label-xs text-primary-fixed-dim">{t('აქტიური', 'Active')}</span>
           </div>
           <div>
             <p className="font-headline-md text-2xl md:text-3xl font-bold text-text-primary">{habitStreak}</p>
@@ -393,7 +394,7 @@ export const Dashboard = ({ language, setActivePage }) => {
         {/* Weekly Growth Chart Card */}
         <div 
           onClick={() => setActivePage('finance_analyzer')}
-          className="glass-card rounded-xl p-stack-md flex flex-col justify-between aspect-square cursor-pointer transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] group"
+          className="glass-card rounded-xl p-stack-md flex flex-col justify-between aspect-square cursor-pointer transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(0,219,233,0.1)] group"
         >
           <div className="flex justify-between items-center">
             <span className="material-symbols-outlined text-text-secondary group-hover:text-primary transition-colors">trending_up</span>
@@ -405,9 +406,9 @@ export const Dashboard = ({ language, setActivePage }) => {
                 <Area 
                   type="monotone" 
                   dataKey="percent" 
-                  stroke="#6366F1" 
+                  stroke="#00dbe9" 
                   strokeWidth={2}
-                  fill="rgba(99, 102, 241, 0.1)" 
+                  fill="rgba(0, 219, 233, 0.1)" 
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -428,8 +429,8 @@ export const Dashboard = ({ language, setActivePage }) => {
               <AreaChart data={last7Days} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorPercent" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#6366F1" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#00dbe9" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#00dbe9" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="name" stroke="#64748B" fontSize={11} tickLine={false} />
@@ -445,7 +446,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                 <Area 
                   type="monotone" 
                   dataKey="percent" 
-                  stroke="#6366F1" 
+                  stroke="#00dbe9" 
                   strokeWidth={2.5}
                   fillOpacity={1} 
                   fill="url(#colorPercent)" 
@@ -521,7 +522,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                   <p className="font-label-sm text-label-sm text-text-secondary">{m.time} • Google Meet</p>
                 </div>
                 {m.meetLink && (
-                  <a href={m.meetLink} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-accent-indigo/10 flex items-center justify-center text-accent-indigo hover:bg-accent-indigo hover:text-white transition-all">
+                  <a href={m.meetLink} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-primary-fixed-dim/10 flex items-center justify-center text-primary-fixed-dim hover:bg-primary-fixed-dim hover:text-white transition-all">
                     <span className="material-symbols-outlined text-lg">videocam</span>
                   </a>
                 )}
@@ -565,7 +566,7 @@ export const Dashboard = ({ language, setActivePage }) => {
       {/* Floating Action Button (FAB) */}
       <button 
         onClick={() => setShowAddModal(true)}
-        className="fixed bottom-24 right-margin-mobile md:bottom-8 md:right-8 w-14 h-14 bg-accent-indigo text-white rounded-full shadow-[0_8px_24px_rgba(99,102,241,0.4)] flex items-center justify-center z-[60] active:scale-90 hover:scale-105 cursor-pointer transition-all"
+        className="fixed bottom-24 right-margin-mobile md:bottom-8 md:right-8 w-14 h-14 bg-primary-fixed-dim text-on-primary-fixed rounded-full shadow-[0_8px_24px_rgba(0,219,233,0.4)] flex items-center justify-center z-[60] active:scale-90 hover:scale-105 cursor-pointer transition-all"
       >
         <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'wght' 600" }}>add</span>
       </button>
@@ -573,7 +574,7 @@ export const Dashboard = ({ language, setActivePage }) => {
       {/* Pomodoro Focus Timer Overlay Modal */}
       {showTimerModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
-          <div className="glass-card rounded-2xl p-8 max-w-sm w-full text-center relative border border-accent-indigo/20 shadow-2xl">
+          <div className="glass-card rounded-2xl p-8 max-w-sm w-full text-center relative border border-primary-fixed-dim/20 shadow-2xl">
             <h3 className="text-xl font-bold text-white mb-2">{t('ღრმა მუშაობის სესია', 'Deep Focus Session')}</h3>
             <p className="text-sm text-text-secondary mb-6">{priority1Task?.text}</p>
             
@@ -585,7 +586,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                   cx="96" 
                   cy="96" 
                   r="88" 
-                  stroke="#6366F1" 
+                  stroke="#00dbe9" 
                   strokeWidth="6" 
                   fill="transparent"
                   strokeDasharray={552}
@@ -601,7 +602,7 @@ export const Dashboard = ({ language, setActivePage }) => {
             <div className="flex gap-4 justify-center">
               <button 
                 onClick={() => setTimerActive(!timerActive)}
-                className="bg-accent-indigo text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all hover:bg-accent-indigo/80 active:scale-95 cursor-pointer"
+                className="bg-primary-fixed-dim text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all hover:bg-primary-fixed-dim/80 active:scale-95 cursor-pointer"
               >
                 {timerActive ? t('პაუზა', 'Pause') : t('დაწყება', 'Start')}
               </button>
@@ -637,7 +638,7 @@ export const Dashboard = ({ language, setActivePage }) => {
             <div className="flex border-b border-border-hairline mb-6 pb-2">
               <button 
                 onClick={() => setActiveTab('task')}
-                className={`flex-1 text-center py-2 font-bold text-sm cursor-pointer border-b-2 transition-all ${activeTab === 'task' ? 'border-accent-indigo text-accent-indigo' : 'border-transparent text-text-secondary'}`}
+                className={`flex-1 text-center py-2 font-bold text-sm cursor-pointer border-b-2 transition-all ${activeTab === 'task' ? 'border-primary-fixed-dim text-primary-fixed-dim' : 'border-transparent text-text-secondary'}`}
               >
                 {t('დავალება', 'Task')}
               </button>
@@ -665,7 +666,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                     value={taskText} 
                     onChange={e => setTaskText(e.target.value)} 
                     placeholder={t('მაგ. მოხსენების მომზადება', 'e.g. Write monthly report')}
-                    className="w-full bg-white/5 border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-accent-indigo"
+                    className="w-full bg-white/5 border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim"
                     required
                   />
                 </div>
@@ -675,7 +676,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                     <select 
                       value={taskCategory} 
                       onChange={e => setTaskCategory(e.target.value)}
-                      className="w-full bg-surface-container-high border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-accent-indigo"
+                      className="w-full bg-surface-container-high border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim"
                     >
                       <option>სამსახური 💼</option>
                       <option>ჯანმრთელობა 💪🏻</option>
@@ -693,7 +694,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                     <select 
                       value={taskPriority} 
                       onChange={e => setTaskPriority(e.target.value)}
-                      className="w-full bg-surface-container-high border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+                      className="w-full bg-surface-container-high border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim"
                     >
                       <option>🔴 მაღალი</option>
                       <option>🟡 საშუალო</option>
@@ -702,7 +703,7 @@ export const Dashboard = ({ language, setActivePage }) => {
                     </select>
                   </div>
                 </div>
-                <button type="submit" className="w-full bg-accent-indigo text-white py-2.5 rounded-xl font-bold text-sm cursor-pointer hover:bg-accent-indigo/80 active:scale-[0.98] transition-all">
+                <button type="submit" className="w-full bg-primary-fixed-dim text-white py-2.5 rounded-xl font-bold text-sm cursor-pointer hover:bg-primary-fixed-dim/80 active:scale-[0.98] transition-all">
                   {t('დავალების დამატება', 'Add Task')}
                 </button>
               </form>

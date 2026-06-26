@@ -64,7 +64,7 @@ function App() {
         <header className="bg-surface-container/80 backdrop-blur-xl sticky top-0 z-40 border-b border-border-hairline shadow-sm h-16 w-full flex items-center justify-between px-6 md:px-10">
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-text-secondary hover:text-white cursor-pointer transition-colors">search</span>
-            <h2 className="font-headline-md text-base md:text-lg font-bold text-accent-indigo">
+            <h2 className="font-headline-md text-base md:text-lg font-bold text-primary-fixed-dim">
               {t('პროდუქტიულობის ტრეკერი', 'Productivity Tracker')}
             </h2>
           </div>
@@ -73,7 +73,7 @@ function App() {
               onClick={() => setActivePage('insights')}
               className="bg-white/5 hover:bg-surface-bright/50 px-3.5 py-1.5 rounded-lg border border-white/5 flex items-center gap-2 transition-all duration-200 group cursor-pointer"
             >
-              <span className="material-symbols-outlined text-accent-indigo text-lg group-hover:scale-110 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+              <span className="material-symbols-outlined text-primary-fixed-dim text-lg group-hover:scale-110 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
               <span className="font-body-md text-xs md:text-sm font-medium">{t('AI ასისტენტი', 'AI Assistant')}</span>
             </button>
             <div className="w-8 h-8 rounded-full bg-surface-container-high border border-white/10 flex items-center justify-center">
