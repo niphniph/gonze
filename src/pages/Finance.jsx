@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, ArrowUpRight, ArrowDownRight, DollarSign, Wallet, Calendar, Tag } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Trash2, ArrowUpRight, ArrowDownRight, Wallet, Calendar, Tag } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 
+const generateFinanceTxId = () => `f-${Date.now()}`;
+
+const incomeCategories = ['ხელფასი', 'ბიზნესი', 'ბონუსი', 'ფრილანსერობა', 'ინვესტიციები', 'სხვა შემოსავალი'];
+const expenseCategories = [
+  'ქირა', 'საჭმელი', 'კომუნალური', 'ინტერნეტი', 'დაზღვევა', 
+  'ტაქსი', 'ტრანსპორტი', 'მანქანა', 'საწვავი', 'გართობა', 
+  'კაფეები და რესტორნები', 'მოგზაურობა', 'წამლები', 'შოპინგი', 'სხვა ხარჯი'
+];
+
 export const Finance = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(() => db.getFinance() || []);
   
   // Form state
   const [type, setType] = useState('expense'); // 'income' or 'expense'
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(() => expenseCategories[0]);
   const [date, setDate] = useState('2026-06-07');
   const [note, setNote] = useState('');
-
-  const incomeCategories = ['ხელფასი', 'ბიზნესი', 'ბონუსი', 'ფრილანსერობა', 'ინვესტიციები', 'სხვა შემოსავალი'];
-  const expenseCategories = [
-    'ქირა', 'საჭმელი', 'კომუნალური', 'ინტერნეტი', 'დაზღვევა', 
-    'ტაქსი', 'ტრანსპორტი', 'მანქანა', 'საწვავი', 'გართობა', 
-    'კაფეები და რესტორნები', 'მოგზაურობა', 'წამლები', 'შოპინგი', 'სხვა ხარჯი'
-  ];
 
   const translateFinanceCategory = (cat) => {
     if (!cat) return '';
@@ -51,15 +53,12 @@ export const Finance = ({ language }) => {
     return cat;
   };
 
-  // Set default category depending on type
-  useEffect(() => {
+  // Set default category depending on type (state update during render)
+  const [prevType, setPrevType] = useState(type);
+  if (type !== prevType) {
+    setPrevType(type);
     setCategory(type === 'income' ? incomeCategories[0] : expenseCategories[0]);
-  }, [type]);
-
-  // Load finance transactions
-  useEffect(() => {
-    setTransactions(db.getFinance() || []);
-  }, []);
+  }
 
   const updateFinanceState = (newTx) => {
     setTransactions(newTx);
@@ -72,7 +71,7 @@ export const Finance = ({ language }) => {
     if (!amount || Number(amount) <= 0) return;
 
     const newTx = {
-      id: `f-${Date.now()}`,
+      id: generateFinanceTxId(),
       type,
       amount: Number(amount),
       category,

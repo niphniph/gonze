@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 export const ProgressBar = ({ progress, className = '', showPercent = true }) => {
   const pct = Math.min(100, Math.max(0, Math.round(progress || 0)));

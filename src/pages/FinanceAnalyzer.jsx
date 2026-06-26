@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { db } from '../utils/db';
 import { financeService } from '../services/financeProviders';
 import { GlassCard } from '../components/GlassCard';
@@ -9,37 +9,27 @@ import {
   Pie, 
   Cell, 
   Tooltip, 
-  Legend,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  AreaChart,
-  Area,
-  CartesianGrid
+  Legend
 } from 'recharts';
 import { 
   Building2, 
-  TrendingUp, 
   Wallet, 
   ArrowUpRight, 
   ArrowDownRight, 
   CheckCircle2, 
   AlertCircle, 
   Trash2, 
-  RefreshCw, 
   Sparkles,
-  PieChart as ChartIcon,
   ShieldCheck,
   Target
 } from 'lucide-react';
 
 export const FinanceAnalyzer = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [accounts, setAccounts] = useState([]);
-  const [transactions, setTransactions] = useState([]);
-  const [budgets, setBudgets] = useState({});
-  const [savingsGoals, setSavingsGoals] = useState([]);
+  const [accounts, setAccounts] = useState(() => db.getFinancialAccounts() || []);
+  const [transactions, setTransactions] = useState(() => db.getTransactions() || []);
+  const [budgets, setBudgets] = useState(() => db.getBudgets() || {});
+  const [savingsGoals, setSavingsGoals] = useState(() => db.getSavingsGoals() || []);
   
   // App UI State
   const [syncing, setSyncing] = useState(false);
@@ -86,13 +76,6 @@ export const FinanceAnalyzer = ({ language }) => {
     if (cat.includes('სხვა ხარჯი') || cat.includes('სზვა ხარჯი')) return 'Other Expense';
     return cat;
   };
-
-  useEffect(() => {
-    setAccounts(db.getFinancialAccounts() || []);
-    setTransactions(db.getTransactions() || []);
-    setBudgets(db.getBudgets() || {});
-    setSavingsGoals(db.getSavingsGoals() || []);
-  }, []);
 
   const saveFinancialData = (newAccounts, newTx, newBudgets, newGoals) => {
     setAccounts(newAccounts);

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Plus, Trash2, Calendar, ClipboardList } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
+const generateWeeklyTaskId = () => `w-task-${Date.now()}`;
+
 export const Weekly = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [weeklyData, setWeeklyData] = useState({});
+  const [weeklyData, setWeeklyData] = useState(() => db.getWeekly() || {});
   const [selectedWeekStart, setSelectedWeekStart] = useState('2026-06-07'); // Default week
   const [newTasks, setNewTasks] = useState({
     day0: '', day1: '', day2: '', day3: '', day4: '', day5: '', day6: ''
@@ -32,10 +34,6 @@ export const Weekly = ({ language }) => {
     'Friday': 'Friday',
     'Saturday': 'Saturday'
   };
-
-  useEffect(() => {
-    setWeeklyData(db.getWeekly());
-  }, []);
 
   const updateWeeklyState = (newData) => {
     setWeeklyData(newData);
@@ -79,7 +77,7 @@ export const Weekly = ({ language }) => {
     const dayTasks = [...(currentWeek[dayName] || [])];
 
     const newTask = {
-      id: `w-task-${Date.now()}`,
+      id: generateWeeklyTaskId(),
       name: taskName,
       completed: false
     };

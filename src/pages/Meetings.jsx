@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { db } from '../utils/db';
 import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
@@ -9,7 +9,6 @@ import {
   Users, 
   Calendar, 
   Clock, 
-  Send, 
   ExternalLink, 
   CheckCircle2, 
   AlertCircle,
@@ -17,10 +16,12 @@ import {
   UserPlus
 } from 'lucide-react';
 
+const generateMeetingId = () => `m-${Date.now()}`;
+
 export const Meetings = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [meetings, setMeetings] = useState([]);
-  const [integrations, setIntegrations] = useState({ connected: false });
+  const [meetings, setMeetings] = useState(() => db.getMeetings() || []);
+  const [integrations] = useState(() => db.getIntegrations());
   
   // Form State
   const [title, setTitle] = useState('');
@@ -34,14 +35,9 @@ export const Meetings = ({ language }) => {
   const [syncToCalendar, setSyncToCalendar] = useState(true);
   const [createMeetLink, setCreateMeetLink] = useState(true);
   const [sendGmailInvites, setSendGmailInvites] = useState(true);
-
+ 
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
-
-  useEffect(() => {
-    setMeetings(db.getMeetings() || []);
-    setIntegrations(db.getIntegrations());
-  }, []);
 
   const saveMeetings = (updated) => {
     setMeetings(updated);
@@ -148,7 +144,7 @@ export const Meetings = ({ language }) => {
       }
 
       const newMeeting = {
-        id: `m-${Date.now()}`,
+        id: generateMeetingId(),
         title: title.trim(),
         description: description.trim(),
         date,

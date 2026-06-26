@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../utils/db';
 import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
 import { 
   Globe, 
   CheckCircle2, 
-  AlertCircle, 
   Trash2, 
   Calendar, 
   Mail, 
@@ -18,26 +17,17 @@ import {
 
 export const GoogleIntegrations = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [integrations, setIntegrations] = useState({
-    connected: false,
-    demoMode: true,
-    clientId: '',
-    apiKey: '',
-    permissions: { calendar: true, gmail: true },
-    profile: null
-  });
+  const [integrations, setIntegrations] = useState(() => db.getIntegrations());
 
   const [loading, setLoading] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    setIntegrations(db.getIntegrations());
-
     const handleAuthSuccess = () => {
       const updated = db.getIntegrations();
       setIntegrations(updated);
-      setSuccessMessage(t("Google-ის ანგარიში წარმატებით დაუკავშირდა!", "Google account connected successfully!"));
+      setSuccessMessage(language === 'ka' ? "Google-ის ანგარიში წარმატებით დაუკავშირდა!" : "Google account connected successfully!");
       setTimeout(() => setSuccessMessage(''), 4000);
     };
 

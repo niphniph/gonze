@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit2, Check, X, Filter, BarChart2, Video, Mail, UserPlus } from 'lucide-react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie, Legend } from 'recharts';
+import { useState } from 'react';
+import { Plus, Trash2, Edit2, X, Filter, BarChart2, Video, UserPlus } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie } from 'recharts';
 import { db } from '../utils/db';
 import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
+const generateTaskId = () => `task-${Date.now()}`;
+
 export const Tasks = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => db.getTasks() || []);
   
   // Form state
   const [isAdding, setIsAdding] = useState(false);
@@ -22,9 +24,8 @@ export const Tasks = ({ language }) => {
   const [comment, setComment] = useState('');
 
   // Google Integration states
-  const [integrations, setIntegrations] = useState({ connected: false });
+  const integrations = db.getIntegrations();
   const [syncToCalendar, setSyncToCalendar] = useState(false);
-  const [createMeetLink, setCreateMeetLink] = useState(false);
   const [sendGmailInvites, setSendGmailInvites] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [participantInput, setParticipantInput] = useState('');
@@ -94,12 +95,6 @@ export const Tasks = ({ language }) => {
     if (name === 'გაუქმდა') return 'Cancelled';
     return name;
   };
-
-  // Load tasks on mount
-  useEffect(() => {
-    setTasks(db.getTasks());
-    setIntegrations(db.getIntegrations());
-  }, []);
 
   // Sync tasks to local storage
   const updateTasksState = (newTasks) => {
@@ -189,7 +184,7 @@ export const Tasks = ({ language }) => {
     }
 
     const newTask = {
-      id: `task-${Date.now()}`,
+      id: generateTaskId(),
       name,
       date,
       category,
@@ -318,7 +313,6 @@ export const Tasks = ({ language }) => {
     
     // Reset Google form states
     setSyncToCalendar(false);
-    setCreateMeetLink(false);
     setSendGmailInvites(false);
     setParticipants([]);
     setParticipantInput('');

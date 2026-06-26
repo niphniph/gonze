@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { GlassCard } from './GlassCard';
 
 export const MetricCard = ({ title, value, icon: Icon, footerText, className = '' }) => {

@@ -1,23 +1,23 @@
-import React from 'react';
+
 import { 
   LayoutDashboard, 
   CheckSquare, 
   Calendar, 
   CalendarDays,
-  RefreshCw, 
   DollarSign, 
   Award, 
   Clock, 
   Video, 
-  Link, 
+  Link as LinkIcon, 
   PieChart, 
   Sparkles, 
-  Settings 
+  Settings
 } from 'lucide-react';
 import { db } from '../utils/db';
 
 export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
+  const profile = db.getProfile();
 
   const navCategories = [
     {
@@ -42,7 +42,7 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
     {
       title: t('კავშირი & სისტემა', 'System'),
       items: [
-        { id: 'google_integrations', label: t('Google ინტეგრაცია', 'Google Integration'), icon: Link },
+        { id: 'google_integrations', label: t('Google ინტეგრაცია', 'Google Integration'), icon: LinkIcon },
         { id: 'insights', label: t('ინსაითები', 'AI Insights'), icon: Sparkles },
         { id: 'settings', label: t('პარამეტრები', 'Settings'), icon: Settings }
       ]
@@ -61,85 +61,80 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
   return (
     <>
       {/* Sidebar for Desktop */}
-      <aside className="sidebar-nav glass-panel" style={{ height: 'auto', minHeight: 'calc(100vh - 2rem)' }}>
-        <div className="nav-logo" style={{ marginBottom: '1.25rem' }}>
-          <h2 className="text-gradient">GONZE</h2>
-          <span className="logo-sub">{t('პროდუქტიულობის ტრეკერი', 'Productivity Tracker')}</span>
+      <aside className="bg-surface-container border-r border-border-hairline h-screen w-64 hidden md:flex flex-col fixed left-0 top-0 z-50">
+        <div className="flex flex-col h-full py-6">
           
-          {/* Language Switcher under logo */}
-          <div style={{ 
-            display: 'flex', 
-            gap: '0.25rem', 
-            marginTop: '0.75rem', 
-            background: 'rgba(0, 0, 0, 0.25)', 
-            borderRadius: '8px', 
-            padding: '0.2rem', 
-            width: 'fit-content',
-            border: '1px solid var(--border-light)' 
-          }}>
-            <button 
-              onClick={() => setLanguage('ka')} 
-              style={{ 
-                background: language === 'ka' ? 'hsl(var(--primary-glow))' : 'transparent',
-                color: language === 'ka' ? 'hsl(var(--primary-hover))' : 'hsl(var(--text-muted))',
-                border: 'none', padding: '0.25rem 0.5rem', fontSize: '0.7rem', fontWeight: 700, borderRadius: '6px', cursor: 'pointer',
-                transition: 'all 0.15s'
-              }}
-            >
-              GE
-            </button>
-            <button 
-              onClick={() => setLanguage('en')} 
-              style={{ 
-                background: language === 'en' ? 'hsl(var(--primary-glow))' : 'transparent',
-                color: language === 'en' ? 'hsl(var(--primary-hover))' : 'hsl(var(--text-muted))',
-                border: 'none', padding: '0.25rem 0.5rem', fontSize: '0.7rem', fontWeight: 700, borderRadius: '6px', cursor: 'pointer',
-                transition: 'all 0.15s'
-              }}
-            >
-              EN
-            </button>
-          </div>
-        </div>
-        
-        <nav className="nav-menu" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 14rem)', paddingRight: '0.25rem' }}>
-          {navCategories.map((cat, idx) => (
-            <div key={idx} style={{ marginBottom: '1.25rem' }}>
-              <div style={{ 
-                fontSize: '0.7rem', 
-                fontWeight: 700, 
-                textTransform: 'uppercase', 
-                letterSpacing: '1px', 
-                color: 'hsl(var(--text-muted))',
-                marginBottom: '0.5rem',
-                paddingLeft: '0.5rem'
-              }}>
-                {cat.title}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                {cat.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activePage === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActivePage(item.id)}
-                      className={`nav-item ${isActive ? 'active' : ''}`}
-                      style={{ padding: '0.65rem 0.85rem', fontSize: '0.85rem' }}
-                    >
-                      <Icon size={16} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Brand Logo */}
+          <div className="px-6 mb-8 flex justify-between items-center">
+            <h1 className="font-headline-md text-headline-md font-extrabold text-white tracking-tight">Gonze</h1>
+            
+            {/* Language Switcher */}
+            <div className="flex items-center gap-1 bg-black/35 rounded-lg p-0.5 border border-border-hairline">
+              <button 
+                onClick={() => setLanguage('ka')} 
+                className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-all cursor-pointer ${language === 'ka' ? 'bg-accent-indigo text-white shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
+              >
+                GE
+              </button>
+              <button 
+                onClick={() => setLanguage('en')} 
+                className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-all cursor-pointer ${language === 'en' ? 'bg-accent-indigo text-white shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
+              >
+                EN
+              </button>
             </div>
-          ))}
-        </nav>
+          </div>
+
+          {/* Profile Header */}
+          <div className="px-6 mb-6 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-accent-indigo flex items-center justify-center overflow-hidden border border-white/10 shadow-lg">
+              <img 
+                className="w-full h-full object-cover" 
+                alt="Profile Avatar"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt-_JfINy3vL-V4v3kSjinfRAHgopEwUG-5H604EnPUuo-up30xeKmKY0sFvlFYnMEeaXP_5I1HVRZVy8br5FCSh2DQ35MA5PbSvCx7huXODgwF5Ih2cDfhcYZG2ZGL-pDY7sFOHg3XeWn6vu0WbF79DG5Zsxm7xJkZ4QepQyUYKmuppRc_Pp-2M8XYuAShfuLPuJVJdvjxrPt7EmBc0xVmtwdCaY_ITxdDqA0fTj88EbNNERsWMDQgqvJZIEDIDAgXlsnZlpA-5M"
+              />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-body-md text-body-md font-bold text-text-primary truncate">{profile.name}</span>
+              <span className="text-[9px] text-accent-indigo font-bold tracking-widest uppercase truncate">{profile.email}</span>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="flex-1 px-4 space-y-4 overflow-y-auto no-scrollbar">
+            {navCategories.map((cat, idx) => (
+              <div key={idx} className="space-y-1">
+                <div className="text-[10px] font-bold text-text-tertiary uppercase tracking-widest px-4 mb-2">
+                  {cat.title}
+                </div>
+                <div className="space-y-1">
+                  {cat.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activePage === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActivePage(item.id)}
+                        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-150 cursor-pointer ${
+                          isActive 
+                            ? 'text-white font-bold bg-white/5 border-r-2 border-accent-indigo shadow-md shadow-accent-indigo/5' 
+                            : 'text-text-secondary hover:bg-white/5 hover:text-text-primary font-medium'
+                        }`}
+                      >
+                        <Icon size={18} className={isActive ? 'text-accent-indigo' : ''} />
+                        <span className="font-body-md text-body-md">{item.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </nav>
+        </div>
       </aside>
 
       {/* Bottom Nav for Mobile */}
-      <nav className="mobile-nav glass-panel">
+      <nav className="bg-surface-container-high/90 backdrop-blur-lg fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 border-t border-border-hairline shadow-lg md:hidden">
         {mobileNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activePage === item.id;
@@ -147,10 +142,14 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
             <button
               key={item.id}
               onClick={() => setActivePage(item.id)}
-              className={`mobile-nav-item ${isActive ? 'active' : ''}`}
+              className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
+                isActive 
+                  ? 'text-primary bg-primary-container/20 px-3 py-1 shadow-sm' 
+                  : 'text-text-secondary hover:text-text-primary'
+              }`}
             >
-              <Icon size={18} />
-              <span className="mobile-nav-label">{item.label}</span>
+              <Icon size={18} className={isActive ? 'text-accent-indigo' : ''} />
+              <span className="text-[10px] mt-0.5">{item.label}</span>
             </button>
           );
         })}
@@ -158,4 +157,3 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
     </>
   );
 };
-

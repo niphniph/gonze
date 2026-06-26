@@ -1,465 +1,406 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { db } from '../utils/db';
-import { GlassCard } from '../components/GlassCard';
-import { ProgressBar } from '../components/ProgressBar';
-import { 
-  CheckSquare, 
-  Award, 
-  Video, 
-  Calendar, 
-  Clock, 
-  ArrowRight,
-  Zap
-} from 'lucide-react';
 
 export const Planner = ({ language, setActivePage }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [tasks, setTasks] = useState([]);
-  const [habits, setHabits] = useState([]);
-  const [habitHistory, setHabitHistory] = useState({});
-  const [meetings, setMeetings] = useState([]);
-  const [budgets, setBudgets] = useState({});
-  const [transactions, setTransactions] = useState([]);
-  const [todayStr, setTodayStr] = useState('2026-06-12'); // Mock local date
 
-  useEffect(() => {
-    setTasks(db.getTasks() || []);
-    const habitData = db.getHabits();
-    setHabits(habitData.list || []);
-    setHabitHistory(habitData.history || {});
-    setMeetings(db.getMeetings() || []);
-    setBudgets(db.getBudgets() || {});
-    setTransactions(db.getTransactions() || []);
-  }, []);
+  // Load Database State
+  const [tasks, setTasks] = useState(() => db.getTasks() || []);
+  const [meetings] = useState(() => db.getMeetings() || []);
+  // Calendar Selected Date
+  const [selectedDate, setSelectedDate] = useState('2026-06-12');
+  
+  // Modals & Form States
+  const [showAddModal, setShowAddModal] = useState(false);
+  
+  const [taskText, setTaskText] = useState('');
+  const [taskCategory, setTaskCategory] = useState('სამსახური 💼');
+  const [taskPriority, setTaskPriority] = useState('🔴 მაღალი');
+
+  // Date picker generation (3 days before, 3 days after)
+  const getDatePickerDays = (centerDateStr) => {
+    const days = [];
+    const center = new Date(centerDateStr);
+    for (let i = -3; i <= 3; i++) {
+      const d = new Date(center);
+      d.setDate(d.getDate() + i);
+      days.push(d);
+    }
+    return days;
+  };
+  const pickerDays = getDatePickerDays(selectedDate);
+
+  const formatDateStr = (date) => date.toISOString().split('T')[0];
+
+  // Dynamic Timeline Item builder
+  const getTimelineItems = (dateStr) => {
+    const dayMeetings = meetings.filter(m => m.date === dateStr);
+    const dayTasks = tasks.filter(task => task.date === dateStr);
+
+    const items = [];
+
+    // Add meetings
+    dayMeetings.forEach(m => {
+      items.push({
+        id: m.id,
+        time: m.time || "12:00",
+        title: m.title,
+        type: 'meeting',
+        category: 'Meeting',
+        desc: m.description,
+        meetLink: m.meetLink,
+        completed: false
+      });
+    });
+
+    // Add tasks (assigning distributed times for visual representation in timeline)
+    dayTasks.forEach((task, index) => {
+      const times = ["09:00", "10:30", "15:00", "17:30"];
+      const taskTime = times[index % times.length];
+      items.push({
+        id: task.id,
+        time: taskTime,
+        title: task.text || task.name,
+        type: 'task',
+        category: task.category,
+        priority: task.priority,
+        completed: task.completed
+      });
+    });
+
+    // Sort by time ascending
+    items.sort((a, b) => a.time.localeCompare(b.time));
+    return items;
+  };
+
+  const rawTimelineItems = getTimelineItems(selectedDate);
+
+  // Compute Focus Gaps (>= 2 hours free time)
+  const getTimelineWithGaps = (items) => {
+    if (items.length === 0) return [];
+    
+    const result = [];
+    const parseToMin = (tStr) => {
+      const [h, m] = tStr.split(':').map(Number);
+      return h * 60 + m;
+    };
+
+    // Insert start-of-day gap if first event is late
+    const firstEventTime = parseToMin(items[0].time);
+    if (firstEventTime >= 120) { // 2+ hours since 8:00 AM (480 mins)
+      result.push({
+        id: 'gap-start',
+        time: '08:00',
+        type: 'gap',
+        duration: Math.round(firstEventTime / 60)
+      });
+    }
+
+    for (let i = 0; i < items.length; i++) {
+      result.push(items[i]);
+
+      if (i < items.length - 1) {
+        const current = items[i];
+        const next = items[i+1];
+        
+        const currentEnd = parseToMin(current.time) + 60; // Assume 1 hr event duration
+        const nextStart = parseToMin(next.time);
+        const gap = nextStart - currentEnd;
+
+        if (gap >= 120) { // 2+ hours
+          const gapHour = Math.floor(currentEnd / 60);
+          const gapMin = currentEnd % 60;
+          const gapTimeStr = `${String(gapHour).padStart(2, '0')}:${String(gapMin).padStart(2, '0')}`;
+          result.push({
+            id: `gap-${current.id}-${next.id}`,
+            time: gapTimeStr,
+            type: 'gap',
+            duration: Math.round(gap / 60)
+          });
+        }
+      }
+    }
+
+    return result;
+  };
+
+  const timelineItems = getTimelineWithGaps(rawTimelineItems);
 
   const handleToggleTask = (taskId) => {
-    const updated = tasks.map(t => {
-      if (t.id === taskId) {
-        return { ...t, completed: !t.completed };
+    const updated = tasks.map(task => {
+      if (task.id === taskId) {
+        return { ...task, completed: !task.completed };
       }
-      return t;
+      return task;
     });
     setTasks(updated);
     db.saveTasks(updated);
   };
 
-  const handleToggleHabit = (habitId) => {
-    const updatedHistory = { ...habitHistory };
-    if (!updatedHistory[habitId]) {
-      updatedHistory[habitId] = {};
-    }
-    updatedHistory[habitId][todayStr] = !updatedHistory[habitId][todayStr];
-    setHabitHistory(updatedHistory);
-    db.saveHabits(habits, updatedHistory);
+  const handleQuickAddInsideGap = () => {
+    setShowAddModal(true);
   };
 
-  // Filters for today (2026-06-12)
-  const todayTasks = tasks.filter(t => t.date === todayStr);
-  const todayMeetings = meetings.filter(m => m.date === todayStr);
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    if (!taskText.trim()) return;
 
-  const completedTodayTasks = todayTasks.filter(t => t.completed);
-  const taskProgress = todayTasks.length > 0 ? Math.round((completedTodayTasks.length / todayTasks.length) * 100) : 0;
+    const newTask = {
+      id: `task-${Date.now()}`,
+      text: taskText.trim(),
+      name: taskText.trim(),
+      date: selectedDate,
+      category: taskCategory,
+      priority: taskPriority,
+      status: '⚠️ არ დაგიწყია',
+      completed: false
+    };
 
-  // Habits completed today
-  const completedTodayHabits = habits.filter(h => habitHistory[h.id]?.[todayStr]);
-  const habitProgress = habits.length > 0 ? Math.round((completedTodayHabits.length / habits.length) * 100) : 0;
+    const updated = [...tasks, newTask];
+    setTasks(updated);
+    db.saveTasks(updated);
 
-  // Dynamic habit categories translation
-  const translateHabitCategory = (cat) => {
-    if (language === 'ka') return cat;
-    const clean = cat.replace(/[💪📖🗓️💰🎯\s]/g, '');
-    if (clean === 'ჯანმრთელობა') return 'Health 💪';
-    if (clean === 'განვითარება') return 'Development 📖';
-    if (clean === 'პირადი') return 'Personal 🗓️';
-    if (clean === 'ფინანსები') return 'Finance 💰';
-    if (clean === 'სამსახური') return 'Work 🎯';
-    return cat;
+    setTaskText('');
+    setShowAddModal(false);
   };
-
-  const translateTaskCategory = (cat) => {
-    if (!cat) return '';
-    if (language === 'ka') return cat;
-    if (cat.includes('ჯანმრთელობა')) return 'Health 💪';
-    if (cat.includes('სამსახური')) return 'Work 💼';
-    if (cat.includes('ფული')) return 'Money ₿';
-    if (cat.includes('ოჯახი')) return 'Family 👨‍👩‍👧‍👦';
-    if (cat.includes('განვითარება')) return 'Personal Development 📚';
-    if (cat.includes('საქმეები')) return 'Chores 🧹';
-    if (cat.includes('იდეები')) return 'Ideas 💡';
-    if (cat.includes('დასვენება')) return 'Leisure 🎮';
-    if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
-    if (cat.includes('საჭმელი')) return 'Food 🍔';
-    if (cat.includes('ქირა')) return 'Rent 🏠';
-    if (cat.includes('კომუნალური')) return 'Utilities ⚡';
-    if (cat.includes('ტრანსპორტი')) return 'Transport 🚗';
-    if (cat.includes('გართობა')) return 'Entertainment 🎭';
-    if (cat.includes('შოპინგი')) return 'Shopping 🛍️';
-    if (cat.includes('სხვა ხარჯი')) return 'Other Expense 💸';
-    return cat;
-  };
-
-  // Budget warning calculation based on today's tasks
-  const getBudgetWarnings = () => {
-    if (Object.keys(budgets).length === 0 || transactions.length === 0) return [];
-    
-    const categorySpending = {};
-    transactions.filter(t => t.type === 'expense').forEach(t => {
-      categorySpending[t.category] = (categorySpending[t.category] || 0) + t.amount;
-    });
-
-    const warnings = [];
-    const checkedCategories = new Set();
-
-    todayTasks.forEach(task => {
-      let matchedBudgetCategory = '';
-      const textToSearch = `${task.name} ${task.category}`.toLowerCase();
-
-      if (textToSearch.includes('საჭმელი') || textToSearch.includes('კვება') || textToSearch.includes('food') || textToSearch.includes('grocery') || textToSearch.includes('supermarket')) {
-        matchedBudgetCategory = 'საჭმელი';
-      } else if (textToSearch.includes('ქირა') || textToSearch.includes('rent') || textToSearch.includes('ბინა')) {
-        matchedBudgetCategory = 'ქირა';
-      } else if (textToSearch.includes('კომუნალური') || textToSearch.includes('utility') || textToSearch.includes('წყალი') || textToSearch.includes('დენი') || textToSearch.includes('bill')) {
-        matchedBudgetCategory = 'კომუნალური';
-      } else if (textToSearch.includes('ტრანსპორტი') || textToSearch.includes('ტაქსი') || textToSearch.includes('transport') || textToSearch.includes('taxi') || textToSearch.includes('yandex')) {
-        matchedBudgetCategory = 'ტრანსპორტი';
-      } else if (textToSearch.includes('გართობა') || textToSearch.includes('კინო') || textToSearch.includes('cinema') || textToSearch.includes('party') || textToSearch.includes('leisure')) {
-        matchedBudgetCategory = 'გართობა';
-      } else if (textToSearch.includes('შოპინგი') || textToSearch.includes('shopping') || textToSearch.includes('ყიდვა') || textToSearch.includes('zara')) {
-        matchedBudgetCategory = 'შოპინგი';
-      }
-
-      if (matchedBudgetCategory && budgets[matchedBudgetCategory] && !checkedCategories.has(matchedBudgetCategory)) {
-        checkedCategories.add(matchedBudgetCategory);
-        const limit = budgets[matchedBudgetCategory];
-        const spent = categorySpending[matchedBudgetCategory] || 0;
-        
-        if (spent >= limit) {
-          warnings.push({
-            category: matchedBudgetCategory,
-            type: 'exceeded',
-            text: t(
-              `გაფრთხილება: '${matchedBudgetCategory}' ბიუჯეტი გადაჭარბებულია! დახარჯულია: ${spent} ₾ (ლიმიტი: ${limit} ₾)`,
-              `Warning: '${translateTaskCategory(matchedBudgetCategory)}' budget exceeded! Spent: ${spent} ₾ (Limit: ${limit} ₾)`
-            )
-          });
-        } else if (spent >= limit * 0.8) {
-          warnings.push({
-            category: matchedBudgetCategory,
-            type: 'approaching',
-            text: t(
-              `ყურადღება: უახლოვდებით '${matchedBudgetCategory}' ბიუჯეტის ლიმიტს. დახარჯულია: ${spent} ₾ (ლიმიტი: ${limit} ₾)`,
-              `Notice: Approaching '${translateTaskCategory(matchedBudgetCategory)}' budget limit. Spent: ${spent} ₾ (Limit: ${limit} ₾)`
-            )
-          });
-        }
-      }
-    });
-
-    return warnings;
-  };
-
-  const budgetWarnings = getBudgetWarnings();
 
   return (
-    <div className="planner-page">
-      <header className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('დღიური პლანერი', 'Daily Planner')}</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('სრული კონტროლი თქვენს დღევანდელ გეგმებზე, დავალებებსა და ჩვევებზე', 'Full control over your daily plans, tasks, and habits')}</p>
+    <div className="min-h-screen text-text-primary px-margin-mobile md:px-margin-desktop py-stack-lg max-w-4xl mx-auto space-y-stack-lg pb-32">
+      
+      {/* Page Header */}
+      <section className="flex justify-between items-center">
+        <h2 className="font-headline-lg text-headline-lg font-bold text-white tracking-tight">{t('პლანერი', 'Planner')}</h2>
+        <div className="flex items-center gap-2">
+          <button className="material-symbols-outlined text-text-secondary hover:text-white cursor-pointer transition-colors">search</button>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '10px', border: '1px solid var(--border-light)', fontSize: '0.9rem', fontWeight: 600 }}>
-          <Clock size={16} style={{ color: 'hsl(var(--primary))' }} />
-          <span>{t('დღეს: 12 ივნისი, 2026', 'Today: June 12, 2026')}</span>
-        </div>
-      </header>
+      </section>
 
-      {/* Budget warnings */}
-      {budgetWarnings.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-          {budgetWarnings.map((warn, index) => (
-            <div 
-              key={index} 
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '1rem',
-                borderRadius: '12px',
-                border: `1px solid ${warn.type === 'exceeded' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.2)'}`,
-                background: warn.type === 'exceeded' ? 'rgba(239, 68, 68, 0.05)' : 'rgba(245, 158, 11, 0.05)',
-                color: warn.type === 'exceeded' ? 'hsl(var(--accent-rose))' : 'hsl(var(--accent-amber))',
-                fontSize: '0.875rem',
-                fontWeight: 600
-              }}
+      {/* Day / Week / Month Tab Switcher */}
+      <div className="flex p-1 bg-surface-container rounded-xl border border-border-hairline">
+        <button 
+          onClick={() => setActivePage('planner')}
+          className="flex-1 py-2 font-label-sm text-label-sm rounded-lg transition-all bg-accent-indigo text-white shadow-lg cursor-pointer"
+        >
+          {t('დღე', 'Day')}
+        </button>
+        <button 
+          onClick={() => setActivePage('weekly')}
+          className="flex-1 py-2 font-label-sm text-label-sm rounded-lg transition-all text-text-secondary hover:text-white cursor-pointer"
+        >
+          {t('კვირა', 'Week')}
+        </button>
+        <button 
+          onClick={() => setActivePage('calendar')}
+          className="flex-1 py-2 font-label-sm text-label-sm rounded-lg transition-all text-text-secondary hover:text-white cursor-pointer"
+        >
+          {t('თვე', 'Month')}
+        </button>
+      </div>
+
+      {/* Horizontal Scrollable Date Picker */}
+      <div className="overflow-x-auto no-scrollbar -mx-margin-mobile px-margin-mobile flex gap-4 items-center py-3">
+        {pickerDays.map((day) => {
+          const dateStr = formatDateStr(day);
+          const isActive = dateStr === selectedDate;
+          const weekday = day.toLocaleDateString(language === 'ka' ? 'ka-GE' : 'en-US', { weekday: 'short' });
+          const dayNum = day.getDate();
+          
+          return (
+            <button
+              key={dateStr}
+              onClick={() => setSelectedDate(dateStr)}
+              className={`flex-shrink-0 flex flex-col items-center justify-center rounded-2xl transition-all cursor-pointer ${
+                isActive 
+                  ? 'w-16 h-24 bg-accent-indigo active-date-glow transform scale-105 border border-white/20 text-white font-bold' 
+                  : 'w-14 h-20 glass-card text-text-secondary hover:text-text-primary'
+              }`}
             >
-              <span style={{ fontSize: '1.2rem' }}>⚠️</span>
-              <span>{warn.text}</span>
-            </div>
-          ))}
+              <span className={`text-[10px] uppercase ${isActive ? 'text-white/80' : 'text-text-tertiary'}`}>{weekday}</span>
+              <span className="text-xl mt-1">{dayNum}</span>
+              {isActive && <div className="w-1.5 h-1.5 rounded-full bg-white mt-1"></div>}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Vertical Schedule Timeline */}
+      <div className="relative pl-14 space-y-8">
+        
+        {/* Vertical Timeline Line */}
+        <div className="absolute left-6 top-2 bottom-2 w-[1px] bg-gradient-to-b from-accent-indigo via-accent-indigo/40 to-transparent opacity-30"></div>
+
+        {timelineItems.length > 0 ? (
+          timelineItems.map((item) => {
+            const isMeeting = item.type === 'meeting';
+            const isTask = item.type === 'task';
+            const isGap = item.type === 'gap';
+
+            if (isGap) {
+              return (
+                <div key={item.id} className="relative py-2">
+                  <span className="absolute -left-14 top-1/2 -translate-y-1/2 font-label-sm text-xs text-text-tertiary">{item.time}</span>
+                  <div className="absolute left-6 top-1/2 -translate-x-[3.5px] -translate-y-1/2 w-2 h-2 rounded-full border border-dashed border-accent-indigo bg-background"></div>
+                  
+                  <div className="rounded-2xl border border-dashed border-border-hairline p-5 flex flex-col items-center text-center bg-white/[0.01] hover:bg-white/[0.02] transition-all">
+                    <span className="material-symbols-outlined text-accent-indigo text-2xl mb-1.5" style={{ fontVariationSettings: "'FILL' 1" }}>spa</span>
+                    <h4 className="font-title-md text-sm font-bold text-text-secondary">{t('ინტელექტუალური ფოკუს-გეპი', 'Intelligent Focus Gap')}</h4>
+                    <p className="font-body-md text-xs text-text-tertiary mt-1 px-4">
+                      {t(`თქვენ გაქვთ ${item.duration} საათი თავისუფალი დრო. გამოიყენეთ ფოკუსირებისთვის.`, `You have ${item.duration} hours of free time. Perfect for deep work.`)}
+                    </p>
+                    <button 
+                      onClick={() => handleQuickAddInsideGap(item.time)}
+                      className="mt-3 px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-full font-label-sm text-xs transition-all border border-border-hairline cursor-pointer active:scale-95"
+                    >
+                      {t('+ დავალების დამატება', 'Quick Add Task')}
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <div key={item.id} className="relative">
+                <span className="absolute -left-14 top-3.5 font-label-sm text-xs text-text-secondary">{item.time}</span>
+                <div className={`absolute left-6 top-5 -translate-x-[3.5px] w-2 h-2 rounded-full ${isMeeting ? 'bg-accent-indigo' : 'border border-accent-indigo bg-background'}`}></div>
+                
+                <div 
+                  className={`glass-card p-4 rounded-2xl border-l-4 transition-all hover:scale-[1.01] hover:border-r-accent-indigo/20 ${
+                    isMeeting ? 'border-l-accent-indigo' : t(item.priority.includes('მაღალი') ? 'border-l-red-500' : 'border-l-accent-emerald')
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                      isMeeting ? 'bg-accent-indigo/10 text-accent-indigo' : 'bg-white/5 text-text-secondary'
+                    }`}>
+                      {isMeeting ? t('შეხვედრა', 'Meeting') : t(item.priority, item.priority)}
+                    </span>
+                    
+                    {isTask && (
+                      <button 
+                        onClick={() => handleToggleTask(item.id)}
+                        className="text-text-secondary hover:text-accent-indigo cursor-pointer transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          {item.completed ? 'check_box' : 'check_box_outline_blank'}
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                  
+                  <h3 className={`font-title-md text-sm font-bold ${item.completed ? 'line-through text-text-tertiary' : 'text-text-primary'}`}>{item.title}</h3>
+                  
+                  {isMeeting && (
+                    <div className="flex items-center gap-3 text-text-secondary mt-2 text-xs">
+                      <span className="flex items-center gap-1 font-label-sm"><span className="material-symbols-outlined text-xs">schedule</span> 60 min</span>
+                      {item.meetLink && (
+                        <a href={item.meetLink} target="_blank" rel="noreferrer" className="flex items-center gap-1 font-label-sm text-accent-indigo hover:underline">
+                          <span className="material-symbols-outlined text-xs">video_call</span> Google Meet
+                        </a>
+                      )}
+                    </div>
+                  )}
+
+                  {isTask && (
+                    <div className="flex items-center gap-3 text-text-secondary mt-2 text-xs">
+                      <span className="flex items-center gap-1 font-label-sm">
+                        <span className="material-symbols-outlined text-xs">tag</span> {item.category}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="hairline-border rounded-xl p-8 flex flex-col items-center justify-center text-center bg-surface-container-low/20">
+            <span className="material-symbols-outlined text-3xl text-text-tertiary mb-2">event_busy</span>
+            <span className="text-text-secondary text-sm font-semibold">{t('დღეს განრიგი თავისუფალია.', 'No events scheduled for this day.')}</span>
+            <button 
+              onClick={() => setShowAddModal(true)}
+              className="mt-4 px-4 py-2 bg-accent-indigo text-white font-bold rounded-xl text-xs hover:bg-accent-indigo/80 cursor-pointer active:scale-95 transition-all"
+            >
+              {t('+ ახალი დაგეგმვა', 'Add Event / Task')}
+            </button>
+          </div>
+        )}
+
+      </div>
+
+      {/* Floating Action Button (FAB) */}
+      <button 
+        onClick={() => { setShowAddModal(true); }}
+        className="fixed bottom-24 right-margin-mobile md:bottom-8 md:right-8 w-14 h-14 bg-accent-indigo text-white rounded-full shadow-2xl flex items-center justify-center z-50 transform hover:scale-105 active:scale-95 cursor-pointer transition-all"
+      >
+        <span className="material-symbols-outlined text-2xl font-bold">add</span>
+      </button>
+
+      {/* Quick Add Event/Task Modal Overlay */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl p-6 max-w-md w-full relative border border-border-hairline shadow-2xl">
+            <button 
+              onClick={() => setShowAddModal(false)}
+              className="absolute top-4 right-4 text-text-secondary hover:text-white cursor-pointer"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+
+            {/* Modal Title */}
+            <h3 className="text-lg font-bold text-white mb-6">{t('ახალი დაგეგმვა', 'Add Event / Task')}</h3>
+
+            <form onSubmit={handleAddTask} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-text-secondary mb-1">{t('დავალების სახელი', 'Task Title')}</label>
+                <input 
+                  type="text" 
+                  value={taskText} 
+                  onChange={e => setTaskText(e.target.value)} 
+                  placeholder={t('მაგ. მოხსენების მომზადება', 'e.g. Write monthly report')}
+                  className="w-full bg-white/5 border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-accent-indigo"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-text-secondary mb-1">{t('კატეგორია', 'Category')}</label>
+                  <select 
+                    value={taskCategory} 
+                    onChange={e => setTaskCategory(e.target.value)}
+                    className="w-full bg-surface-container-high border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+                  >
+                    <option>სამსახური 💼</option>
+                    <option>ჯანმრთელობა 💪🏻</option>
+                    <option>ფული ₿</option>
+                    <option>ოჯახი 👨‍👩‍👧‍👦</option>
+                    <option>პირადი განვითარება 📚</option>
+                    <option>საქმეები 🧹</option>
+                    <option>იდეები 💡</option>
+                    <option>დასვენება 🎮</option>
+                    <option>სულიერება 🧘🏻</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-text-secondary mb-1">{t('პრიორიტეტი', 'Priority')}</label>
+                  <select 
+                    value={taskPriority} 
+                    onChange={e => setTaskPriority(e.target.value)}
+                    className="w-full bg-surface-container-high border border-border-hairline rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+                  >
+                    <option>🔴 მაღალი</option>
+                    <option>🟡 საშუალო</option>
+                    <option>🔵 დაბალი</option>
+                    <option>⚪️ სურვილისამებრ</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" className="w-full bg-accent-indigo text-white py-2.5 rounded-xl font-bold text-sm cursor-pointer hover:bg-accent-indigo/80 active:scale-[0.98] transition-all">
+                {t('დაგეგმვა', 'Add Task')}
+              </button>
+            </form>
+          </div>
         </div>
       )}
 
-      {/* Stats Summary Panel */}
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--text-muted))' }}>{t('დავალებების პროგრესი', 'Task Progress')}</span>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{taskProgress}%</h3>
-            <span style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))' }}>
-              {completedTodayTasks.length}/{todayTasks.length} {t('შესრულდა', 'completed')}
-            </span>
-          </div>
-          <ProgressBar progress={taskProgress} type="complete" />
-        </GlassCard>
-
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--text-muted))' }}>{t('ჩვევების შესრულება', 'Habits Progress')}</span>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{habitProgress}%</h3>
-            <span style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))' }}>
-              {completedTodayHabits.length}/{habits.length} {t('შესრულდა', 'completed')}
-            </span>
-          </div>
-          <ProgressBar progress={habitProgress} />
-        </GlassCard>
-
-        <GlassCard style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-          <div>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--text-muted))' }}>{t('დღევანდელი შეხვედრები', "Today's Meetings")}</span>
-            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: '0.25rem' }}>{todayMeetings.length} {t('ივენთი', 'events')}</h3>
-          </div>
-          <button 
-            onClick={() => setActivePage('meetings')}
-            className="btn btn-secondary" 
-            style={{ padding: '0.5rem 0.75rem', fontSize: '0.75rem' }}
-          >
-            {t('გადასვლა', 'Go')}
-            <ArrowRight size={12} />
-          </button>
-        </GlassCard>
-      </section>
-
-      {/* Main Grid: Todo & Habits on Left, Schedule on Right */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '2rem' }}>
-        {/* Left Side: Tasks & Habits */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          {/* Today's Tasks */}
-          <GlassCard style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CheckSquare size={18} style={{ color: 'hsl(var(--primary))' }} />
-                {t('დღევანდელი დავალებები', "Today's Tasks")} ({todayTasks.length})
-              </h3>
-              <button 
-                onClick={() => setActivePage('tasks')} 
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--primary-hover))', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-              >
-                {t('სრული სია', 'Full List')} <ArrowRight size={12} />
-              </button>
-            </div>
-
-            {todayTasks.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {todayTasks.map(task => (
-                  <div 
-                    key={task.id}
-                    onClick={() => handleToggleTask(task.id)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '0.75rem',
-                      background: 'rgba(255, 255, 255, 0.01)',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: '10px',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    <div style={{
-                      width: '18px',
-                      height: '18px',
-                      borderRadius: '4px',
-                      border: '1.5px solid ' + (task.completed ? 'hsl(var(--accent-emerald))' : 'hsl(var(--text-muted))'),
-                      background: task.completed ? 'hsl(var(--accent-emerald))' : 'transparent',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '0.7rem',
-                      fontWeight: 'bold',
-                      marginRight: '0.75rem',
-                      flexShrink: 0
-                    }}>
-                      {task.completed && "✓"}
-                    </div>
-                    <div style={{ 
-                      fontSize: '0.875rem', 
-                      textDecoration: task.completed ? 'line-through' : 'none',
-                      color: task.completed ? 'hsl(var(--text-muted))' : 'white',
-                      fontWeight: 500
-                    }}>
-                      {task.text || task.name}
-                    </div>
-                    <span style={{ fontSize: '0.65rem', marginLeft: 'auto', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-light)', color: 'hsl(var(--text-secondary))' }}>
-                      {translateTaskCategory(task.category)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ padding: '2rem 1rem', textAlign: 'center', color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
-                {t('დღეს დავალებები არ გაქვთ.', 'No tasks for today.')}
-              </div>
-            )}
-          </GlassCard>
-
-          {/* Today's Habits */}
-          <GlassCard style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Award size={18} style={{ color: 'hsl(var(--accent-emerald))' }} />
-                {t('ჩვევების შემოწმება', 'Habit Tracker')} ({habits.length})
-              </h3>
-              <button 
-                onClick={() => setActivePage('habits')} 
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-emerald))', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-              >
-                {t('მართვა', 'Manage')} <ArrowRight size={12} />
-              </button>
-            </div>
-
-            {habits.length > 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.75rem' }}>
-                {habits.map(habit => {
-                  const isChecked = habitHistory[habit.id]?.[todayStr] || false;
-                  return (
-                    <div 
-                      key={habit.id}
-                      onClick={() => handleToggleHabit(habit.id)}
-                      style={{
-                        padding: '0.75rem',
-                        background: isChecked ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.02)',
-                        border: isChecked ? '1px solid hsl(var(--accent-emerald) / 0.4)' : '1px solid var(--border-light)',
-                        borderRadius: '10px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '0.35rem',
-                        alignItems: 'center',
-                        transition: 'all 0.15s'
-                      }}
-                    >
-                      <span style={{ fontSize: '1.25rem' }}>🏆</span>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>{habit.name}</span>
-                      <div style={{ 
-                        width: '16px', 
-                        height: '16px', 
-                        borderRadius: '4px',
-                        border: '1.5px solid ' + (isChecked ? 'hsl(var(--accent-emerald))' : 'hsl(var(--text-muted))'),
-                        background: isChecked ? 'hsl(var(--accent-emerald))' : 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        fontSize: '0.65rem',
-                        fontWeight: 'bold'
-                      }}>
-                        {isChecked && "✓"}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={{ padding: '2rem 1rem', textAlign: 'center', color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
-                {t('აქტიური ჩვევები არ გაქვთ.', 'No active habits.')}
-              </div>
-            )}
-          </GlassCard>
-        </div>
-
-        {/* Right Side: Schedule Timeline */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Calendar size={18} style={{ color: 'hsl(var(--accent-blue))' }} />
-              {t('დღევანდელი განრიგი', "Today's Schedule")}
-            </h3>
-            <button 
-              onClick={() => setActivePage('calendar')} 
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-blue))', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-            >
-              {t('კალენდარი', 'Calendar')} <ArrowRight size={12} />
-            </button>
-          </div>
-
-          {todayMeetings.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '2px solid var(--border-light)', paddingLeft: '1rem', marginLeft: '0.5rem', flex: 1 }}>
-              {todayMeetings.map((meeting, index) => (
-                <div 
-                  key={meeting.id} 
-                  style={{ 
-                    position: 'relative',
-                    background: 'rgba(255, 255, 255, 0.01)',
-                    border: '1px solid var(--border-light)',
-                    borderRadius: '10px',
-                    padding: '0.85rem 1rem'
-                  }}
-                >
-                  {/* Timeline Dot Indicator */}
-                  <div style={{ 
-                    position: 'absolute', 
-                    left: '-1.45rem', 
-                    top: '1.2rem', 
-                    width: '10px', 
-                    height: '10px', 
-                    borderRadius: '50%', 
-                    background: 'hsl(var(--accent-blue))',
-                    border: '2px solid hsl(var(--bg-surface-elevated))' 
-                  }} />
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                    <h4 style={{ fontWeight: 700, fontSize: '0.9rem' }}>{meeting.title}</h4>
-                    <span style={{ fontSize: '0.75rem', color: 'hsl(var(--accent-blue))', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2' }}>
-                      <Clock size={12} />
-                      {meeting.time}
-                    </span>
-                  </div>
-                  
-                  {meeting.description && (
-                    <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.75rem', marginBottom: '0.5rem' }}>{meeting.description}</p>
-                  )}
-
-                  {meeting.meetLink && (
-                    <a 
-                      href={meeting.meetLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      style={{ 
-                        fontSize: '0.7rem', 
-                        color: 'hsl(var(--accent-blue))', 
-                        display: 'inline-flex', 
-                        alignItems: 'center', 
-                        gap: '0.25rem', 
-                        fontWeight: 600,
-                        textDecoration: 'underline' 
-                      }}
-                    >
-                      <Video size={10} />
-                      {t('Google Meet-ზე შესვლა', 'Join Google Meet')}
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem', color: 'hsl(var(--text-muted))', padding: '4rem 1rem' }}>
-              <Zap size={32} style={{ color: 'rgba(255, 255, 255, 0.05)' }} />
-              <span style={{ fontSize: '0.85rem' }}>{t('დღეს შეხვედრები არ გაქვთ დაგეგმილი', 'No meetings scheduled today')}</span>
-            </div>
-          )}
-        </GlassCard>
-      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { 
@@ -15,18 +15,13 @@ import {
 
 export const Insights = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [tasks, setTasks] = useState([]);
-  const [habits, setHabits] = useState([]);
-  const [transactions, setTransactions] = useState([]);
-  const [budgets, setBudgets] = useState({});
-
-  useEffect(() => {
-    setTasks(db.getTasks() || []);
-    const habitData = db.getHabits();
-    setHabits(habitData.list || []);
-    setTransactions(db.getTransactions() || []);
-    setBudgets(db.getBudgets() || {});
-  }, []);
+  const [tasks] = useState(() => db.getTasks() || []);
+  const [habits] = useState(() => {
+    const data = db.getHabits();
+    return data.list || [];
+  });
+  const [transactions] = useState(() => db.getTransactions() || []);
+  const [budgets] = useState(() => db.getBudgets() || {});
 
   // Compute Productivity Statistics
   const completedTasks = tasks.filter(t => t.completed).length;

@@ -40,6 +40,7 @@ const initialTransactions = [];
 const initialFinancialInsights = [];
 const initialBudgets = {};
 const initialSavingsGoals = [];
+const initialProfile = { name: "Nikoloz Kapanadze", email: "ninekapanadze@gmail.com" };
 
 // Database API
 export const db = {
@@ -88,8 +89,12 @@ export const db = {
   getSavingsGoals: () => getStorageItem("gonze_savings_goals", initialSavingsGoals),
   saveSavingsGoals: (data) => setStorageItem("gonze_savings_goals", data),
 
+  getProfile: () => getStorageItem("gonze_profile", initialProfile),
+  saveProfile: (data) => setStorageItem("gonze_profile", data),
+
   // Clear database to empty seed values
   resetDatabase: () => {
+    localStorage.removeItem("gonze_profile");
     localStorage.removeItem("gonze_tasks");
     localStorage.removeItem("gonze_habits");
     localStorage.removeItem("gonze_habits_history");

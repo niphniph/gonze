@@ -10,7 +10,7 @@ function decodeJwt(token) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
     return JSON.parse(jsonPayload);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -33,21 +33,18 @@ export async function onRequestPost(context) {
 
   const token = authHeader.split(" ")[1];
   let userId = null;
-  let email = null;
 
   if (token.startsWith("mock_token_for_")) {
-    email = token.replace("mock_token_for_", "");
+    const email = token.replace("mock_token_for_", "");
     userId = email.split("@")[0];
   } else {
     const decoded = decodeJwt(token);
     if (decoded) {
       userId = decoded.sub || decoded.email?.split("@")[0] || "guest_user";
-      email = decoded.email || "guest@example.com";
     }
   }
 
   let verifiedUserId = userId;
-  let verifiedUserEmail = email;
 
   try {
     // Try to verify user JWT token against Supabase auth server
@@ -61,7 +58,6 @@ export async function onRequestPost(context) {
     if (userRes.ok) {
       const user = await userRes.json();
       verifiedUserId = user.id || verifiedUserId;
-      verifiedUserEmail = user.email || verifiedUserEmail;
     }
   } catch (err) {
     console.warn("Supabase Auth Server unreachable, using decoded token credentials:", err.message);
@@ -79,7 +75,7 @@ export async function onRequestPost(context) {
     let reqData = {};
     try {
       reqData = await request.clone().json();
-    } catch (e) {
+    } catch {
       // Body is empty or not JSON
     }
 

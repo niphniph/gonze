@@ -15,14 +15,14 @@ export async function onRequestPost(context) {
     let requestData;
     try {
       requestData = await request.json();
-    } catch (e) {
+    } catch {
       return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
     }
 
-    const { userId, guestId, answers, language } = requestData;
+    const { userId, guestId, answers } = requestData;
 
     if (!userId && !guestId) {
       return new Response(JSON.stringify({ error: "Missing userId or guestId" }), {

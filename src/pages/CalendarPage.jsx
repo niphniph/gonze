@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { db } from '../utils/db';
 import { googleService } from '../services/googleService';
 import { GlassCard } from '../components/GlassCard';
@@ -8,19 +8,75 @@ import {
   Plus, 
   Video, 
   CheckSquare, 
-  Calendar as CalendarIcon, 
   RefreshCw,
-  Info,
   Clock,
   Link,
   UserPlus
 } from 'lucide-react';
 
+const getInitialEvents = (lang) => {
+  const localTasks = db.getTasks() || [];
+  const localMeetings = db.getMeetings() || [];
+  const localCalEvents = db.getCalendarEvents() || [];
+
+  const translateCategoryLocal = (cat) => {
+    if (!cat) return '';
+    if (lang === 'ka') return cat;
+    if (cat.includes('ჯანმრთელობა')) return 'Health 💪🏻';
+    if (cat.includes('სამსახური')) return 'Work 💼';
+    if (cat.includes('ფული')) return 'Money ₿';
+    if (cat.includes('ოჯახი')) return 'Family 👨‍👩‍👧‍👦';
+    if (cat.includes('განვითარება')) return 'Personal Development 📚';
+    if (cat.includes('საქმეები')) return 'Chores 🧹';
+    if (cat.includes('იდეები')) return 'Ideas 💡';
+    if (cat.includes('დასვენება')) return 'Leisure 🎮';
+    if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
+    if (cat.includes('საჭმელი')) return 'Food 🍔';
+    if (cat.includes('ქირა')) return 'Rent 🏠';
+    if (cat.includes('კომუნალური')) return 'Utilities ⚡';
+    if (cat.includes('ტრანსპორტი')) return 'Transport 🚗';
+    if (cat.includes('გართობა')) return 'Entertainment 🎭';
+    if (cat.includes('შოპინგი')) return 'Shopping 🛍️';
+    if (cat.includes('სზვა ხარჯი') || cat.includes('სხვა ხარჯი')) return 'Other Expense 💸';
+    return cat;
+  };
+
+  const taskEvents = localTasks.map(t => ({
+    id: `task-${t.id}`,
+    title: `${lang === 'ka' ? 'დავალება: ' : 'Task: '}${t.text || t.name}`,
+    description: translateCategoryLocal(t.category) || (lang === 'ka' ? "დავალება" : "Task"),
+    date: t.date || "2026-06-12",
+    time: "23:59",
+    type: 'task',
+    color: 'hsl(var(--primary))',
+    completed: t.completed
+  }));
+
+  const meetingEvents = localMeetings.map(m => ({
+    id: `meet-${m.id}`,
+    title: `${lang === 'ka' ? 'შეხვედრა: ' : 'Meeting: '}${m.title}`,
+    description: m.description,
+    date: m.date,
+    time: m.time,
+    type: 'meeting',
+    color: 'hsl(var(--accent-blue))',
+    meetLink: m.meetLink,
+    participants: m.participants
+  }));
+
+  const customEvents = localCalEvents.map(e => ({
+    ...e,
+    color: e.color || 'hsl(var(--accent-emerald))'
+  }));
+
+  return [...taskEvents, ...meetingEvents, ...customEvents];
+};
+
 export const CalendarPage = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
   const [currentDate, setCurrentDate] = useState(new Date(2026, 5, 12)); // June 12, 2026 (local month is 0-indexed: 5 = June)
-  const [events, setEvents] = useState([]);
-  const [integrations, setIntegrations] = useState({ connected: false });
+  const [events, setEvents] = useState(() => getInitialEvents(language));
+  const [integrations] = useState(() => db.getIntegrations());
   const [loading, setLoading] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -39,64 +95,15 @@ export const CalendarPage = ({ language }) => {
   const [participantInput, setParticipantInput] = useState('');
   const [syncLoading, setSyncLoading] = useState(false);
 
-  useEffect(() => {
-    loadEvents();
-    setIntegrations(db.getIntegrations());
-  }, []);
+  const loadEvents = useCallback(() => {
+    setEvents(getInitialEvents(language));
+  }, [language]);
 
-  const loadEvents = () => {
-    const localTasks = db.getTasks() || [];
-    const localMeetings = db.getMeetings() || [];
-    const localCalEvents = db.getCalendarEvents() || [];
-
-    // Map tasks to events
-    const taskEvents = localTasks.map(t => ({
-      id: `task-${t.id}`,
-      title: `${language === 'ka' ? 'დავალება: ' : 'Task: '}${t.text || t.name}`,
-      description: translateCategory(t.category) || (language === 'ka' ? "დავალება" : "Task"),
-      date: t.date || "2026-06-12",
-      time: "23:59",
-      type: 'task',
-      color: 'hsl(var(--primary))',
-      completed: t.completed
-    }));
-
-    // Map meetings to events
-    const meetingEvents = localMeetings.map(m => ({
-      id: `meet-${m.id}`,
-      title: `${language === 'ka' ? 'შეხვედრა: ' : 'Meeting: '}${m.title}`,
-      description: m.description,
-      date: m.date,
-      time: m.time,
-      type: 'meeting',
-      color: 'hsl(var(--accent-blue))',
-      meetLink: m.meetLink,
-      participants: m.participants
-    }));
-
-    // Local custom calendar events
-    const customEvents = localCalEvents.map(e => ({
-      ...e,
-      color: e.color || 'hsl(var(--accent-emerald))'
-    }));
-
-    setEvents([...taskEvents, ...meetingEvents, ...customEvents]);
-  };
-
-  const translateCategory = (cat) => {
-    if (!cat) return '';
-    if (language === 'ka') return cat;
-    if (cat.includes('ჯანმრთელობა')) return 'Health 💪🏻';
-    if (cat.includes('სამსახური')) return 'Work 💼';
-    if (cat.includes('ფული')) return 'Money ₿';
-    if (cat.includes('ოჯახი')) return 'Family 👨‍👩‍👧‍👦';
-    if (cat.includes('განვითარება')) return 'Personal Development 📚';
-    if (cat.includes('საქმეები')) return 'Chores 🧹';
-    if (cat.includes('იდეები')) return 'Ideas 💡';
-    if (cat.includes('დასვენება')) return 'Leisure 🎮';
-    if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
-    return cat;
-  };
+  const [prevLanguage, setPrevLanguage] = useState(language);
+  if (language !== prevLanguage) {
+    setPrevLanguage(language);
+    setEvents(getInitialEvents(language));
+  }
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -386,7 +393,6 @@ export const CalendarPage = ({ language }) => {
             >
               {/* Day Number */}
               <span style={{ 
-                fontSize: '0.8rem', 
                 fontWeight: 700, 
                 color: isToday ? 'white' : 'hsl(var(--text-secondary))',
                 background: isToday ? 'hsl(var(--primary))' : 'transparent',

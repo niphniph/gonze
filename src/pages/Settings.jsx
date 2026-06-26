@@ -1,68 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { 
-  Settings as SettingsIcon, 
-  Database, 
   Trash2, 
   RefreshCw, 
   ShieldAlert, 
   CheckCircle2, 
   HardDrive,
-  User,
-  Lock
+  User
 } from 'lucide-react';
+
+const computeStats = () => {
+  const localTasks = db.getTasks() || [];
+  const localHabits = db.getHabits()?.list || [];
+  const localMeetings = db.getMeetings() || [];
+  const localTransactions = db.getTransactions() || [];
+
+  // Calculate localStorage size
+  let totalBytes = 0;
+  for (let x in localStorage) {
+    if (Object.prototype.hasOwnProperty.call(localStorage, x)) {
+      totalBytes += ((localStorage[x].length + x.length) * 2);
+    }
+  }
+  
+  let sizeStr;
+  if (totalBytes > 1024 * 1024) {
+    sizeStr = (totalBytes / (1024 * 1024)).toFixed(2) + ' MB';
+  } else if (totalBytes > 1024) {
+    sizeStr = (totalBytes / 1024).toFixed(2) + ' KB';
+  } else {
+    sizeStr = totalBytes + ' B';
+  }
+
+  return {
+    tasks: localTasks.length,
+    habits: localHabits.length,
+    meetings: localMeetings.length,
+    transactions: localTransactions.length,
+    storageSize: sizeStr
+  };
+};
 
 export const Settings = ({ language, handleSetLanguage }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
   
-  const [stats, setStats] = useState({
-    tasks: 0,
-    habits: 0,
-    meetings: 0,
-    transactions: 0,
-    storageSize: '0 B'
-  });
+  const [stats, setStats] = useState(() => computeStats());
 
-  const [username, setUsername] = useState(t('ნიკოლოზ კაპანაძე', 'Nikoloz Kapanadze'));
-  const [email, setEmail] = useState('ninekapanadze@gmail.com');
+  const [username, setUsername] = useState(() => db.getProfile().name);
+  const [email, setEmail] = useState(() => db.getProfile().email);
   const [theme, setTheme] = useState('dark');
   const [successMsg, setSuccessMsg] = useState('');
 
-  useEffect(() => {
-    loadStats();
-  }, []);
-
   const loadStats = () => {
-    const localTasks = db.getTasks() || [];
-    const localHabits = db.getHabits()?.list || [];
-    const localMeetings = db.getMeetings() || [];
-    const localTransactions = db.getTransactions() || [];
-
-    // Calculate localStorage size
-    let totalBytes = 0;
-    for (let x in localStorage) {
-      if (localStorage.hasOwnProperty(x)) {
-        totalBytes += ((localStorage[x].length + x.length) * 2);
-      }
-    }
-    
-    let sizeStr = '0 B';
-    if (totalBytes > 1024 * 1024) {
-      sizeStr = (totalBytes / (1024 * 1024)).toFixed(2) + ' MB';
-    } else if (totalBytes > 1024) {
-      sizeStr = (totalBytes / 1024).toFixed(2) + ' KB';
-    } else {
-      sizeStr = totalBytes + ' B';
-    }
-
-    setStats({
-      tasks: localTasks.length,
-      habits: localHabits.length,
-      meetings: localMeetings.length,
-      transactions: localTransactions.length,
-      storageSize: sizeStr
-    });
+    setStats(computeStats());
   };
 
   const handleClearStore = (storeKey, labelGeo, labelEn) => {
@@ -83,6 +74,7 @@ export const Settings = ({ language, handleSetLanguage }) => {
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
+    db.saveProfile({ name: username, email });
     setSuccessMsg(t("პროფილის პარამეტრები წარმატებით განახლდა.", "Profile settings updated successfully."));
     setTimeout(() => setSuccessMsg(''), 3000);
   };

@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Award, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { Trash2, Calendar } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { db } from '../utils/db';
 import { GlassCard } from '../components/GlassCard';
 import { ProgressBar } from '../components/ProgressBar';
 
+const generateHabitId = () => `habit-${Date.now()}`;
+
 export const Habits = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
-  const [habitsList, setHabitsList] = useState([]);
-  const [habitHistory, setHabitHistory] = useState({});
+  const [habitsList, setHabitsList] = useState(() => {
+    const data = db.getHabits();
+    return data.list || [];
+  });
+  const [habitHistory, setHabitHistory] = useState(() => {
+    const data = db.getHabits();
+    return data.history || {};
+  });
 
   // Add habit form state
   const [newHabitName, setNewHabitName] = useState('');
@@ -20,12 +28,6 @@ export const Habits = ({ language }) => {
   const currentMonthIdx = 5; // June (0-indexed)
   const monthDaysCount = 30;
   const monthName = t("ივნისი", "June");
-
-  useEffect(() => {
-    const data = db.getHabits();
-    setHabitsList(data.list || []);
-    setHabitHistory(data.history || {});
-  }, []);
 
   const updateHabitsState = (newList, newHistory) => {
     setHabitsList(newList);
@@ -50,7 +52,7 @@ export const Habits = ({ language }) => {
     e.preventDefault();
     if (!newHabitName.trim()) return;
 
-    const habitId = `habit-${Date.now()}`;
+    const habitId = generateHabitId();
     const newHabit = {
       id: habitId,
       name: newHabitName,
