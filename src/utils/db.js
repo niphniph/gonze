@@ -45,69 +45,69 @@ const initialProfile = { name: "Nikoloz Kapanadze", email: "ninekapanadze@gmail.
 // Database API
 export const db = {
   // Get all data
-  getTasks: () => getStorageItem("gonze_tasks", initialTasks),
-  saveTasks: (tasks) => setStorageItem("gonze_tasks", tasks),
+  getTasks: () => getStorageItem("tracker_tasks", initialTasks),
+  saveTasks: (tasks) => setStorageItem("tracker_tasks", tasks),
 
   getHabits: () => {
-    const list = getStorageItem("gonze_habits", initialHabits);
-    const history = getStorageItem("gonze_habits_history", generateHabitHistory());
+    const list = getStorageItem("tracker_habits", initialHabits);
+    const history = getStorageItem("tracker_habits_history", generateHabitHistory());
     return { list, history };
   },
   saveHabits: (list, history) => {
-    setStorageItem("gonze_habits", list);
-    setStorageItem("gonze_habits_history", history);
+    setStorageItem("tracker_habits", list);
+    setStorageItem("tracker_habits_history", history);
   },
 
-  getWeekly: () => getStorageItem("gonze_weekly", initialWeekly),
-  saveWeekly: (weekly) => setStorageItem("gonze_weekly", weekly),
+  getWeekly: () => getStorageItem("tracker_weekly", initialWeekly),
+  saveWeekly: (weekly) => setStorageItem("tracker_weekly", weekly),
 
-  getFinance: () => getStorageItem("gonze_finance", initialFinance),
-  saveFinance: (finance) => setStorageItem("gonze_finance", finance),
+  getFinance: () => getStorageItem("tracker_finance", initialFinance),
+  saveFinance: (finance) => setStorageItem("tracker_finance", finance),
 
   // New Integration, Meetings, Calendar, Banking Stores
-  getIntegrations: () => getStorageItem("gonze_integrations", initialIntegrations),
-  saveIntegrations: (data) => setStorageItem("gonze_integrations", data),
+  getIntegrations: () => getStorageItem("tracker_integrations", initialIntegrations),
+  saveIntegrations: (data) => setStorageItem("tracker_integrations", data),
 
-  getMeetings: () => getStorageItem("gonze_meetings", initialMeetings),
-  saveMeetings: (data) => setStorageItem("gonze_meetings", data),
+  getMeetings: () => getStorageItem("tracker_meetings", initialMeetings),
+  saveMeetings: (data) => setStorageItem("tracker_meetings", data),
 
-  getCalendarEvents: () => getStorageItem("gonze_calendar_events", initialCalendarEvents),
-  saveCalendarEvents: (data) => setStorageItem("gonze_calendar_events", data),
+  getCalendarEvents: () => getStorageItem("tracker_calendar_events", initialCalendarEvents),
+  saveCalendarEvents: (data) => setStorageItem("tracker_calendar_events", data),
 
-  getFinancialAccounts: () => getStorageItem("gonze_financial_accounts", initialFinancialAccounts),
-  saveFinancialAccounts: (data) => setStorageItem("gonze_financial_accounts", data),
+  getFinancialAccounts: () => getStorageItem("tracker_financial_accounts", initialFinancialAccounts),
+  saveFinancialAccounts: (data) => setStorageItem("tracker_financial_accounts", data),
 
-  getTransactions: () => getStorageItem("gonze_transactions", initialTransactions),
-  saveTransactions: (data) => setStorageItem("gonze_transactions", data),
+  getTransactions: () => getStorageItem("tracker_transactions", initialTransactions),
+  saveTransactions: (data) => setStorageItem("tracker_transactions", data),
 
-  getFinancialInsights: () => getStorageItem("gonze_financial_insights", initialFinancialInsights),
-  saveFinancialInsights: (data) => setStorageItem("gonze_financial_insights", data),
+  getFinancialInsights: () => getStorageItem("tracker_financial_insights", initialFinancialInsights),
+  saveFinancialInsights: (data) => setStorageItem("tracker_financial_insights", data),
 
-  getBudgets: () => getStorageItem("gonze_budgets", initialBudgets),
-  saveBudgets: (data) => setStorageItem("gonze_budgets", data),
+  getBudgets: () => getStorageItem("tracker_budgets", initialBudgets),
+  saveBudgets: (data) => setStorageItem("tracker_budgets", data),
 
-  getSavingsGoals: () => getStorageItem("gonze_savings_goals", initialSavingsGoals),
-  saveSavingsGoals: (data) => setStorageItem("gonze_savings_goals", data),
+  getSavingsGoals: () => getStorageItem("tracker_savings_goals", initialSavingsGoals),
+  saveSavingsGoals: (data) => setStorageItem("tracker_savings_goals", data),
 
-  getProfile: () => getStorageItem("gonze_profile", initialProfile),
-  saveProfile: (data) => setStorageItem("gonze_profile", data),
+  getProfile: () => getStorageItem("tracker_profile", initialProfile),
+  saveProfile: (data) => setStorageItem("tracker_profile", data),
 
   // Clear database to empty seed values
   resetDatabase: () => {
-    localStorage.removeItem("gonze_profile");
-    localStorage.removeItem("gonze_tasks");
-    localStorage.removeItem("gonze_habits");
-    localStorage.removeItem("gonze_habits_history");
-    localStorage.removeItem("gonze_weekly");
-    localStorage.removeItem("gonze_finance");
-    localStorage.removeItem("gonze_integrations");
-    localStorage.removeItem("gonze_meetings");
-    localStorage.removeItem("gonze_calendar_events");
-    localStorage.removeItem("gonze_financial_accounts");
-    localStorage.removeItem("gonze_transactions");
-    localStorage.removeItem("gonze_financial_insights");
-    localStorage.removeItem("gonze_budgets");
-    localStorage.removeItem("gonze_savings_goals");
+    localStorage.removeItem("tracker_profile");
+    localStorage.removeItem("tracker_tasks");
+    localStorage.removeItem("tracker_habits");
+    localStorage.removeItem("tracker_habits_history");
+    localStorage.removeItem("tracker_weekly");
+    localStorage.removeItem("tracker_finance");
+    localStorage.removeItem("tracker_integrations");
+    localStorage.removeItem("tracker_meetings");
+    localStorage.removeItem("tracker_calendar_events");
+    localStorage.removeItem("tracker_financial_accounts");
+    localStorage.removeItem("tracker_transactions");
+    localStorage.removeItem("tracker_financial_insights");
+    localStorage.removeItem("tracker_budgets");
+    localStorage.removeItem("tracker_savings_goals");
     window.location.reload();
   }
 };

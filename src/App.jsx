@@ -15,11 +15,11 @@ import { Settings } from './pages/Settings';
 
 function App() {
   const [activePage, setActivePage] = useState('dashboard');
-  const [language, setLanguage] = useState(localStorage.getItem('gonze_lang') || 'en');
+  const [language, setLanguage] = useState(localStorage.getItem('tracker_lang') || 'en');
 
   const handleSetLanguage = (lang) => {
     setLanguage(lang);
-    localStorage.setItem('gonze_lang', lang);
+    localStorage.setItem('tracker_lang', lang);
   };
 
   const renderPage = () => {

@@ -1,18 +1,18 @@
-# Gonze: AI Life & Business Operating System - Technical Specification & PRD / ტექნიკური დავალება და პროექტის აღწერილობა
+# Productivity Tracker: AI Life & Business Operating System - Technical Specification & PRD / ტექნიკური დავალება და პროექტის აღწერილობა
 
-This document outlines the product requirements, architectural specifications, and implementation guidelines for Gonze, an AI-powered Life & Business Operating System.
+This document outlines the product requirements, architectural specifications, and implementation guidelines for Productivity Tracker, an AI-powered Life & Business Operating System.
 
-ეს დოკუმენტი განსაზღვრავს პროდუქტის მოთხოვნებს, არქიტექტურულ სპეციფიკაციებსა და იმპლემენტაციის სახელმძღვანელო მითითებებს Gonze-სთვის, რომელიც წარმოადგენს ხელოვნური ინტელექტის მქონე Life & Business ოპერაციულ სისტემას.
+ეს დოკუმენტი განსაზღვრავს პროდუქტის მოთხოვნებს, არქიტექტურულ სპეციფიკაციებსა და იმპლემენტაციის სახელმძღვანელო მითითებებს Productivity Tracker-სთვის, რომელიც წარმოადგენს ხელოვნური ინტელექტის მქონე Life & Business ოპერაციულ სისტემას.
 
 ---
 
 ## 1. Project Overview & Vision / პროექტის მიმოხილვა და ხედვა
 
 ### English:
-Gonze is not just another simple AI planner. It is designed to be an AI Life & Business Operating System that plans, executes, and tracks life and business goals in a unified workspace. By integrating daily productivity with financial tracking, Google APIs (Calendar, Meet, Gmail), and AI-driven coaching, Gonze empowers users to manage their schedules, habits, and budgets from a single cohesive command center.
+Productivity Tracker is not just another simple AI planner. It is designed to be an AI Life & Business Operating System that plans, executes, and tracks life and business goals in a unified workspace. By integrating daily productivity with financial tracking, Google APIs (Calendar, Meet, Gmail), and AI-driven coaching, Productivity Tracker empowers users to manage their schedules, habits, and budgets from a single cohesive command center.
 
 ### ქართული:
-Gonze არ არის კიდევ ერთი მარტივი AI planner-ი. იგი შექმნილია როგორც AI Life & Business Operating System (ცხოვრებისა და ბიზნესის ოპერაციული სისტემა), რომელიც გეგმავს, ასრულებს და აკონტროლებს ცხოვრებისეულ და ბიზნეს მიზნებს ერთიან სამუშაო სივრცეში. პროდუქტიულობის, ფინანსური ტრეკინგის, Google API-ების (Calendar, Meet, Gmail) და ხელოვნური ინტელექტის მწვრთნელის გაერთიანებით, Gonze მომხმარებლებს საშუალებას აძლევს მართონ თავიანთი განრიგი, ჩვევები და ბიუჯეტი ერთიანი მართვის პანელიდან.
+Productivity Tracker არ არის კიდევ ერთი მარტივი AI planner-ი. იგი შექმნილია როგორც AI Life & Business Operating System (ცხოვრებისა და ბიზნესის ოპერაციული სისტემა), რომელიც გეგმავს, ასრულებს და აკონტროლებს ცხოვრებისეულ და ბიზნეს მიზნებს ერთიან სამუშაო სივრცეში. პროდუქტიულობის, ფინანსური ტრეკინგის, Google API-ების (Calendar, Meet, Gmail) და ხელოვნური ინტელექტის მწვრთნელის გაერთიანებით, Productivity Tracker მომხმარებლებს საშუალებას აძლევს მართონ თავიანთი განრიგი, ჩვევები და ბიუჯეტი ერთიანი მართვის პანელიდან.
 
 ---
 
@@ -20,21 +20,21 @@ Gonze არ არის კიდევ ერთი მარტივი AI 
 
 ### English:
 The productivity and life management market is highly fragmented. Competitors like Motion and Reclaim AI focus heavily on algorithmic scheduling. Others like LifeOS and Hey Kyra offer all-in-one planners but lack deep context-aware proactive feedback.
-Here is how Gonze positions itself against the key competitors:
+Here is how Productivity Tracker positions itself against the key competitors:
 
 - **Motion (usemotion.com):** Strong AI scheduling and task organization, but lacks financial tracking, health metrics, or deeper habit analytics.
 - **Reclaim AI (reclaim.ai):** Integrates tasks and habits into Google Calendar but does not address life goals, business objectives, or finances.
 - **LifeOS (runlifeos.com) / Hey Kyra (heykyra.ai):** Combines habits, planners, and basic finance, but functions as a passive repository of information.
-- **Gonze's Edge:** Proactive AI COO/CEO engine. Instead of users manually scheduling everything, they specify high-level goals (e.g., "Launch a VR space in 6 months"), and Gonze auto-generates action plans, populates calendars, tracks budgets, issues cost-saving alerts, and dynamically reviews performance.
+- **Productivity Tracker's Edge:** Proactive AI COO/CEO engine. Instead of users manually scheduling everything, they specify high-level goals (e.g., "Launch a VR space in 6 months"), and Productivity Tracker auto-generates action plans, populates calendars, tracks budgets, issues cost-saving alerts, and dynamically reviews performance.
 
 ### ქართული:
 პროდუქტიულობისა და ცხოვრების მართვის ბაზარი საკმაოდ ფრაგმენტირებულია. ისეთი კონკურენტები, როგორიცაა Motion და Reclaim AI, ძირითადად ფოკუსირებული არიან ალგორითმულ დაგეგმვაზე. სხვები, როგორიცაა LifeOS და Hey Kyra, სთავაზობენ მომხმარებელს "ყველაფერი ერთში" პლანერებს, თუმცა აკლიათ პროაქტიული და კონტექსტზე ორიენტირებული უკუკავშირი.
-Gonze-ის პოზიციონირება ძირითად კონკურენტებთან მიმართებაში:
+Productivity Tracker-ის პოზიციონირება ძირითად კონკურენტებთან მიმართებაში:
 
 - **Motion (usemotion.com):** ძლიერი AI დაგეგმვა და თასქების ორგანიზება, თუმცა არ გააჩნია ფინანსური მოდული ან ჩვევების სიღრმისეული ანალიტიკა.
 - **Reclaim AI (reclaim.ai):** ახდენს თასქებისა და ჩვევების ინტეგრაციას Google კალენდარში, მაგრამ არ მოიცავს ცხოვრებისეულ, ბიზნეს მიზნებსა და ფინანსებს.
 - **LifeOS (runlifeos.com) / Hey Kyra (heykyra.ai):** აერთიანებს ჩვევებს, პლანერსა და საბაზისო ფინანსებს, მაგრამ მუშაობს როგორც ინფორმაციის პასიური საცავი.
-- **Gonze-ის უპირატესობა:** პროაქტიული AI COO/CEO მოდული. მომხმარებლის მიერ თითოეული თასქის ხელით გაწერის ნაცვლად, მომხმარებელი უთითებს გლობალურ მიზანს (მაგ. "VR სივრცის გახსნა 6 თვეში"), ხოლო Gonze თავად აგენერირებს სამოქმედო გეგმას, ავსებს კალენდარს, აკონტროლებს ბიუჯეტს, იძლევა რეკომენდაციებს ხარჯების შემცირებაზე და დინამიკურად აფასებს პროგრესს.
+- **Productivity Tracker-ის უპირატესობა:** პროაქტიული AI COO/CEO მოდული. მომხმარებლის მიერ თითოეული თასქის ხელით გაწერის ნაცვლად, მომხმარებელი უთითებს გლობალურ მიზანს (მაგ. "VR სივრცის გახსნა 6 თვეში"), ხოლო Productivity Tracker თავად აგენერირებს სამოქმედო გეგმას, ავსებს კალენდარს, აკონტროლებს ბიუჯეტს, იძლევა რეკომენდაციებს ხარჯების შემცირებაზე და დინამიკურად აფასებს პროგრესს.
 
 ---
 

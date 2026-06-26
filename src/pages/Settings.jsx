@@ -201,7 +201,7 @@ export const Settings = ({ language, handleSetLanguage }) => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
             <button 
-              onClick={() => handleClearStore('gonze_tasks', 'დავალებები', 'Tasks')} 
+              onClick={() => handleClearStore('tracker_tasks', 'დავალებები', 'Tasks')} 
               className="btn btn-secondary" 
               style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
             >
@@ -210,7 +210,7 @@ export const Settings = ({ language, handleSetLanguage }) => {
             </button>
 
             <button 
-              onClick={() => handleClearStore('gonze_habits', 'ჩვევები', 'Habits')} 
+              onClick={() => handleClearStore('tracker_habits', 'ჩვევები', 'Habits')} 
               className="btn btn-secondary" 
               style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
             >
@@ -219,7 +219,7 @@ export const Settings = ({ language, handleSetLanguage }) => {
             </button>
 
             <button 
-              onClick={() => handleClearStore('gonze_meetings', 'შეხვედრები', 'Meetings')} 
+              onClick={() => handleClearStore('tracker_meetings', 'შეხვედრები', 'Meetings')} 
               className="btn btn-secondary" 
               style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
             >
@@ -228,7 +228,7 @@ export const Settings = ({ language, handleSetLanguage }) => {
             </button>
 
             <button 
-              onClick={() => handleClearStore('gonze_transactions', 'ტრანზაქციები', 'Transactions')} 
+              onClick={() => handleClearStore('tracker_transactions', 'ტრანზაქციები', 'Transactions')} 
               className="btn btn-secondary" 
               style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
             >

@@ -224,7 +224,7 @@ export const googleService = {
       attendees: attendees.map(email => ({ email })),
       conferenceData: {
         createRequest: {
-          requestId: `gonze-${Date.now()}`,
+          requestId: `tracker-${Date.now()}`,
           conferenceSolutionKey: {
             type: 'hangoutsMeet'
           }
