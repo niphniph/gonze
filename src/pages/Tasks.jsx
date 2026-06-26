@@ -169,7 +169,7 @@ export const Tasks = ({ language }) => {
                 <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
                 ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                <small style="color: #666;">Sent automatically via Gonze Productivity Tracker</small>
+                <small style="color: #666;">Sent automatically via Productivity Tracker</small>
               </div>
             `;
             await Promise.all(
@@ -256,7 +256,7 @@ export const Tasks = ({ language }) => {
                 <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
                 ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                <small style="color: #666;">Sent automatically via Gonze Productivity Tracker</small>
+                <small style="color: #666;">Sent automatically via Productivity Tracker</small>
               </div>
             `;
             await Promise.all(

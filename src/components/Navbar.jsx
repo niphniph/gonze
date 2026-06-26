@@ -66,7 +66,7 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
           
           {/* Brand Logo */}
           <div className="px-6 mb-8 flex justify-between items-center">
-            <h1 className="font-headline-md text-headline-md font-extrabold text-white tracking-tight">Gonze</h1>
+            <h1 className="font-headline-md text-headline-md font-extrabold text-white tracking-tight">Tracker</h1>
             
             {/* Language Switcher */}
             <div className="flex items-center gap-1 bg-black/35 rounded-lg p-0.5 border border-border-hairline">

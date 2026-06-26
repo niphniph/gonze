@@ -365,7 +365,7 @@ export const GoogleIntegrations = ({ language }) => {
             </div>
             
             <p style={{ fontSize: '0.9rem', color: 'hsl(var(--text-secondary))', marginBottom: '1rem', lineHeight: '1.4' }}>
-              <strong>Gonze Tracker</strong> {t('ითხოვს ნებართვას თქვენს Google ანგარიშთან დასაკავშირებლად:', 'requests permission to connect to your Google Account:')}
+              <strong>Productivity Tracker</strong> {t('ითხოვს ნებართვას თქვენს Google ანგარიშთან დასაკავშირებლად:', 'requests permission to connect to your Google Account:')}
             </p>
 
             <div style={{ 
