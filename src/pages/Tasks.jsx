@@ -1,21 +1,15 @@
 import { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Filter, BarChart2, Video, UserPlus } from 'lucide-react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie } from 'recharts';
+import { Plus, Trash2, Edit2, X } from 'lucide-react';
 import { db } from '../utils/db';
 import { googleService } from '../services/googleService';
-import { GlassCard } from '../components/GlassCard';
-import { ProgressBar } from '../components/ProgressBar';
 
 const generateTaskId = () => `task-${Date.now()}`;
 
 export const Tasks = ({ language }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
   const [tasks, setTasks] = useState(() => db.getTasks() || []);
-  
-  // Form state
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  
   const [name, setName] = useState('');
   const [date, setDate] = useState('2026-06-07');
   const [category, setCategory] = useState('სამსახური 💼');
@@ -23,302 +17,96 @@ export const Tasks = ({ language }) => {
   const [status, setStatus] = useState('⚠️ არ დაგიწყია');
   const [comment, setComment] = useState('');
 
-  // Google Integration states
   const integrations = db.getIntegrations();
   const [syncToCalendar, setSyncToCalendar] = useState(false);
   const [sendGmailInvites, setSendGmailInvites] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [participantInput, setParticipantInput] = useState('');
   const [syncLoading, setSyncLoading] = useState(false);
-
-  // Filters
   const [filterCategory, setFilterCategory] = useState('All');
   const [filterPriority, setFilterPriority] = useState('All');
   const [filterStatus, setFilterStatus] = useState('All');
 
-  // Categories, Priorities, Statuses matching Excel
-  const categories = [
-    'ჯანმრთელობა 💪🏻', 'სამსახური 💼', 'ფული ₿', 
-    'ოჯახი 👨‍👩‍👧‍👦', 'პირადი განვითარება 📚', 
-    'საქმეები 🧹', 'იდეები 💡', 'დასვენება 🎮', 'სულიერება 🧘🏻'
-  ];
-
+  const categories = ['ჯანმრთელობა 💪🏻', 'სამსახური 💼', 'ფული ₿', 'ოჯახი 👨‍👩‍👧‍👦', 'პირადი განვითარება 📚', 'საქმეები 🧹', 'იდეები 💡', 'დასვენება 🎮', 'სულიერება 🧘🏻'];
   const priorities = ['🔴 მაღალი', '🟡 საშუალო', '🔵 დაბალი', '⚪️ სურვილისამებრ'];
   const statuses = ['✅ შესრულებული', '✏️ პროგრესშია', '⚠️ არ დაგიწყია', '❌ გაუქმდა'];
 
   const translateCategory = (cat) => {
     if (language === 'ka') return cat;
-    if (cat.includes('ჯანმრთელობა')) return 'Health 💪🏻';
-    if (cat.includes('სამსახური')) return 'Work 💼';
-    if (cat.includes('ფული')) return 'Money ₿';
-    if (cat.includes('ოჯახი')) return 'Family 👨‍👩‍👧‍👦';
-    if (cat.includes('განვითარება')) return 'Personal Development 📚';
-    if (cat.includes('საქმეები')) return 'Chores 🧹';
-    if (cat.includes('იდეები')) return 'Ideas 💡';
-    if (cat.includes('დასვენება')) return 'Leisure 🎮';
-    if (cat.includes('სულიერება')) return 'Spirituality 🧘🏻';
+    const map = { 'ჯანმრთელობა': 'Health', 'სამსახური': 'Work', 'ფული': 'Money', 'ოჯახი': 'Family', 'განვითარება': 'Development', 'საქმეები': 'Chores', 'იდეები': 'Ideas', 'დასვენება': 'Leisure', 'სულიერება': 'Spirituality' };
+    for (const [k, v] of Object.entries(map)) { if (cat.includes(k)) return cat.replace(k, v); }
     return cat;
   };
+  const translatePriority = (p) => { if (language === 'ka') return p; const map = { 'მაღალი': 'High', 'საშუალო': 'Medium', 'დაბალი': 'Low', 'სურვილისამებრ': 'Optional' }; for (const [k, v] of Object.entries(map)) { if (p.includes(k)) return p.replace(k, v); } return p; };
+  const translateStatus = (s) => { if (language === 'ka') return s; const map = { 'შესრულებული': 'Completed', 'პროგრესშია': 'In Progress', 'არ დაგიწყია': 'Not Started', 'გაუქმდა': 'Cancelled' }; for (const [k, v] of Object.entries(map)) { if (s.includes(k)) return s.replace(k, v); } return s; };
 
-  const translatePriority = (prio) => {
-    if (language === 'ka') return prio;
-    if (prio.includes('მაღალი')) return '🔴 High';
-    if (prio.includes('საშუალო')) return '🟡 Medium';
-    if (prio.includes('დაბალი')) return '🔵 Low';
-    if (prio.includes('სურვილისამებრ')) return '⚪️ Optional';
-    return prio;
-  };
+  const updateTasksState = (newTasks) => { setTasks(newTasks); db.saveTasks(newTasks); };
 
-  const translateStatus = (stat) => {
-    if (language === 'ka') return stat;
-    if (stat.includes('შესრულებული')) return '✅ Completed';
-    if (stat.includes('პროგრესშია')) return '✏️ In Progress';
-    if (stat.includes('არ დაგიწყია')) return '⚠️ Not Started';
-    if (stat.includes('გაუქმდა')) return '❌ Cancelled';
-    return stat;
-  };
-
-  const translatePrioShort = (name) => {
-    if (language === 'ka') return name;
-    if (name === 'მაღალი') return 'High';
-    if (name === 'საშუალო') return 'Medium';
-    if (name === 'დაბალი') return 'Low';
-    if (name === 'სურვილისამებრ') return 'Optional';
-    return name;
-  };
-
-  const translateStatusShort = (name) => {
-    if (language === 'ka') return name;
-    if (name === 'შესრულებული') return 'Completed';
-    if (name === 'პროგრესშია') return 'In Progress';
-    if (name === 'არ დაგიწყია') return 'Not Started';
-    if (name === 'გაუქმდა') return 'Cancelled';
-    return name;
-  };
-
-  // Sync tasks to local storage
-  const updateTasksState = (newTasks) => {
-    setTasks(newTasks);
-    db.saveTasks(newTasks);
-  };
-
-  // Toggle checkbox
   const handleToggleComplete = (id) => {
     const updated = tasks.map(task => {
       if (task.id === id) {
         const completed = !task.completed;
-        return {
-          ...task,
-          completed,
-          status: completed ? '✅ შესრულებული' : '✏️ პროგრესშია'
-        };
+        return { ...task, completed, status: completed ? '✅ შესრულებული' : '✏️ პროგრესშია' };
       }
       return task;
     });
     updateTasksState(updated);
   };
 
-  const handleAddParticipant = () => {
-    const email = participantInput.trim();
-    if (!email) return;
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      alert(t("გთხოვთ შეიყვანოთ სწორი ელ-ფოსტის მისამართი.", "Please enter a valid email address."));
-      return;
-    }
-    if (participants.includes(email)) return;
-    setParticipants([...participants, email]);
-    setParticipantInput('');
-  };
-
-  const handleRemoveParticipant = (email) => {
-    setParticipants(participants.filter(p => p !== email));
-  };
-
-  // Add task
   const handleAddTask = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
-
     setSyncLoading(true);
-    let meetLink = "";
-    let isSynced = false;
-    let googleEventId = "";
-
+    let meetLink = "", isSynced = false, googleEventId = "";
     if (integrations.connected && syncToCalendar) {
       try {
-        const res = await googleService.createCalendarEvent({
-          title: name.trim(),
-          description: comment.trim(),
-          date,
-          time: "12:00",
-          attendees: participants
-        });
+        const res = await googleService.createCalendarEvent({ title: name.trim(), description: comment.trim(), date, time: "12:00", attendees: participants });
         if (res.success) {
-          meetLink = res.meetLink;
-          googleEventId = res.id;
-          isSynced = true;
-
+          meetLink = res.meetLink; googleEventId = res.id; isSynced = true;
           if (sendGmailInvites && participants.length > 0) {
-            const subject = `${t('დავალების მოწვევა: ', 'Task Invitation: ')}${name.trim()}`;
-            const body = `
-              <div style="font-family: sans-serif; padding: 20px; color: #111;">
-                <h2>${name.trim()}</h2>
-                <p><strong>${t('კატეგორია:', 'Category:')}</strong> ${translateCategory(category)}</p>
-                <p>${comment.trim() || t('დამატებითი აღწერის გარეშე.', 'No additional description.')}</p>
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
-                ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                <small style="color: #666;">Sent automatically via Productivity Tracker</small>
-              </div>
-            `;
-            await Promise.all(
-              participants.map(email => googleService.sendGmailInvitation({ to: email, subject, body }))
-            );
+            await Promise.all(participants.map(email => googleService.sendGmailInvitation({ to: email, subject: `Task Invitation: ${name.trim()}`, body: `<h2>${name.trim()}</h2><p>Category: ${translateCategory(category)}</p>` })));
           }
         }
-      } catch (err) {
-        console.error("Google Calendar / Gmail error for task:", err);
-        alert(t("Google კალენდართან სინქრონიზაციის შეცდომა: ", "Google Calendar sync error: ") + err.message);
-      }
+      } catch (err) { console.error("Google Calendar error:", err); }
     }
-
-    const newTask = {
-      id: generateTaskId(),
-      name,
-      date,
-      category,
-      priority,
-      status,
-      completed: status === '✅ შესრულებული',
-      comment,
-      meetLink,
-      googleEventId,
-      googleSynced: isSynced,
-      participants
-    };
-
+    const newTask = { id: generateTaskId(), name, date, category, priority, status, completed: status === '✅ შესრულებული', comment, meetLink, googleEventId, googleSynced: isSynced, participants };
     updateTasksState([newTask, ...tasks]);
     setSyncLoading(false);
     resetForm();
   };
 
-  // Edit task
   const handleStartEdit = (task) => {
-    setEditingId(task.id);
-    setName(task.name);
-    setDate(task.date);
-    setCategory(task.category);
-    setPriority(task.priority);
-    setStatus(task.status);
-    setComment(task.comment || '');
-    setSyncToCalendar(task.googleSynced || false);
-    setParticipants(task.participants || []);
-    setIsAdding(true); // open form
+    setEditingId(task.id); setName(task.name); setDate(task.date); setCategory(task.category);
+    setPriority(task.priority); setStatus(task.status); setComment(task.comment || '');
+    setSyncToCalendar(task.googleSynced || false); setParticipants(task.participants || []); setIsAdding(true);
   };
 
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
-
     setSyncLoading(true);
-    let meetLink = "";
-    let isSynced = false;
-    let googleEventId = "";
-
     const existingTask = tasks.find(t => t.id === editingId);
-    meetLink = existingTask?.meetLink || "";
-    googleEventId = existingTask?.googleEventId || "";
-    isSynced = existingTask?.googleSynced || false;
-
+    let meetLink = existingTask?.meetLink || "", googleEventId = existingTask?.googleEventId || "", isSynced = existingTask?.googleSynced || false;
     if (integrations.connected && syncToCalendar && !isSynced) {
       try {
-        const res = await googleService.createCalendarEvent({
-          title: name.trim(),
-          description: comment.trim(),
-          date,
-          time: "12:00",
-          attendees: participants
-        });
-        if (res.success) {
-          meetLink = res.meetLink;
-          googleEventId = res.id;
-          isSynced = true;
-
-          if (sendGmailInvites && participants.length > 0) {
-            const subject = `${t('დავალების მოწვევა: ', 'Task Invitation: ')}${name.trim()}`;
-            const body = `
-              <div style="font-family: sans-serif; padding: 20px; color: #111;">
-                <h2>${name.trim()}</h2>
-                <p><strong>${t('კატეგორია:', 'Category:')}</strong> ${translateCategory(category)}</p>
-                <p>${comment.trim() || t('დამატებითი აღწერის გარეშე.', 'No additional description.')}</p>
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                <p><strong>${t('თარიღი:', 'Date:')}</strong> ${date}</p>
-                ${meetLink ? `<p><strong>Google Meet:</strong> <a href="${meetLink}">${meetLink}</a></p>` : ''}
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                <small style="color: #666;">Sent automatically via Productivity Tracker</small>
-              </div>
-            `;
-            await Promise.all(
-              participants.map(email => googleService.sendGmailInvitation({ to: email, subject, body }))
-            );
-          }
-        }
-      } catch (err) {
-        console.error("Google Calendar error for task edit:", err);
-        alert(t("Google კალენდართან სინქრონიზაციის შეცდომა: ", "Google Calendar sync error: ") + err.message);
-      }
+        const res = await googleService.createCalendarEvent({ title: name.trim(), description: comment.trim(), date, time: "12:00", attendees: participants });
+        if (res.success) { meetLink = res.meetLink; googleEventId = res.id; isSynced = true; }
+      } catch (err) { console.error("Google Calendar error:", err); }
     }
-
-    const updated = tasks.map(task => {
-      if (task.id === editingId) {
-        return {
-          ...task,
-          name,
-          date,
-          category,
-          priority,
-          status,
-          completed: status === '✅ შესრულებული',
-          comment,
-          meetLink,
-          googleEventId,
-          googleSynced: isSynced,
-          participants: participants.length > 0 ? participants : task.participants
-        };
-      }
-      return task;
-    });
-
+    const updated = tasks.map(task => task.id === editingId ? { ...task, name, date, category, priority, status, completed: status === '✅ შესრულებული', comment, meetLink, googleEventId, googleSynced: isSynced, participants: participants.length > 0 ? participants : task.participants } : task);
     updateTasksState(updated);
     setSyncLoading(false);
     resetForm();
   };
 
-  // Delete task
-  const handleDeleteTask = (id) => {
-    const updated = tasks.filter(task => task.id !== id);
-    updateTasksState(updated);
-  };
+  const handleDeleteTask = (id) => { updateTasksState(tasks.filter(task => task.id !== id)); };
 
   const resetForm = () => {
-    setName('');
-    setDate('2026-06-07');
-    setCategory('სამსახური 💼');
-    setPriority('🔴 მაღალი');
-    setStatus('⚠️ არ დაგიწყია');
-    setComment('');
-    setEditingId(null);
-    setIsAdding(false);
-    
-    // Reset Google form states
-    setSyncToCalendar(false);
-    setSendGmailInvites(false);
-    setParticipants([]);
-    setParticipantInput('');
+    setName(''); setDate('2026-06-07'); setCategory('სამსახური 💼'); setPriority('🔴 მაღალი');
+    setStatus('⚠️ არ დაგიწყია'); setComment(''); setEditingId(null); setIsAdding(false);
+    setSyncToCalendar(false); setSendGmailInvites(false); setParticipants([]); setParticipantInput('');
   };
 
-  // Filter tasks
   const filteredTasks = tasks.filter(task => {
     const matchCat = filterCategory === 'All' || task.category === filterCategory;
     const matchPri = filterPriority === 'All' || task.priority === filterPriority;
@@ -326,220 +114,136 @@ export const Tasks = ({ language }) => {
     return matchCat && matchPri && matchStat;
   });
 
-  // Calculate completion percentage
   const completedCount = tasks.filter(t => t.completed).length;
   const totalCount = tasks.length;
-  const completionPct = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+  const completionPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
-  // Chart Data: Status
-  const statusCounts = {};
-  statuses.forEach(s => { statusCounts[s] = 0; });
-  tasks.forEach(t => {
-    statusCounts[t.status] = (statusCounts[t.status] || 0) + 1;
-  });
-  const statusChartData = Object.keys(statusCounts).map(s => ({
-    name: translateStatusShort(s.split(' ')[1] || s),
-    value: statusCounts[s]
-  })).filter(d => d.value > 0);
-
-  // Chart Data: Priority
-  const priorityCounts = {};
-  priorities.forEach(p => { priorityCounts[p] = 0; });
-  tasks.forEach(t => {
-    priorityCounts[t.priority] = (priorityCounts[t.priority] || 0) + 1;
-  });
-  const priorityChartData = Object.keys(priorityCounts).map(p => ({
-    name: translatePrioShort(p.split(' ')[1] || p),
-    value: priorityCounts[p]
-  }));
-
-  const PRIORITY_COLORS = {
-    'მაღალი': 'hsl(var(--accent-rose))',
-    'High': 'hsl(var(--accent-rose))',
-    'საშუალო': 'hsl(var(--accent-amber))',
-    'Medium': 'hsl(var(--accent-amber))',
-    'დაბალი': 'hsl(var(--accent-blue))',
-    'Low': 'hsl(var(--accent-blue))',
-    'სურვილისამებრ': 'hsl(var(--text-muted))',
-    'Optional': 'hsl(var(--text-muted))'
-  };
-
-  const STATUS_COLORS = {
-    'შესრულებული': 'hsl(var(--accent-emerald))',
-    'Completed': 'hsl(var(--accent-emerald))',
-    'პროგრესშია': 'hsl(var(--accent-blue))',
-    'In Progress': 'hsl(var(--accent-blue))',
-    'არ დაგიწყია': 'hsl(var(--accent-amber))',
-    'Not Started': 'hsl(var(--accent-amber))',
-    'გაუქმდა': 'hsl(var(--accent-rose))',
-    'Cancelled': 'hsl(var(--accent-rose))'
+  const getColor = (str, type) => {
+    if (type === 'priority') {
+      if (str.includes('მაღალი') || str === 'High') return 'text-error';
+      if (str.includes('საშუალო') || str === 'Medium') return 'text-orange-400';
+      if (str.includes('დაბალი') || str === 'Low') return 'text-primary-fixed-dim';
+      return 'text-on-surface-variant';
+    }
+    if (str.includes('შესრულებული') || str === 'Completed') return 'text-green-400';
+    if (str.includes('პროგრესში') || str === 'In Progress') return 'text-primary-fixed-dim';
+    if (str.includes('არ დაგიწყია') || str === 'Not Started') return 'text-orange-400';
+    if (str.includes('გაუქმდა') || str === 'Cancelled') return 'text-error';
+    return 'text-on-surface-variant';
   };
 
   return (
-    <div className="tasks-page">
-      <header className="page-header" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      {/* Header */}
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('დავალებები', 'Tasks')}</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('მართეთ ყოველდღიური და სამუშაო ამოცანები', 'Manage daily and work tasks')}</p>
+          <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('დავალებები', 'Tasks')}</h2>
+          <p className="font-body-md text-on-surface-variant">{t('მართეთ ყოველდღიური და სამუშაო ამოცანები', 'Manage daily and work tasks')}</p>
         </div>
-        <button 
-          onClick={() => { isAdding ? resetForm() : setIsAdding(true); }}
-          className="btn btn-primary"
-        >
+        <button onClick={() => { isAdding ? resetForm() : setIsAdding(true); }} className="bg-primary-fixed-dim text-on-primary-fixed px-6 py-3 rounded-full font-bold text-sm hover:bg-primary-container transition-all active:scale-95 cursor-pointer flex items-center gap-2 border-none shadow-lg shadow-primary-fixed-dim/20">
           {isAdding ? <X size={16} /> : <Plus size={16} />}
           <span>{isAdding ? t('დახურვა', 'Close') : t('დავალების დამატება', 'Add Task')}</span>
         </button>
-      </header>
+      </div>
 
-      {/* Task Add / Edit Modal-style Form */}
+      {/* Stats */}
+      <div className="glass-card rounded-xl p-6 md:p-8">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+          <div>
+            <p className="text-on-surface-variant text-sm">{t('საერთო პროგრესი', 'Overall Progress')}</p>
+            <p className="font-display text-3xl font-bold text-on-surface">{completedCount} / {totalCount}</p>
+          </div>
+          <div className="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+            <div className="h-full bg-primary-fixed-dim rounded-full transition-all" style={{ width: `${completionPct}%` }} />
+          </div>
+          <div className="text-primary-fixed-dim font-bold text-sm">{completionPct}%</div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="glass-card rounded-xl p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="bg-surface-container-high border border-outline-variant/30 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim">
+            <option value="All">{t('ყველა კატეგორია', 'All Categories')}</option>
+            {categories.map(c => <option key={c} value={c}>{translateCategory(c)}</option>)}
+          </select>
+          <select value={filterPriority} onChange={e => setFilterPriority(e.target.value)} className="bg-surface-container-high border border-outline-variant/30 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim">
+            <option value="All">{t('ყველა პრიორიტეტი', 'All Priorities')}</option>
+            {priorities.map(p => <option key={p} value={p}>{translatePriority(p)}</option>)}
+          </select>
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="bg-surface-container-high border border-outline-variant/30 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim">
+            <option value="All">{t('ყველა სტატუსი', 'All Statuses')}</option>
+            {statuses.map(s => <option key={s} value={s}>{translateStatus(s)}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Add/Edit Form */}
       {isAdding && (
-        <GlassCard style={{ marginBottom: '2rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
-          <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem', fontWeight: 700 }}>
+        <div className="glass-card rounded-xl p-6 md:p-8 border border-primary-fixed-dim/20">
+          <h3 className="font-headline-md text-xl font-bold text-on-surface mb-6">
             {editingId ? t('დავალების რედაქტირება', 'Edit Task') : t('ახალი დავალების შექმნა', 'Create New Task')}
           </h3>
-          <form onSubmit={editingId ? handleSaveEdit : handleAddTask}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-              <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                <label className="form-label">{t('დავალება', 'Task')}</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  placeholder={t("შეიყვანეთ დავალების დასახელება...", "Enter task name...")} 
-                  value={name} 
-                  onChange={e => setName(e.target.value)} 
-                  required 
-                />
+          <form onSubmit={editingId ? handleSaveEdit : handleAddTask} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="md:col-span-2">
+                <label className="font-label text-xs text-on-surface-variant mb-1 block">{t('დავალება', 'Task')}</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder={t("შეიყვანეთ დავალების დასახელება...", "Enter task name...")} className="w-full bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim" required />
               </div>
-              <div className="form-group">
-                <label className="form-label">{t('თარიღი', 'Date')}</label>
-                <input 
-                  type="date" 
-                  className="form-input" 
-                  value={date} 
-                  onChange={e => setDate(e.target.value)} 
-                  required 
-                />
+              <div>
+                <label className="font-label text-xs text-on-surface-variant mb-1 block">{t('თარიღი', 'Date')}</label>
+                <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary-fixed-dim" required />
               </div>
-              <div className="form-group">
-                <label className="form-label">{t('კატეგორია', 'Category')}</label>
-                <select className="form-select" value={category} onChange={e => setCategory(e.target.value)}>
-                  {categories.map(cat => <option key={cat} value={cat}>{translateCategory(cat)}</option>)}
+              <div>
+                <label className="font-label text-xs text-on-surface-variant mb-1 block">{t('კატეგორია', 'Category')}</label>
+                <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                  {categories.map(c => <option key={c} value={c}>{translateCategory(c)}</option>)}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">{t('პრიორიტეტი', 'Priority')}</label>
-                <select className="form-select" value={priority} onChange={e => setPriority(e.target.value)}>
-                  {priorities.map(prio => <option key={prio} value={prio}>{translatePriority(prio)}</option>)}
+              <div>
+                <label className="font-label text-xs text-on-surface-variant mb-1 block">{t('პრიორიტეტი', 'Priority')}</label>
+                <select value={priority} onChange={e => setPriority(e.target.value)} className="w-full bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                  {priorities.map(p => <option key={p} value={p}>{translatePriority(p)}</option>)}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">{t('სტატუსი', 'Status')}</label>
-                <select className="form-select" value={status} onChange={e => setStatus(e.target.value)}>
-                  {statuses.map(stat => <option key={stat} value={stat}>{translateStatus(stat)}</option>)}
+              <div>
+                <label className="font-label text-xs text-on-surface-variant mb-1 block">{t('სტატუსი', 'Status')}</label>
+                <select value={status} onChange={e => setStatus(e.target.value)} className="w-full bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                  {statuses.map(s => <option key={s} value={s}>{translateStatus(s)}</option>)}
                 </select>
               </div>
             </div>
-            <div className="form-group" style={{ marginTop: '0.5rem' }}>
-              <label className="form-label">{t('კომენტარი', 'Comment')}</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                placeholder={t("დაამატეთ შენიშვნა...", "Add comment...")} 
-                value={comment} 
-                onChange={e => setComment(e.target.value)} 
-              />
+            <div>
+              <label className="font-label text-xs text-on-surface-variant mb-1 block">{t('კომენტარი', 'Comment')}</label>
+              <input type="text" value={comment} onChange={e => setComment(e.target.value)} placeholder={t("დაამატეთ შენიშვნა...", "Add comment...")} className="w-full bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none" />
             </div>
-
-            {/* Google Integration options if connected */}
             {integrations.connected && (
-              <div style={{ 
-                background: 'rgba(139, 92, 246, 0.03)', 
-                border: '1px solid rgba(139, 92, 246, 0.1)', 
-                borderRadius: '10px', 
-                padding: '1rem',
-                marginTop: '1rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.75rem'
-              }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--primary-hover))', marginBottom: '0.25rem' }}>
-                  Smart Google Automation
-                </div>
-                
-                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={syncToCalendar} 
-                      onChange={e => setSyncToCalendar(e.target.checked)}
-                      style={{ accentColor: 'hsl(var(--primary))' }}
-                    />
-                    <span>Create Google Calendar Event</span>
+              <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 space-y-3">
+                <p className="font-label text-[10px] text-primary-fixed-dim uppercase tracking-widest font-bold">Smart Google Automation</p>
+                <div className="flex gap-6 flex-wrap">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-on-surface-variant">
+                    <input type="checkbox" checked={syncToCalendar} onChange={e => setSyncToCalendar(e.target.checked)} className="accent-primary-fixed-dim" />
+                    Create Google Calendar Event
                   </label>
-
                   {syncToCalendar && (
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={sendGmailInvites} 
-                        onChange={e => setSendGmailInvites(e.target.checked)}
-                        style={{ accentColor: 'hsl(var(--primary))' }}
-                      />
-                      <span>Send Email Invitation (via Gmail)</span>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-on-surface-variant">
+                      <input type="checkbox" checked={sendGmailInvites} onChange={e => setSendGmailInvites(e.target.checked)} className="accent-primary-fixed-dim" />
+                      Send Email Invitation (via Gmail)
                     </label>
                   )}
                 </div>
-
-                {/* Participants list for task */}
                 {syncToCalendar && sendGmailInvites && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.25rem' }}>
-                    <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: 0 }}>
-                      {t('მოწვეული მონაწილეები', 'Invited Participants (Email)')}
-                    </label>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <input 
-                        type="email" 
-                        className="form-input" 
-                        placeholder="invitee@example.com" 
-                        value={participantInput} 
-                        onChange={e => setParticipantInput(e.target.value)} 
-                        onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddParticipant())}
-                        style={{ padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
-                      />
-                      <button 
-                        type="button" 
-                        onClick={handleAddParticipant} 
-                        className="btn btn-secondary" 
-                        style={{ padding: '0.4rem 0.6rem' }}
-                      >
-                        <UserPlus size={14} />
-                      </button>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input type="email" value={participantInput} onChange={e => setParticipantInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), setParticipants([...participants, participantInput]), setParticipantInput(''))} placeholder="invitee@example.com" className="flex-1 bg-surface-container-high border border-outline-variant/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none" />
+                      <button type="button" onClick={() => { if (participantInput.trim()) { setParticipants([...participants, participantInput.trim()]); setParticipantInput(''); } }} className="bg-surface-container-highest text-white px-4 py-2 rounded-lg text-sm font-bold cursor-pointer border border-outline-variant/30 hover:bg-surface-bright transition-all">+</button>
                     </div>
-
                     {participants.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.25rem' }}>
+                      <div className="flex flex-wrap gap-2">
                         {participants.map(p => (
-                          <span 
-                            key={p} 
-                            style={{ 
-                              fontSize: '0.7rem', 
-                              background: 'rgba(255, 255, 255, 0.05)', 
-                              border: '1px solid var(--border-light)', 
-                              padding: '0.15rem 0.4rem', 
-                              borderRadius: '4px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '0.25rem'
-                            }}
-                          >
+                          <span key={p} className="bg-surface-container-high border border-outline-variant/30 rounded-full px-3 py-1 text-xs text-on-surface-variant flex items-center gap-1">
                             {p}
-                            <button 
-                              type="button" 
-                              onClick={() => handleRemoveParticipant(p)}
-                              style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-rose))', fontSize: '0.65rem', padding: '0 0.1rem' }}
-                            >
-                              ✕
-                            </button>
+                            <button type="button" onClick={() => setParticipants(participants.filter(x => x !== p))} className="text-error cursor-pointer bg-transparent border-none text-sm">&times;</button>
                           </span>
                         ))}
                       </div>
@@ -548,277 +252,45 @@ export const Tasks = ({ language }) => {
                 )}
               </div>
             )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.25rem' }}>
-              <button type="button" onClick={resetForm} className="btn btn-secondary" disabled={syncLoading}>{t('გაუქმება', 'Cancel')}</button>
-              <button type="submit" className="btn btn-primary" disabled={syncLoading}>
-                {syncLoading ? t('მიმდინარეობს სინქრონიზაცია...', 'Syncing...') : t('შენახვა', 'Save')}
+            <div className="flex justify-end gap-4">
+              <button type="button" onClick={resetForm} className="bg-surface-container-highest text-on-surface px-6 py-3 rounded-full font-bold text-sm hover:bg-surface-bright transition-all cursor-pointer border border-outline-variant/30">{t('გაუქმება', 'Cancel')}</button>
+              <button type="submit" disabled={syncLoading} className="bg-primary-fixed-dim text-on-primary-fixed px-6 py-3 rounded-full font-bold text-sm hover:bg-primary-container transition-all active:scale-95 cursor-pointer border-none" style={{ opacity: syncLoading ? 0.7 : 1 }}>
+                {syncLoading ? t('მიმდინარეობს...', 'Syncing...') : t('შენახვა', 'Save')}
               </button>
             </div>
           </form>
-        </GlassCard>
+        </div>
       )}
 
-      {/* Stats Summary & Filters */}
-      <section style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '1.5rem', marginBottom: '2rem', alignItems: 'stretch' }}>
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h4 style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', marginBottom: '0.5rem' }}>{t('საერთო პროგრესი', 'Overall Progress')}</h4>
-          <div style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem' }}>
-            {completedCount} / {totalCount}
-          </div>
-          <ProgressBar progress={completionPct} />
-        </GlassCard>
-
-        {/* Filters */}
-        <GlassCard>
-          <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Filter size={16} />
-            <span>{t('ფილტრები', 'Filters')}</span>
-          </h4>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" style={{ fontSize: '0.75rem' }}>{t('კატეგორია', 'Category')}</label>
-              <select className="form-select" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-                <option value="All">{t('ყველა კატეგორია', 'All Categories')}</option>
-                {categories.map(cat => <option key={cat} value={cat}>{translateCategory(cat)}</option>)}
-              </select>
-            </div>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" style={{ fontSize: '0.75rem' }}>{t('პრიორიტეტი', 'Priority')}</label>
-              <select className="form-select" value={filterPriority} onChange={e => setFilterPriority(e.target.value)}>
-                <option value="All">{t('ყველა პრიორიტეტი', 'All Priorities')}</option>
-                {priorities.map(prio => <option key={prio} value={prio}>{translatePriority(prio)}</option>)}
-              </select>
-            </div>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" style={{ fontSize: '0.75rem' }}>{t('სტატუსი', 'Status')}</label>
-              <select className="form-select" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
-                <option value="All">{t('ყველა სტატუსი', 'All Statuses')}</option>
-                {statuses.map(stat => <option key={stat} value={stat}>{translateStatus(stat)}</option>)}
-              </select>
-            </div>
-          </div>
-        </GlassCard>
-      </section>
-
-      {/* Main Grid: List and Analytics Charts */}
-      <section style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', alignItems: 'start' }}>
-        {/* Task List */}
-        <GlassCard style={{ padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.25rem' }}>{t('დავალებების სია', 'Tasks List')} ({filteredTasks.length})</h3>
-          
-          {filteredTasks.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {filteredTasks.map(task => {
-                const taskPrioName = task.priority.split(' ')[1] || task.priority;
-                const taskStatName = task.status.split(' ')[1] || task.status;
-                const prioColor = PRIORITY_COLORS[taskPrioName] || 'hsl(var(--text-secondary))';
-                const statColor = STATUS_COLORS[taskStatName] || 'hsl(var(--text-secondary))';
-
-                return (
-                  <div 
-                    key={task.id} 
-                    style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'space-between',
-                      padding: '1rem',
-                      background: 'rgba(255, 255, 255, 0.02)',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: '10px',
-                      transition: 'all 0.2s',
-                      opacity: task.completed ? 0.65 : 1
-                    }}
-                  >
-                    {/* Left: Checkbox + Name + Comment */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: 0 }}>
-                      <label className="checkbox-container" style={{ cursor: 'pointer' }}>
-                        <input 
-                          type="checkbox" 
-                          className="checkbox-input"
-                          checked={task.completed} 
-                          onChange={() => handleToggleComplete(task.id)} 
-                        />
-                        <span className="checkbox-custom" />
-                      </label>
-                      <div style={{ minWidth: 0, paddingRight: '1rem' }}>
-                        <div style={{ 
-                          fontWeight: 600, 
-                          fontSize: '0.95rem',
-                          textDecoration: task.completed ? 'line-through' : 'none',
-                          color: task.completed ? 'hsl(var(--text-muted))' : 'hsl(var(--text-primary))',
-                          transition: 'all 0.2s',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>
-                          {task.name}
-                        </div>
-                        {task.comment && (
-                          <div style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))', marginTop: '0.15rem' }}>
-                            {task.comment}
-                          </div>
-                        )}
-                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.35rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.04)', color: 'hsl(var(--text-secondary))' }}>
-                            {translateCategory(task.category)}
-                          </span>
-                          <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.04)', color: 'hsl(var(--text-muted))' }}>
-                            {task.date}
-                          </span>
-                          {task.googleSynced && (
-                            <span style={{ 
-                              fontSize: '0.65rem', 
-                              padding: '0.1rem 0.4rem', 
-                              borderRadius: '4px', 
-                              background: 'rgba(139, 92, 246, 0.1)', 
-                              color: 'hsl(var(--primary-hover))', 
-                              fontWeight: 600,
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '0.2rem'
-                            }}>
-                              Google Synced
-                            </span>
-                          )}
-                          {task.meetLink && (
-                            <a 
-                              href={task.meetLink} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              style={{ 
-                                fontSize: '0.65rem', 
-                                padding: '0.1rem 0.4rem', 
-                                borderRadius: '4px', 
-                                background: 'rgba(14, 165, 233, 0.15)', 
-                                color: 'hsl(var(--accent-blue))', 
-                                fontWeight: 600,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '0.2rem',
-                                textDecoration: 'none'
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Video size={10} />
-                              Join Meet
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Badges + Action Buttons */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem' }} className="desktop-badges">
-                        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: prioColor }}>
-                          {translatePriority(task.priority)}
-                        </span>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: statColor }}>
-                          {translateStatus(task.status)}
-                        </span>
-                      </div>
-                      <div style={{ display: 'flex', gap: '0.25rem' }}>
-                        <button 
-                          onClick={() => handleStartEdit(task)} 
-                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.35rem', color: 'hsl(var(--text-secondary))' }}
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                        <button 
-                          onClick={() => handleDeleteTask(task.id)} 
-                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.35rem', color: 'hsl(var(--accent-rose))' }}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div style={{ padding: '3rem 1rem', textAlign: 'center', color: 'hsl(var(--text-muted))' }}>
-              {t('დავალებები ვერ მოიძებნა ამ ფილტრებით.', 'No tasks found matching these filters.')}
-            </div>
-          )}
-        </GlassCard>
-
-        {/* Charts Panel */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Priority Chart */}
-          <GlassCard style={{ padding: '1.25rem' }}>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <BarChart2 size={16} style={{ color: 'hsl(var(--primary))' }} />
-              <span>{t('დავალებები პრიორიტეტით', 'Tasks by Priority')}</span>
-            </h4>
-            <div style={{ width: '100%', height: '180px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={priorityChartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                  <XAxis dataKey="name" stroke="hsl(var(--text-muted))" fontSize={10} tickLine={false} />
-                  <YAxis stroke="hsl(var(--text-muted))" fontSize={10} tickLine={false} allowDecimals={false} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--bg-surface-elevated))', 
-                      borderColor: 'var(--border-light)', 
-                      borderRadius: '8px',
-                      color: 'hsl(var(--text-primary))'
-                    }} 
-                  />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                    {priorityChartData.map((entry, index) => {
-                      const color = PRIORITY_COLORS[entry.name] || 'hsl(var(--primary))';
-                      return <Cell key={`cell-${index}`} fill={color} />;
-                    })}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </GlassCard>
-
-          {/* Status Chart */}
-          <GlassCard style={{ padding: '1.25rem' }}>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <BarChart2 size={16} style={{ color: 'hsl(var(--accent-blue))' }} />
-              <span>{t('დავალებები სტატუსით', 'Tasks by Status')}</span>
-            </h4>
-            <div style={{ width: '100%', height: '180px' }}>
-              {statusChartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={statusChartData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={40}
-                      outerRadius={65}
-                      paddingAngle={3}
-                      dataKey="value"
-                    >
-                      {statusChartData.map((entry, index) => {
-                        const color = STATUS_COLORS[entry.name] || 'hsl(var(--primary))';
-                        return <Cell key={`cell-${index}`} fill={color} />;
-                      })}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--bg-surface-elevated))', 
-                        borderColor: 'var(--border-light)', 
-                        borderRadius: '8px',
-                        color: 'hsl(var(--text-primary))'
-                      }} 
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div style={{ padding: '2rem 0', textAlign: 'center', color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
-                  {t('მონაცემები არ არის', 'No data available')}
+      {/* Task List */}
+      <div className="glass-card rounded-xl p-6 md:p-8">
+        <h3 className="font-headline-md text-xl font-bold text-on-surface mb-6">{t('დავალებების სია', 'Tasks List')} ({filteredTasks.length})</h3>
+        <div className="space-y-4">
+          {filteredTasks.length > 0 ? filteredTasks.map(task => (
+            <div key={task.id} className={`flex items-center gap-4 p-4 rounded-xl bg-surface-container-low border border-outline-variant/10 hover:border-primary-fixed-dim/30 transition-all ${task.completed ? 'opacity-60' : ''}`}>
+              <button onClick={() => handleToggleComplete(task.id)} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer bg-transparent transition-colors ${task.completed ? 'border-green-400 bg-green-400/20' : 'border-outline hover:border-primary-fixed-dim'}`}>
+                {task.completed && <span className="material-symbols-outlined text-green-400 text-sm">check</span>}
+              </button>
+              <div className="flex-1 min-w-0">
+                <p className={`font-body-md font-bold ${task.completed ? 'line-through text-on-surface-variant' : 'text-on-surface'}`}>{task.name}</p>
+                <div className="flex gap-3 mt-1 flex-wrap">
+                  <span className="font-label text-[10px] text-on-surface-variant">{translateCategory(task.category)}</span>
+                  <span className={`font-label text-[10px] ${getColor(task.priority, 'priority')}`}>{translatePriority(task.priority)}</span>
+                  <span className={`font-label text-[10px] ${getColor(task.status)}`}>{translateStatus(task.status)}</span>
+                  <span className="font-label text-[10px] text-on-surface-variant">{task.date}</span>
+                  {task.meetLink && <span className="font-label text-[10px] text-primary-fixed-dim">Google Meet</span>}
                 </div>
-              )}
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleStartEdit(task)} className="text-on-surface-variant hover:text-primary-fixed-dim cursor-pointer bg-transparent border-none p-1"><Edit2 size={14} /></button>
+                <button onClick={() => handleDeleteTask(task.id)} className="text-on-surface-variant hover:text-error cursor-pointer bg-transparent border-none p-1"><Trash2 size={14} /></button>
+              </div>
             </div>
-          </GlassCard>
+          )) : (
+            <div className="text-center py-12 text-on-surface-variant">{t('დავალებები ვერ მოიძებნა.', 'No tasks found.')}</div>
+          )}
         </div>
-      </section>
+      </div>
     </div>
   );
 };
