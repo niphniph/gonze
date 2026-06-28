@@ -11,3 +11,5 @@
 /diet/food-scanner /diet/index.html 200
 /diet/progress /diet/index.html 200
 /diet/dashboard /diet/index.html 200
+/pawn/* /pawn/index.html 200
+
