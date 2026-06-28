@@ -37,5 +37,6 @@ moveFolder('ninokvariani2');
 moveFolder('diet');
 moveFolder('portfolio');
 moveFolder('pawn');
+moveFolder('nineos');
 moveFile('_redirects');
 
