@@ -293,20 +293,20 @@ export const FinanceAnalyzer = ({ language }) => {
   const COLORS = ['hsl(var(--primary))', 'hsl(var(--accent-blue))', 'hsl(var(--accent-emerald))', 'hsl(var(--accent-amber))', 'hsl(var(--accent-rose))', '#fbbf24', '#f87171'];
 
   return (
-    <div className="finance-analyzer-page">
-      <header className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ფინანსების ანალიზი', 'Finance Analyzer')}</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('ღია ბანკინგის მხარდაჭერა, ავტომატური რეპორტინგი და AI ფინანსური ინსაითები', 'Open banking support, automated reporting and AI financial insights')}</p>
+          <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('ფინანსების ანალიზი', 'Finance Analyzer')}</h2>
+          <p className="font-body-md text-on-surface-variant">{t('ღია ბანკინგის მხარდაჭერა, ავტომატური რეპორტინგი და AI ფინანსური ინსაითები', 'Open banking support, automated reporting and AI financial insights')}</p>
         </div>
 
         {accounts.length > 0 ? (
-          <button onClick={handleDisconnectBank} className="btn btn-danger">
+          <button onClick={handleDisconnectBank} className="bg-error/10 hover:bg-error/20 text-error border border-error/20 font-bold text-xs py-2.5 px-5 rounded-full cursor-pointer transition-all active:scale-95 flex items-center gap-2">
             <Trash2 size={16} />
             <span>{t('ბანკის გათიშვა', 'Disconnect Bank')}</span>
           </button>
         ) : (
-          <button onClick={handleConnectBank} disabled={syncing} className="btn btn-primary">
+          <button onClick={handleConnectBank} disabled={syncing} className="bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-xs py-2.5 px-5 rounded-full cursor-pointer transition-all active:scale-95 flex items-center gap-2 border-none">
             <Building2 size={16} />
             <span>{syncing ? t('მიმდინარეობს დაკავშირება...', 'Connecting...') : t('ბანკის დაკავშირება', 'Connect Bank')}</span>
           </button>
@@ -314,136 +314,112 @@ export const FinanceAnalyzer = ({ language }) => {
       </header>
 
       {successMsg && (
-        <div style={{
-          background: 'rgba(16, 185, 129, 0.1)',
-          border: '1px solid hsl(var(--accent-emerald))',
-          color: 'hsl(var(--accent-emerald))',
-          padding: '1rem',
-          borderRadius: '10px',
-          marginBottom: '2rem',
-          fontWeight: 600,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem'
-        }}>
+        <div className="bg-green-400/10 border border-green-400/20 text-green-400 p-4 rounded-xl flex items-center gap-3 font-semibold">
           <CheckCircle2 size={18} />
           <span>{successMsg}</span>
         </div>
       )}
 
       {accounts.length === 0 ? (
-        <div style={{ padding: '6rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
-          <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--primary))' }}>
-            <Wallet size={40} />
+        <div className="flex flex-col items-center justify-center text-center p-12 md:p-24 bg-surface-container-low/30 border border-outline-variant/10 rounded-2xl gap-5">
+          <div className="w-16 h-16 rounded-full bg-primary-fixed/10 flex items-center justify-center text-primary-fixed-dim">
+            <Wallet size={36} />
           </div>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{t('ფინანსური ანალიზატორი გათიშულია', 'Financial Analyzer Disconnected')}</h3>
-          <p style={{ color: 'hsl(var(--text-muted))', fontSize: '0.9rem', maxWidth: '450px', lineHeight: '1.5' }}>
+          <h3 className="font-headline-md text-xl font-bold text-on-surface">{t('ფინანსური ანალიზატორი გათიშულია', 'Financial Analyzer Disconnected')}</h3>
+          <p className="font-body-md text-xs text-on-surface-variant max-w-md leading-relaxed">
             {t("დააკავშირეთ თქვენი საბანკო ანგარიში, რათა ავტომატურად მოხდეს ტრანზაქციების იმპორტირება, კატეგორიზაცია და ფინანსური ჯანმრთელობის ანალიზი.", "Connect your bank account to automatically import, categorize, and analyze your financial health.")}
           </p>
-          <button onClick={handleConnectBank} className="btn btn-primary">
+          <button onClick={handleConnectBank} className="bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-xs py-3.5 px-6 rounded-full cursor-pointer transition-all border-none active:scale-95 mt-2">
             {t('დააკავშირეთ ბანკი ახლავე (Mock Integration)', 'Connect Bank Now (Mock Integration)')}
           </button>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          
-          {/* Main metrics */}
-          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
-            <GlassCard style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'rgba(139, 92, 246, 0.1)', color: 'hsl(var(--primary-hover))' }}>
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="glass-card rounded-xl p-5 flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-primary-fixed/10 text-primary-fixed-dim">
                 <Wallet size={24} />
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('საერთო ბალანსი', 'Net Balance')}</span>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{currentBalance.toLocaleString()} ₾</h3>
+                <span className="font-body-md text-xs text-on-surface-variant block">{t('საერთო ბალანსი', 'Net Balance')}</span>
+                <h3 className="font-headline-md text-lg font-bold text-on-surface mt-0.5">{currentBalance.toLocaleString()} ₾</h3>
               </div>
-            </GlassCard>
+            </div>
 
-            <GlassCard style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', color: 'hsl(var(--accent-emerald))' }}>
+            <div className="glass-card rounded-xl p-5 flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-green-400/10 text-green-400">
                 <ArrowUpRight size={24} />
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('შემოსავლები (თვე)', 'Income (Month)')}</span>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'hsl(var(--accent-emerald))' }}>+{totalIncome.toLocaleString()} ₾</h3>
+                <span className="font-body-md text-xs text-on-surface-variant block">{t('შემოსავლები (თვე)', 'Income (Month)')}</span>
+                <h3 className="font-headline-md text-lg font-bold text-green-400 mt-0.5">+{totalIncome.toLocaleString()} ₾</h3>
               </div>
-            </GlassCard>
+            </div>
 
-            <GlassCard style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'rgba(239, 68, 68, 0.1)', color: 'hsl(var(--accent-rose))' }}>
+            <div className="glass-card rounded-xl p-5 flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-error/10 text-error">
                 <ArrowDownRight size={24} />
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('ხარჯები (თვე)', 'Expenses (Month)')}</span>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'hsl(var(--accent-rose))' }}>-{totalExpenses.toLocaleString()} ₾</h3>
+                <span className="font-body-md text-xs text-on-surface-variant block">{t('ხარჯები (თვე)', 'Expenses (Month)')}</span>
+                <h3 className="font-headline-md text-lg font-bold text-error mt-0.5">-{totalExpenses.toLocaleString()} ₾</h3>
               </div>
-            </GlassCard>
+            </div>
 
             {/* Health Score Card */}
-            <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>{t('ფინანსური ჯანმრთელობის ინდექსი', 'Financial Health Index')}</span>
-                <Sparkles size={16} style={{ color: 'hsl(var(--primary))' }} />
+            <div className="glass-card rounded-xl p-5 flex flex-col gap-2 relative overflow-hidden">
+              <div className="flex justify-between items-center">
+                <span className="font-body-md text-xs text-on-surface-variant">{t('ფინანსური ჯანმრთელობის ინდექსი', 'Financial Health Index')}</span>
+                <Sparkles size={16} className="text-primary-fixed-dim" />
               </div>
-              <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: healthScore > 75 ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-amber))' }}>
+              <h3 className={`font-headline-md text-lg font-bold mt-0.5 ${healthScore > 75 ? 'text-green-400' : 'text-orange-400'}`}>
                 {healthScore} / 100
               </h3>
-              <ProgressBar progress={healthScore} type={healthScore > 75 ? 'complete' : 'ongoing'} />
-            </GlassCard>
-          </section>
+              <ProgressBar progress={healthScore} type={healthScore > 75 ? 'complete' : 'ongoing'} showPercent={false} />
+            </div>
+          </div>
 
           {/* AI Insights & Charts */}
-          <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', flexWrap: 'wrap' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* AI Insights list */}
-            <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Sparkles size={18} style={{ color: 'hsl(var(--primary))' }} />
+            <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+              <h3 className="font-headline-md text-base font-bold text-on-surface flex items-center gap-2">
+                <Sparkles size={18} className="text-primary-fixed-dim" />
                 {t('AI ფინანსური რეკომენდაციები', 'AI Financial Insights')}
               </h3>
 
               {insights.length > 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1 }}>
+                <div className="flex flex-col gap-3 flex-1 overflow-y-auto max-h-[250px] pr-1 custom-scrollbar">
                   {insights.map((ins) => (
                     <div 
                       key={ins.id} 
-                      style={{
-                        padding: '0.85rem 1rem',
-                        borderRadius: '10px',
-                        background: ins.type === 'danger' ? 'rgba(239, 68, 68, 0.05)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.05)' : 'rgba(139, 92, 246, 0.05)',
-                        border: '1px solid ' + (ins.type === 'danger' ? 'rgba(239, 68, 68, 0.2)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(139, 92, 246, 0.2)'),
-                        fontSize: '0.8rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        lineHeight: '1.4'
-                      }}
+                      className={`p-3.5 rounded-xl border text-xs flex items-start gap-3 leading-relaxed ${
+                        ins.type === 'danger' ? 'bg-red-400/5 border-red-400/10 text-red-400' : ins.type === 'warning' ? 'bg-orange-400/5 border-orange-400/10 text-orange-400' : 'bg-primary-fixed/5 border-primary-fixed/10 text-primary-fixed-dim'
+                      }`}
                     >
-                      <AlertCircle size={16} style={{ 
-                        color: ins.type === 'danger' ? 'hsl(var(--accent-rose))' : ins.type === 'warning' ? 'hsl(var(--accent-amber))' : 'hsl(var(--primary-hover))',
-                        flexShrink: 0
-                      }} />
+                      <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
                       <span>{ins.text}</span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>
+                <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant/50 text-xs py-8 border border-dashed border-outline-variant/10 rounded-xl">
                   {t('რეკომენდაციები ჯერ არ არის', 'No insights yet')}
                 </div>
               )}
-            </GlassCard>
+            </div>
 
             {/* Category Expenses Chart */}
-            <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>{t('ხარჯების გადანაწილება', 'Expense Distribution')}</h3>
-              <div style={{ flex: 1, minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+              <h3 className="font-headline-md text-base font-bold text-on-surface">{t('ხარჯების გადანაწილება', 'Expense Distribution')}</h3>
+              <div className="flex-1 min-h-[220px] flex items-center justify-center">
                 {pieChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={pieChartData}
                         cx="50%" cy="50%"
-                        innerRadius={50} outerRadius={80}
+                        innerRadius={50} outerRadius={75}
                         paddingAngle={3}
                         dataKey="value"
                       >
@@ -451,46 +427,44 @@ export const FinanceAnalyzer = ({ language }) => {
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--bg-surface-elevated))', borderColor: 'var(--border-light)', borderRadius: '8px', color: 'white' }} formatter={(val) => `${val} ₾`} />
+                      <Tooltip contentStyle={{ backgroundColor: 'var(--color-surface-container-high)', borderColor: 'var(--color-outline-variant)', borderRadius: '8px', color: 'white' }} formatter={(val) => `${val} ₾`} />
                       <Legend verticalAlign="bottom" height={36} iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '11px' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <span style={{ color: 'hsl(var(--text-muted))', fontSize: '0.85rem' }}>{t('მონაცემები არ არის', 'No data available')}</span>
+                  <span className="text-on-surface-variant/50 text-xs">{t('მონაცემები არ არის', 'No data available')}</span>
                 )}
               </div>
-            </GlassCard>
-          </section>
+            </div>
+          </div>
 
           {/* Budgets & Savings Goals */}
-          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Category Budgets Manager */}
-            <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>{t('კატეგორიის ბიუჯეტები', 'Category Budgets')}</h3>
+            <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+              <h3 className="font-headline-md text-base font-bold text-on-surface">{t('კატეგორიის ბიუჯეტები', 'Category Budgets')}</h3>
               
-              <form onSubmit={handleAddBudget} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
+              <form onSubmit={handleAddBudget} className="flex gap-2">
                 <select 
-                  className="form-select" 
+                  className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer"
                   value={newBudgetCategory} 
                   onChange={e => setNewBudgetCategory(e.target.value)}
-                  style={{ flex: 1 }}
                 >
                   {expenseCategories.map(cat => <option key={cat} value={cat}>{translateFinanceCategory(cat)}</option>)}
                 </select>
                 <input 
                   type="number" 
-                  className="form-input" 
+                  className="w-28 bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                   placeholder={t("ლიმიტი (₾)", "Limit (₾)")} 
                   value={newBudgetLimit}
                   onChange={e => setNewBudgetLimit(e.target.value)}
-                  style={{ width: '100px' }}
                   required
                 />
-                <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>{t('დამატება', 'Add')}</button>
+                <button type="submit" className="bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-xs py-2.5 px-4 rounded-xl cursor-pointer border-none transition-all active:scale-95">{t('დამატება', 'Add')}</button>
               </form>
 
               {/* Budgets list */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div className="flex flex-col gap-3 overflow-y-auto max-h-[300px] pr-1 custom-scrollbar">
                 {Object.keys(budgets).map(cat => {
                   const limit = budgets[cat];
                   const spent = expenseByCategory[cat] || 0;
@@ -498,17 +472,17 @@ export const FinanceAnalyzer = ({ language }) => {
                   const isOver = spent > limit;
                   
                   return (
-                    <div key={cat} style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-light)', borderRadius: '10px', padding: '0.75rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>
-                        <span>{translateFinanceCategory(cat)}</span>
-                        <span style={{ color: isOver ? 'hsl(var(--accent-rose))' : 'hsl(var(--text-secondary))' }}>
+                    <div key={cat} className="bg-surface-container-low border border-outline-variant/10 rounded-xl p-4">
+                      <div className="flex justify-between items-center text-xs font-semibold mb-2">
+                        <span className="text-on-surface">{translateFinanceCategory(cat)}</span>
+                        <span className={isOver ? 'text-error' : 'text-on-surface-variant'}>
                           {spent} ₾ / {limit} ₾
                         </span>
                       </div>
-                      <ProgressBar progress={pct} type={isOver ? 'complete' : 'ongoing'} />
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'hsl(var(--text-muted))', marginTop: '0.35rem' }}>
+                      <ProgressBar progress={pct} type={isOver ? 'complete' : 'ongoing'} showPercent={false} />
+                      <div className="flex justify-between items-center text-[10px] text-on-surface-variant/70 mt-2">
                         <span>{pct}% {t('ათვისებული', 'spent')}</span>
-                        <button onClick={() => handleRemoveBudget(cat)} style={{ background: 'transparent', border: 'none', color: 'hsl(var(--accent-rose))', cursor: 'pointer' }}>
+                        <button onClick={() => handleRemoveBudget(cat)} className="text-error hover:underline cursor-pointer bg-transparent border-none p-0 text-[10px]">
                           {t('წაშლა', 'Delete')}
                         </button>
                       </div>
@@ -516,28 +490,28 @@ export const FinanceAnalyzer = ({ language }) => {
                   );
                 })}
               </div>
-            </GlassCard>
+            </div>
 
             {/* Savings Goals Manager */}
-            <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Target size={18} style={{ color: 'hsl(var(--accent-emerald))' }} />
+            <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+              <h3 className="font-headline-md text-base font-bold text-on-surface flex items-center gap-2">
+                <Target size={18} className="text-green-400" />
                 {t('დაზოგვის მიზნები', 'Savings Goals')}
               </h3>
 
-              <form onSubmit={handleAddGoal} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <form onSubmit={handleAddGoal} className="flex flex-col gap-3">
                 <input 
                   type="text" 
-                  className="form-input" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                   placeholder={t("მიზანი (მაგ. მოგზაურობა ✈️)", "Goal (e.g. Travel ✈️)")} 
                   value={newGoalName}
                   onChange={e => setNewGoalName(e.target.value)}
                   required 
                 />
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <div className="grid grid-cols-2 gap-2">
                   <input 
                     type="number" 
-                    className="form-input" 
+                    className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                     placeholder={t("სამიზნე (₾)", "Target (₾)")} 
                     value={newGoalTarget}
                     onChange={e => setNewGoalTarget(e.target.value)}
@@ -545,29 +519,29 @@ export const FinanceAnalyzer = ({ language }) => {
                   />
                   <input 
                     type="number" 
-                    className="form-input" 
+                    className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                     placeholder={t("არსებული (₾)", "Current (₾)")} 
                     value={newGoalCurrent}
                     onChange={e => setNewGoalCurrent(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>{t('მიზნის შექმნა', 'Create Goal')}</button>
+                <button type="submit" className="w-full bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-xs py-2.5 px-4 rounded-xl cursor-pointer border-none transition-all active:scale-95">{t('მიზნის შექმნა', 'Create Goal')}</button>
               </form>
 
               {/* Goals list */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div className="flex flex-col gap-3 overflow-y-auto max-h-[250px] pr-1 custom-scrollbar">
                 {savingsGoals.map(goal => {
                   const pct = Math.min(100, Math.round((goal.current / goal.target) * 100));
                   return (
-                    <div key={goal.id} style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-light)', borderRadius: '10px', padding: '0.75rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>
-                        <span>{goal.name}</span>
-                        <span>{goal.current} ₾ / {goal.target} ₾</span>
+                    <div key={goal.id} className="bg-surface-container-low border border-outline-variant/10 rounded-xl p-4">
+                      <div className="flex justify-between items-center text-xs font-semibold mb-2">
+                        <span className="text-on-surface">{goal.name}</span>
+                        <span className="text-on-surface-variant">{goal.current} ₾ / {goal.target} ₾</span>
                       </div>
-                      <ProgressBar progress={pct} type="complete" />
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'hsl(var(--text-muted))', marginTop: '0.35rem' }}>
+                      <ProgressBar progress={pct} type="complete" showPercent={false} />
+                      <div className="flex justify-between items-center text-[10px] text-on-surface-variant/70 mt-2">
                         <span>{pct}% {t('შევსებული', 'saved')}</span>
-                        <button onClick={() => handleRemoveGoal(goal.id)} style={{ background: 'transparent', border: 'none', color: 'hsl(var(--accent-rose))', cursor: 'pointer' }}>
+                        <button onClick={() => handleRemoveGoal(goal.id)} className="text-error hover:underline cursor-pointer bg-transparent border-none p-0 text-[10px]">
                           {t('წაშლა', 'Delete')}
                         </button>
                       </div>
@@ -575,143 +549,120 @@ export const FinanceAnalyzer = ({ language }) => {
                   );
                 })}
               </div>
-            </GlassCard>
-          </section>
+            </div>
+          </div>
 
           {/* Connected Bank accounts & Live statement ledger */}
-          <section style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem', flexWrap: 'wrap' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Accounts details */}
-            <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>{t('დაკავშირებული ანგარიშები', 'Connected Accounts')}</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-4">
+              <h3 className="font-headline-md text-base font-bold text-on-surface">{t('დაკავშირებული ანგარიშები', 'Connected Accounts')}</h3>
+              <div className="flex flex-col gap-3 overflow-y-auto max-h-[300px] pr-1 custom-scrollbar">
                 {accounts.map(acc => (
-                  <div key={acc.id} style={{ padding: '0.75rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{acc.name}</span>
-                      <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'hsl(var(--text-muted))' }}>{acc.type}</span>
+                  <div key={acc.id} className="p-4 bg-surface-container-low border border-outline-variant/10 rounded-xl">
+                    <div className="flex justify-between items-center text-xs font-bold text-on-surface">
+                      <span>{acc.name}</span>
+                      <span className="font-label text-[9px] text-on-surface-variant uppercase tracking-wider">{acc.type}</span>
                     </div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 700, marginTop: '0.5rem', color: acc.balance >= 0 ? 'white' : 'hsl(var(--accent-rose))' }}>
+                    <div className={`text-xl font-bold mt-2 ${acc.balance >= 0 ? 'text-on-surface' : 'text-error'}`}>
                       {acc.balance.toLocaleString()} ₾
                     </div>
                   </div>
                 ))}
               </div>
-            </GlassCard>
+            </div>
 
             {/* Transactions imported */}
-            <GlassCard>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem' }}>{t('იმპორტირებული ტრანზაქციები', 'Imported Transactions')} ({transactions.length})</h3>
+            <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-4 lg:col-span-2">
+              <h3 className="font-headline-md text-base font-bold text-on-surface">{t('იმპორტირებული ტრანზაქციები', 'Imported Transactions')} ({transactions.length})</h3>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '300px', overflowY: 'auto' }}>
+              <div className="flex flex-col gap-3 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
                 {transactions.map(tx => {
                   const isIncome = tx.type === 'income';
                   return (
-                    <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.75rem', background: 'rgba(255, 255, 255, 0.01)', border: '1px solid var(--border-light)', borderRadius: '8px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', flex: 1 }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{translateFinanceCategory(tx.note)}</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                          <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{tx.date}</span>
-                          <span style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>|</span>
+                    <div key={tx.id} className="flex justify-between items-center p-3.5 bg-surface-container-low border border-outline-variant/10 rounded-xl hover:border-primary-fixed-dim/20 transition-all gap-4">
+                      <div className="flex flex-col gap-1 flex-1 min-w-0">
+                        <div className="font-headline-md text-xs font-bold text-on-surface truncate">{translateFinanceCategory(tx.note)}</div>
+                        <div className="flex items-center gap-2 font-label text-[10px] text-on-surface-variant/70">
+                          <span>{tx.date}</span>
+                          <span>|</span>
                           
                           {/* Category Selector Dropdown */}
                           <select
                             value={tx.category}
                             onChange={(e) => handleEditTransactionCategory(tx.id, e.target.value)}
-                            style={{
-                              background: 'rgba(0, 0, 0, 0.3)',
-                              border: '1px solid var(--border-light)',
-                              borderRadius: '4px',
-                              color: 'hsl(var(--text-secondary))',
-                              fontSize: '0.7rem',
-                              padding: '0.1rem 0.25rem',
-                              cursor: 'pointer',
-                              outline: 'none'
-                            }}
+                            className="bg-surface-container-highest border border-outline-variant/30 rounded px-1.5 py-0.5 text-[10px] text-on-surface-variant focus:outline-none cursor-pointer"
                           >
                             {tx.type === 'income' ? (
                               <>
-                                <option value="ხელფასი">{translateFinanceCategory('ხელფასი')}</option>
-                                <option value="ბიზნესი">{translateFinanceCategory('ბიზნესი')}</option>
-                                <option value="ბონუსი">{translateFinanceCategory('ბონუსი')}</option>
-                                <option value="ფრილანსერობა">{translateFinanceCategory('ფრილანსერობა')}</option>
-                                <option value="ინვესტიციები">{translateFinanceCategory('ინვესტიციები')}</option>
-                                <option value="სხვა შემოსავალი">{translateFinanceCategory('სხვა შემოსავალი')}</option>
+                                <option value="ხელფასი" className="bg-surface-container-high">{translateFinanceCategory('ხელფასი')}</option>
+                                <option value="ბიზნესი" className="bg-surface-container-high">{translateFinanceCategory('ბიზნესი')}</option>
+                                <option value="ბონუსი" className="bg-surface-container-high">{translateFinanceCategory('ბონუსი')}</option>
+                                <option value="ფრილანსერობა" className="bg-surface-container-high">{translateFinanceCategory('ფრილანსერობა')}</option>
+                                <option value="ინვესტიციები" className="bg-surface-container-high">{translateFinanceCategory('ინვესტიციები')}</option>
+                                <option value="სხვა შემოსავალი" className="bg-surface-container-high">{translateFinanceCategory('სხვა შემოსავალი')}</option>
                               </>
                             ) : (
                               <>
-                                <option value="საჭმელი">{translateFinanceCategory('საჭმელი')}</option>
-                                <option value="ქირა">{translateFinanceCategory('ქირა')}</option>
-                                <option value="კომუნალური">{translateFinanceCategory('კომუნალური')}</option>
-                                <option value="ტრანსპორტი">{translateFinanceCategory('ტრანსპორტი')}</option>
-                                <option value="გართობა">{translateFinanceCategory('გართობა')}</option>
-                                <option value="შოპინგი">{translateFinanceCategory('შოპინგი')}</option>
-                                <option value="სხვა ხარჯი">{translateFinanceCategory('სხვა ხარჯი')}</option>
-                                <option value="სზვა ხარჯი">{translateFinanceCategory('სზვა ხარჯი')}</option>
+                                <option value="საჭმელი" className="bg-surface-container-high">{translateFinanceCategory('საჭმელი')}</option>
+                                <option value="ქირა" className="bg-surface-container-high">{translateFinanceCategory('ქირა')}</option>
+                                <option value="კომუნალური" className="bg-surface-container-high">{translateFinanceCategory('კომუნალური')}</option>
+                                <option value="ტრანსპორტი" className="bg-surface-container-high">{translateFinanceCategory('ტრანსპორტი')}</option>
+                                <option value="გართობა" className="bg-surface-container-high">{translateFinanceCategory('გართობა')}</option>
+                                <option value="შოპინგი" className="bg-surface-container-high">{translateFinanceCategory('შოპინგი')}</option>
+                                <option value="სხვა ხარჯი" className="bg-surface-container-high">{translateFinanceCategory('სხვა ხარჯი')}</option>
+                                <option value="სზვა ხარჯი" className="bg-surface-container-high">{translateFinanceCategory('სზვა ხარჯი')}</option>
                               </>
                             )}
                           </select>
                         </div>
                       </div>
-                      <span style={{ fontWeight: 700, fontSize: '0.9rem', color: isIncome ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-rose))' }}>
+                      <span className={`font-headline-md text-sm font-black flex-shrink-0 ${isIncome ? 'text-green-400' : 'text-error'}`}>
                         {isIncome ? '+' : '-'}{tx.amount} ₾
                       </span>
                     </div>
                   );
                 })}
               </div>
-            </GlassCard>
-          </section>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Mock Plaid Link Modal */}
       {showPlaidModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0, 0, 0, 0.65)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 1000, padding: '1rem'
-        }}>
-          <div style={{
-            background: 'hsl(var(--bg-surface-elevated))',
-            border: '1px solid var(--border-light)',
-            borderRadius: '16px',
-            width: '100%', maxWidth: '400px',
-            padding: '2rem',
-            boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-              <ShieldCheck size={24} style={{ color: 'hsl(var(--accent-emerald))' }} />
-              <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>Connect Bank via Plaid</span>
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl max-w-sm w-full p-8 flex flex-col gap-6 border border-outline-variant/20 shadow-2xl">
+            <div className="flex items-center gap-2.5 pb-2 border-b border-outline-variant/10">
+              <ShieldCheck size={22} className="text-green-400" />
+              <span className="font-headline-md text-base font-bold text-on-surface">Connect Bank via Plaid</span>
             </div>
 
-            <p style={{ fontSize: '0.8rem', color: 'hsl(var(--text-secondary))', marginBottom: '1.25rem', lineHeight: '1.4' }}>
+            <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
               {t('დააკავშირეთ თქვენი საბანკო ანგარიში უსაფრთხოდ. ჩვენ არასდროს ვინახავთ პაროლებს.', 'Connect your bank account securely. We never store your password.')}
             </p>
 
-            <form onSubmit={handlePlaidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('აირჩიეთ ბანკი', 'Select Bank')}</label>
+            <form onSubmit={handlePlaidSubmit} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('აირჩიეთ ბანკი', 'Select Bank')}</label>
                 <select 
-                  className="form-select" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer" 
                   value={selectedBank} 
                   onChange={e => setSelectedBank(e.target.value)}
                   required
                 >
-                  <option value="">{t('-- აირჩიეთ --', '-- Select Bank --')}</option>
-                  <option value="TBC Bank">{t('თიბისი ბანკი (TBC Bank)', 'TBC Bank')}</option>
-                  <option value="Bank of Georgia">{t('საქართველოს ბანკი (BOG)', 'Bank of Georgia (BOG)')}</option>
-                  <option value="Liberty Bank">{t('ლიბერთი ბანკი (Liberty)', 'Liberty Bank (Liberty)')}</option>
+                  <option value="" className="bg-surface-container-high">{t('-- აირჩიეთ --', '-- Select Bank --')}</option>
+                  <option value="TBC Bank" className="bg-surface-container-high">{t('თიბისი ბანკი (TBC Bank)', 'TBC Bank')}</option>
+                  <option value="Bank of Georgia" className="bg-surface-container-high">{t('საქართველოს ბანკი (BOG)', 'Bank of Georgia (BOG)')}</option>
+                  <option value="Liberty Bank" className="bg-surface-container-high">{t('ლიბერთი ბანკი (Liberty)', 'Liberty Bank (Liberty)')}</option>
                 </select>
               </div>
 
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('მომხმარებელი (Username)', 'Username')}</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('მომხმარებელი (Username)', 'Username')}</label>
                 <input 
                   type="text" 
-                  className="form-input" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                   placeholder="Username / Email" 
                   value={username}
                   onChange={e => setUsername(e.target.value)}
@@ -719,11 +670,11 @@ export const FinanceAnalyzer = ({ language }) => {
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('პაროლი (Password)', 'Password')}</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('პაროლი (Password)', 'Password')}</label>
                 <input 
                   type="password" 
-                  className="form-input" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                   placeholder="••••••••" 
                   value={password}
                   onChange={e => setPassword(e.target.value)}
@@ -731,19 +682,17 @@ export const FinanceAnalyzer = ({ language }) => {
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+              <div className="flex gap-3 mt-4">
                 <button 
                   type="button" 
                   onClick={() => setShowPlaidModal(false)} 
-                  className="btn btn-secondary" 
-                  style={{ flex: 1 }}
+                  className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-on-surface font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border border-outline-variant/30 active:scale-95"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className="btn btn-primary" 
-                  style={{ flex: 1 }}
+                  className="flex-1 bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border-none active:scale-95"
                 >
                   Connect Bank
                 </button>

@@ -155,21 +155,20 @@ export const Weekly = ({ language }) => {
   });
 
   return (
-    <div className="weekly-page">
-      <header className="page-header" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('კვირეული', 'Weekly Tracker')}</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დაგეგმეთ თქვენი მიზნები და დავალებები კვირის ჭრილში', 'Plan your goals and tasks in a weekly view')}</p>
+          <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('კვირეული', 'Weekly Tracker')}</h2>
+          <p className="font-body-md text-on-surface-variant">{t('დაგეგმეთ თქვენი მიზნები და დავალებები კვირის ჭრილში', 'Plan your goals and tasks in a weekly view')}</p>
         </div>
         
         {/* Date Selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-light)', padding: '0.5rem 1rem', borderRadius: '14px' }}>
-          <Calendar size={16} style={{ color: 'hsl(var(--primary))' }} />
-          <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'hsl(var(--text-secondary))' }}>{t('კვირის დასაწყისი:', 'Week Start:')}</span>
+        <div className="flex items-center gap-3 bg-surface-container-high border border-outline-variant/30 px-4 py-2.5 rounded-xl">
+          <Calendar size={16} className="text-primary-fixed-dim" />
+          <span className="font-body-md text-xs text-on-surface-variant font-medium">{t('კვირის დასაწყისი:', 'Week Start:')}</span>
           <input 
             type="date" 
-            className="form-input" 
-            style={{ width: '150px', padding: '0.25rem 0.5rem', background: 'transparent', border: 'none', cursor: 'pointer' }}
+            className="bg-transparent border-none text-on-surface text-xs focus:outline-none cursor-pointer"
             value={selectedWeekStart} 
             onChange={e => setSelectedWeekStart(e.target.value)} 
           />
@@ -177,104 +176,80 @@ export const Weekly = ({ language }) => {
       </header>
 
       {/* Week Progress Card */}
-      <section style={{ marginBottom: '2.5rem' }}>
-        <GlassCard style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-          <div style={{ flex: 1 }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.25rem' }}>{t('ამ კვირის საერთო პროგრესი', "This Week's Overall Progress")}</h3>
-            <span style={{ fontSize: '0.85rem', color: 'hsl(var(--text-muted))' }}>{t('კვირის ყველა ამოცანის შესრულების მაჩვენებელი', 'Completion rate for all weekly tasks')}</span>
-          </div>
-          <div style={{ minWidth: '250px', flex: 1 }}>
-            <ProgressBar progress={weeklyPct} />
-          </div>
-        </GlassCard>
-      </section>
+      <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex-1 w-full text-center md:text-left">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface mb-1">{t('ამ კვირის საერთო პროგრესი', "This Week's Overall Progress")}</h3>
+          <p className="font-body-md text-xs text-on-surface-variant">{t('კვირის ყველა ამოცანის შესრულების მაჩვენებელი', 'Completion rate for all weekly tasks')}</p>
+        </div>
+        <div className="w-full md:max-w-md flex-1">
+          <ProgressBar progress={weeklyPct} />
+        </div>
+      </div>
 
       {/* Daily Task Columns Grid */}
-      <section style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-        gap: '1.5rem', 
-        marginBottom: '2.5rem' 
-      }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {weekDays.map(day => {
           const tasks = getTasksForDay(day.dayName);
           const completedCount = tasks.filter(t => t.completed).length;
           const pct = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
           return (
-            <GlassCard key={day.dayName} style={{ display: 'flex', flexDirection: 'column', minHeight: '300px' }}>
+            <div key={day.dayName} className="glass-card rounded-xl p-5 flex flex-col min-h-[350px]">
               {/* Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'hsl(var(--text-primary))' }}>{day.label}</h4>
-                  <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>{day.dateStr}</span>
+                  <h4 className="font-headline-md text-base font-bold text-on-surface">{day.label}</h4>
+                  <span className="font-label text-[10px] text-on-surface-variant/70">{day.dateStr}</span>
                 </div>
                 {tasks.length > 0 && (
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: pct === 100 ? 'hsl(var(--accent-emerald))' : 'hsl(var(--primary))' }}>
+                  <span className={`font-label text-xs font-bold ${pct === 100 ? 'text-green-400' : 'text-primary-fixed-dim'}`}>
                     {pct}%
                   </span>
                 )}
               </div>
 
               {/* Day's Tasks */}
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem', margin: '0.5rem 0' }}>
+              <div className="flex-1 flex flex-col gap-2 my-2 overflow-y-auto max-h-[200px] custom-scrollbar">
                 {tasks.length > 0 ? (
                   tasks.map(task => (
                     <div 
                       key={task.id} 
-                      style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'space-between',
-                        padding: '0.65rem 0.75rem',
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        border: '1px solid var(--border-light)',
-                        borderRadius: '8px',
-                        transition: 'all 0.15s'
-                      }}
+                      className={`flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-outline-variant/10 hover:border-primary-fixed-dim/20 transition-all ${task.completed ? 'opacity-60' : ''}`}
                     >
-                      <label className="checkbox-container" style={{ flex: 1, minWidth: 0 }}>
+                      <label className="flex items-center gap-2.5 flex-1 min-w-0 cursor-pointer">
                         <input 
                           type="checkbox" 
-                          className="checkbox-input"
+                          className="w-4 h-4 rounded border-outline bg-transparent text-primary-fixed-dim focus:ring-primary-fixed-dim cursor-pointer"
                           checked={task.completed} 
                           onChange={() => handleToggleTask(day.dayName, task.id)} 
                         />
-                        <span className="checkbox-custom" />
-                        <span style={{ 
-                          fontSize: '0.85rem', 
-                          fontWeight: 500,
-                          textDecoration: task.completed ? 'line-through' : 'none',
-                          color: task.completed ? 'hsl(var(--text-muted))' : 'hsl(var(--text-primary))',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>
+                        <span className={`font-body-md text-xs truncate ${
+                          task.completed ? 'line-through text-on-surface-variant' : 'text-on-surface'
+                        }`}>
                           {task.name}
                         </span>
                       </label>
                       <button 
                         onClick={() => handleDeleteTask(day.dayName, task.id)}
-                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-rose))', padding: '0.2rem' }}
+                        className="text-on-surface-variant hover:text-error cursor-pointer bg-transparent border-none p-1 transition-colors"
                       >
                         <Trash2 size={12} />
                       </button>
                     </div>
                   ))
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', border: '1px dashed var(--border-light)', borderRadius: '10px', padding: '1.5rem', color: 'hsl(var(--text-muted))', fontSize: '0.8rem' }}>
-                    <ClipboardList size={24} style={{ marginBottom: '0.35rem', opacity: 0.5 }} />
-                    {t('დავალებები ცარიელია', 'No tasks planned')}
+                  <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-outline-variant/20 rounded-xl p-4 text-on-surface-variant/50 text-xs">
+                    <ClipboardList size={20} className="mb-1 opacity-55 text-primary-fixed-dim" />
+                    <span>{t('დავალებები ცარიელია', 'No tasks planned')}</span>
                   </div>
                 )}
               </div>
 
               {/* Add Task Input inside Card */}
-              <div style={{ marginTop: 'auto', display: 'flex', gap: '0.5rem', borderTop: '1px solid var(--border-light)', paddingTop: '0.75rem' }}>
+              <div className="mt-auto flex gap-2 border-t border-outline-variant/20 pt-3">
                 <input 
                   type="text" 
-                  className="form-input" 
-                  style={{ padding: '0.4rem 0.5rem', fontSize: '0.85rem', flex: 1 }}
+                  className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-lg px-3 py-1.5 text-xs text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-fixed-dim transition-colors"
                   placeholder={t("ახალი გეგმა...", "New plan...")} 
                   value={newTasks[`day${day.index}`]} 
                   onChange={e => setNewTasks({ ...newTasks, [`day${day.index}`]: e.target.value })}
@@ -282,45 +257,42 @@ export const Weekly = ({ language }) => {
                 />
                 <button 
                   onClick={() => handleAddTask(day.dayName, day.index)}
-                  className="btn btn-primary"
-                  style={{ padding: '0.4rem', borderRadius: '8px' }}
+                  className="bg-primary-fixed-dim text-on-primary-fixed p-1.5 rounded-lg hover:bg-primary-container transition-all active:scale-95 cursor-pointer flex items-center justify-center border-none"
                 >
                   <Plus size={14} />
                 </button>
               </div>
-            </GlassCard>
+            </div>
           );
         })}
-      </section>
+      </div>
 
       {/* Weekly Completion Chart */}
-      <section style={{ marginBottom: '1.5rem' }}>
-        <GlassCard>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1.5rem' }}>{t('კვირის პროგრესი დღეების მიხედვით (%)', 'Weekly Progress by Day (%)')}</h3>
-          <div style={{ width: '100%', height: '220px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <XAxis dataKey="name" stroke="hsl(var(--text-muted))" fontSize={11} tickLine={false} />
-                <YAxis stroke="hsl(var(--text-muted))" fontSize={11} tickLine={false} domain={[0, 100]} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--bg-surface-elevated))', 
-                    borderColor: 'var(--border-light)', 
-                    borderRadius: '8px',
-                    color: 'hsl(var(--text-primary))'
-                  }} 
-                  formatter={(value) => `${value}%`}
-                />
-                <Bar dataKey="rate" fill="hsl(var(--accent-blue))" radius={[4, 4, 0, 0]}>
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.rate === 100 ? 'hsl(var(--accent-emerald))' : 'hsl(var(--accent-blue))'} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </GlassCard>
-      </section>
+      <div className="glass-card rounded-xl p-6 md:p-8">
+        <h3 className="font-headline-md text-base font-bold text-on-surface mb-6">{t('კვირის პროგრესი დღეების მიხედვით (%)', 'Weekly Progress by Day (%)')}</h3>
+        <div className="w-full h-[220px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+              <XAxis dataKey="name" stroke="var(--color-outline)" fontSize={11} tickLine={false} />
+              <YAxis stroke="var(--color-outline)" fontSize={11} tickLine={false} domain={[0, 100]} />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'var(--color-surface-container-high)', 
+                  borderColor: 'var(--color-outline-variant)', 
+                  borderRadius: '8px',
+                  color: 'var(--color-on-surface)'
+                }} 
+                formatter={(value) => `${value}%`}
+              />
+              <Bar dataKey="rate" fill="var(--color-primary-fixed-dim)" radius={[4, 4, 0, 0]}>
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.rate === 100 ? '#4ade80' : 'var(--color-primary-fixed-dim)'} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   );
 };

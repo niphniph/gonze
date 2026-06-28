@@ -101,313 +101,211 @@ export const GoogleIntegrations = ({ language }) => {
   };
 
   return (
-    <div className="google-integrations-page">
-      <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ინტეგრაციები', 'Integrations')}</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დაუკავშირეთ Google სერვისები თქვენს პლატფორმას ავტომატური კალენდრისა და შეხვედრებისთვის', 'Connect Google services to your platform for automated calendars and meetings')}</p>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col gap-2">
+        <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('ინტეგრაციები', 'Integrations')}</h2>
+        <p className="font-body-md text-on-surface-variant">{t('დაუკავშირეთ Google სერვისები თქვენს პლატფორმას ავტომატური კალენდრისა და შეხვედრებისთვის', 'Connect Google services to your platform for automated calendars and meetings')}</p>
       </header>
 
       {successMessage && (
-        <div style={{
-          background: 'rgba(16, 185, 129, 0.1)',
-          border: '1px solid hsl(var(--accent-emerald))',
-          color: 'hsl(var(--accent-emerald))',
-          padding: '1rem',
-          borderRadius: '10px',
-          marginBottom: '2rem',
-          fontWeight: 600,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem'
-        }}>
+        <div className="bg-green-400/10 border border-green-400/20 text-green-400 p-4 rounded-xl flex items-center gap-3 font-semibold">
           <CheckCircle2 size={18} />
           <span>{successMessage}</span>
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {/* Connection panel */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Google Account Connection</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>{t('სიმულაციის რეჟიმი', 'Sandbox Mode')}</span>
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+          <div className="flex justify-between items-center border-b border-outline-variant/10 pb-4">
+            <h3 className="font-headline-md text-lg font-bold text-on-surface">Google Connection</h3>
+            <div className="flex items-center gap-2">
+              <span className="font-body-md text-xs text-on-surface-variant">{t('სიმულაციის რეჟიმი', 'Sandbox Mode')}</span>
               <button 
                 onClick={toggleDemoMode} 
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--primary))' }}
+                className="text-primary-fixed-dim bg-transparent border-none cursor-pointer p-1"
               >
-                {integrations.demoMode ? <ToggleRight size={36} /> : <ToggleLeft size={36} />}
+                {integrations.demoMode ? <ToggleRight size={32} /> : <ToggleLeft size={32} />}
               </button>
             </div>
           </div>
 
           {integrations.connected && integrations.profile ? (
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center', 
-              padding: '1.5rem', 
-              background: 'rgba(255, 255, 255, 0.02)', 
-              borderRadius: '12px',
-              border: '1px solid var(--border-light)'
-            }}>
+            <div className="flex flex-col items-center p-6 bg-surface-container-low/50 border border-outline-variant/10 rounded-xl w-full">
               <img 
                 src={integrations.profile.avatar} 
                 alt="Avatar" 
-                style={{ width: '80px', height: '80px', borderRadius: '50%', marginBottom: '1rem', border: '2px solid hsl(var(--primary))' }}
+                className="w-20 h-20 rounded-full mb-4 border-2 border-primary-fixed-dim object-cover"
                 onError={(e) => { e.target.src = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y' }}
               />
-              <h4 style={{ fontWeight: 700, fontSize: '1.1rem' }}>{integrations.profile.name}</h4>
-              <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.85rem', marginBottom: '1.5rem' }}>{integrations.profile.email}</p>
+              <h4 className="font-headline-md text-base font-bold text-on-surface">{integrations.profile.name}</h4>
+              <p className="font-body-md text-xs text-on-surface-variant mb-4">{integrations.profile.email}</p>
               
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                <span style={{ 
-                  fontSize: '0.7rem', 
-                  padding: '0.25rem 0.5rem', 
-                  borderRadius: '999px', 
-                  background: 'rgba(16, 185, 129, 0.1)', 
-                  color: 'hsl(var(--accent-emerald))', 
-                  fontWeight: 600,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem'
-                }}>
+              <div className="flex gap-2 flex-wrap justify-center mb-6">
+                <span className="font-label text-[10px] px-2.5 py-1 rounded-full bg-green-400/10 text-green-400 font-bold flex items-center gap-1">
                   <ShieldCheck size={12} />
                   Active Token
                 </span>
-                <span style={{ 
-                  fontSize: '0.7rem', 
-                  padding: '0.25rem 0.5rem', 
-                  borderRadius: '999px', 
-                  background: integrations.demoMode ? 'rgba(56, 189, 248, 0.1)' : 'rgba(139, 92, 246, 0.1)', 
-                  color: integrations.demoMode ? '#38bdf8' : 'hsl(var(--primary-hover))', 
-                  fontWeight: 600
-                }}>
-                  {integrations.demoMode ? 'Sandbox Mode' : 'Production Mode'}
+                <span className={`font-label text-[10px] px-2.5 py-1 rounded-full font-bold ${
+                  integrations.demoMode ? 'bg-sky-400/10 text-sky-400' : 'bg-primary-fixed/10 text-primary-fixed-dim'
+                }`}>
+                  {integrations.demoMode ? 'Sandbox' : 'Production'}
                 </span>
               </div>
 
-              <button onClick={handleDisconnect} className="btn btn-danger" style={{ width: '100%' }}>
+              <button onClick={handleDisconnect} className="w-full bg-error/10 hover:bg-error/20 text-error font-bold text-sm py-3 px-6 rounded-full cursor-pointer transition-all border border-error/20 flex items-center justify-center gap-2 active:scale-95">
                 <Trash2 size={16} />
                 <span>{t('კავშირის გაწყვეტა (Disconnect)', 'Disconnect Account')}</span>
               </button>
             </div>
           ) : (
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center', 
-              padding: '2rem 1.5rem', 
-              textAlign: 'center',
-              background: 'rgba(0, 0, 0, 0.15)', 
-              borderRadius: '12px',
-              border: '1px solid var(--border-light)'
-            }}>
-              <div style={{ 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                background: 'rgba(139, 92, 246, 0.1)', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                marginBottom: '1rem',
-                color: 'hsl(var(--primary))' 
-              }}>
-                <Globe size={32} />
+            <div className="flex flex-col items-center p-8 bg-surface-container-low/50 border border-outline-variant/10 rounded-xl text-center w-full">
+              <div className="w-14 h-14 rounded-full bg-primary-fixed/10 flex items-center justify-center mb-4 text-primary-fixed-dim">
+                <Globe size={28} />
               </div>
-              <h4 style={{ fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.5rem' }}>{t('დაუკავშირეთ Google ანგარიში', 'Connect Google Account')}</h4>
-              <p style={{ color: 'hsl(var(--text-muted))', fontSize: '0.8rem', marginBottom: '1.5rem', lineHeight: '1.4' }}>
+              <h4 className="font-headline-md text-base font-bold text-on-surface mb-2">{t('დაუკავშირეთ Google ანგარიში', 'Connect Google Account')}</h4>
+              <p className="font-body-md text-xs text-on-surface-variant leading-relaxed mb-6">
                 {t('მოახდინეთ კალენდრის სინქრონიზაცია და დააგენერირეთ Google Meet ბმულები თქვენი დავალებებისა და შეხვედრებისთვის.', 'Sync your calendar and generate Google Meet links for your tasks and meetings.')}
               </p>
               
               <button 
                 onClick={handleConnect} 
                 disabled={loading}
-                className="btn btn-primary" 
-                style={{ width: '100%', padding: '0.75rem' }}
+                className="w-full bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-sm py-3 px-6 rounded-full cursor-pointer transition-all border-none active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? t('მიმდინარეობს დაკავშირება...', 'Connecting...') : 'Google Account Connect'}
               </button>
             </div>
           )}
-        </GlassCard>
+        </div>
 
         {/* Credentials Form (Real API mode) */}
         {!integrations.demoMode && (
-          <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Key size={18} style={{ color: 'hsl(var(--primary))' }} />
-              API Credentials Configuration
+          <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-4">
+            <h3 className="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2">
+              <Key size={18} className="text-primary-fixed-dim" />
+              API Credentials
             </h3>
-            <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+            <p className="font-body-md text-xs text-on-surface-variant">
               {t('შეიყვანეთ Google Cloud პროექტის რეკვიზიტები. სერთიფიკატები ინახება მხოლოდ თქვენს ბრაუზერში.', 'Enter Google Cloud project credentials. Certificates are saved only in your browser.')}
             </p>
 
-            <div className="form-group">
-              <label className="form-label">Google Client ID</label>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">Google Client ID</label>
               <input 
                 type="text" 
-                className="form-input" 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                 placeholder="xxxxx.apps.googleusercontent.com" 
                 value={integrations.clientId} 
                 onChange={e => handleInputChange('clientId', e.target.value)} 
               />
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Google API Key</label>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">Google API Key</label>
               <input 
                 type="password" 
-                className="form-input" 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                 placeholder="AIzaSy..." 
                 value={integrations.apiKey} 
                 onChange={e => handleInputChange('apiKey', e.target.value)} 
               />
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(139, 92, 246, 0.05)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(139, 92, 246, 0.1)' }}>
-              <Settings size={16} style={{ color: 'hsl(var(--primary))' }} />
-              <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-secondary))' }}>
+            <div className="flex items-center gap-3 bg-primary-fixed/5 border border-primary-fixed/10 p-3.5 rounded-xl mt-2">
+              <Settings size={16} className="text-primary-fixed-dim flex-shrink-0" />
+              <span className="font-body-md text-xs text-on-surface-variant leading-relaxed">
                 {t('მიუთითეთ `https://nine13.site` Authorized Redirect URIs-ში.', 'Specify `https://nine13.site` in Authorized Redirect URIs.')}
               </span>
             </div>
-          </GlassCard>
+          </div>
         )}
 
         {/* Permissions & Scopes */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Active Scopes & Permissions</h3>
-          <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem' }}>{t('მართეთ წვდომის უფლებები ნებისმიერ დროს', 'Manage access permissions at any time')}</p>
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-4">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface">Permissions & Scopes</h3>
+          <p className="font-body-md text-xs text-on-surface-variant">{t('მართეთ წვდომის უფლებები ნებისმიერ დროს', 'Manage access permissions at any time')}</p>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+          <div className="flex flex-col gap-3 mt-2">
             {/* Calendar scope */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between', 
-              padding: '0.75rem', 
-              background: 'rgba(255, 255, 255, 0.02)', 
-              borderRadius: '8px',
-              border: '1px solid var(--border-light)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Calendar size={18} style={{ color: 'hsl(var(--primary))' }} />
+            <div className="flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/10 rounded-xl">
+              <div className="flex items-center gap-3">
+                <Calendar size={18} className="text-primary-fixed-dim" />
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>Google Calendar Access</div>
-                  <div style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{t('სინქრონიზაცია და Meet ლინკების გენერირება', 'Sync and generate Meet links')}</div>
+                  <div className="font-headline-md text-xs font-bold text-on-surface">Google Calendar Access</div>
+                  <div className="font-body-md text-[10px] text-on-surface-variant">{t('სინქრონიზაცია და Meet ლინკების გენერირება', 'Sync and generate Meet links')}</div>
                 </div>
               </div>
               <input 
                 type="checkbox" 
+                className="w-4 h-4 rounded border-outline bg-transparent text-primary-fixed-dim focus:ring-primary-fixed-dim cursor-pointer"
                 checked={integrations.permissions.calendar} 
                 onChange={() => togglePermission('calendar')}
-                style={{ width: '16px', height: '16px', accentColor: 'hsl(var(--primary))', cursor: 'pointer' }}
               />
             </div>
 
             {/* Gmail scope */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between', 
-              padding: '0.75rem', 
-              background: 'rgba(255, 255, 255, 0.02)', 
-              borderRadius: '8px',
-              border: '1px solid var(--border-light)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Mail size={18} style={{ color: 'hsl(var(--accent-blue))' }} />
+            <div className="flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/10 rounded-xl">
+              <div className="flex items-center gap-3">
+                <Mail size={18} className="text-secondary-fixed-dim" />
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>Gmail Send Access</div>
-                  <div style={{ fontSize: '0.7rem', color: 'hsl(var(--text-muted))' }}>{t('მოწვევის წერილების ავტომატური გაგზავნა', 'Send invitation emails automatically')}</div>
+                  <div className="font-headline-md text-xs font-bold text-on-surface">Gmail Send Access</div>
+                  <div className="font-body-md text-[10px] text-on-surface-variant">{t('მოწვევის წერილების ავტომატური გაგზავნა', 'Send invitation emails automatically')}</div>
                 </div>
               </div>
               <input 
                 type="checkbox" 
+                className="w-4 h-4 rounded border-outline bg-transparent text-primary-fixed-dim focus:ring-primary-fixed-dim cursor-pointer"
                 checked={integrations.permissions.gmail} 
                 onChange={() => togglePermission('gmail')}
-                style={{ width: '16px', height: '16px', accentColor: 'hsl(var(--primary))', cursor: 'pointer' }}
               />
             </div>
           </div>
-        </GlassCard>
+        </div>
       </div>
 
       {/* Mock OAuth Consent Modal */}
       {showConsentModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.65)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '1rem'
-        }}>
-          <div style={{
-            background: 'hsl(var(--bg-surface-elevated))',
-            border: '1px solid var(--border-light)',
-            borderRadius: '16px',
-            width: '100%',
-            maxWidth: '450px',
-            padding: '2rem',
-            boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <Globe size={24} style={{ color: '#4285F4' }} />
-              <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>Sign in with Google</span>
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl max-w-md w-full p-8 flex flex-col gap-6 border border-outline-variant/20 shadow-2xl">
+            <div className="flex items-center gap-2.5 pb-2 border-b border-outline-variant/10">
+              <Globe size={22} className="text-primary-fixed-dim" />
+              <span className="font-headline-md text-base font-bold text-on-surface">Sign in with Google</span>
             </div>
             
-            <p style={{ fontSize: '0.9rem', color: 'hsl(var(--text-secondary))', marginBottom: '1rem', lineHeight: '1.4' }}>
-              <strong>Productivity Tracker</strong> {t('ითხოვს ნებართვას თქვენს Google ანგარიშთან დასაკავშირებლად:', 'requests permission to connect to your Google Account:')}
+            <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
+              <strong className="text-on-surface">Productivity Tracker</strong> {t('ითხოვს ნებართვას თქვენს Google ანგარიშთან დასაკავშირებლად:', 'requests permission to connect to your Google Account:')}
             </p>
 
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '0.75rem', 
-              padding: '1rem', 
-              background: 'rgba(0, 0, 0, 0.2)', 
-              borderRadius: '8px', 
-              marginBottom: '1.5rem',
-              border: '1px solid var(--border-light)'
-            }}>
-              <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>
-                <CheckCircle2 size={16} style={{ color: 'hsl(var(--accent-emerald))', flexShrink: 0 }} />
+            <div className="flex flex-col gap-3 p-4 bg-surface-container-low border border-outline-variant/10 rounded-xl">
+              <div className="flex gap-3 text-[11px] text-on-surface-variant leading-normal">
+                <CheckCircle2 size={16} className="text-green-400 flex-shrink-0" />
                 <span>{t('თქვენი ძირითადი პროფილის ინფორმაციის ნახვა (სახელი, მეილი, ფოტო).', 'View your basic profile info (name, email, photo).')}</span>
               </div>
               {integrations.permissions.calendar && (
-                <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>
-                  <CheckCircle2 size={16} style={{ color: 'hsl(var(--accent-emerald))', flexShrink: 0 }} />
+                <div className="flex gap-3 text-[11px] text-on-surface-variant leading-normal">
+                  <CheckCircle2 size={16} className="text-green-400 flex-shrink-0" />
                   <span>{t('Google Calendar-ში ივენთების დამატება, რედაქტირება და წაშლა.', 'Add, edit, and delete events in Google Calendar.')}</span>
                 </div>
               )}
               {integrations.permissions.gmail && (
-                <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', color: 'hsl(var(--text-secondary))' }}>
-                  <CheckCircle2 size={16} style={{ color: 'hsl(var(--accent-emerald))', flexShrink: 0 }} />
+                <div className="flex gap-3 text-[11px] text-on-surface-variant leading-normal">
+                  <CheckCircle2 size={16} className="text-green-400 flex-shrink-0" />
                   <span>{t('Gmail-ის მეშვეობით შეხვედრის მოწვევების გაგზავნა მონაწილეებისთვის.', 'Send meeting invitations to participants via Gmail.')}</span>
                 </div>
               )}
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="flex gap-3">
               <button 
                 onClick={() => setShowConsentModal(false)} 
-                className="btn btn-secondary" 
-                style={{ flex: 1 }}
+                className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-on-surface font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border border-outline-variant/30 active:scale-95"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleApproveConsent} 
-                className="btn btn-primary" 
-                style={{ flex: 1, background: '#4285F4' }}
+                className="flex-1 bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border-none active:scale-95"
               >
                 Allow Access
               </button>

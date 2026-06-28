@@ -308,19 +308,19 @@ export const CalendarPage = ({ language }) => {
     : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   return (
-    <div className="calendar-page">
-      <header className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('კალენდარი', 'Calendar')}</h1>
-          <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დავალებები, შეხვედრები და კალენდრის ივენთები ერთიან სივრცეში', 'Tasks, meetings, and calendar events in one unified space')}</p>
+          <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('კალენდარი', 'Calendar')}</h2>
+          <p className="font-body-md text-on-surface-variant">{t('დავალებები, შეხვედრები და კალენდრის ივენთები ერთიან სივრცეში', 'Tasks, meetings, and calendar events in one unified space')}</p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button onClick={handleSyncGoogle} disabled={loading} className="btn btn-secondary">
+        <div className="flex gap-3">
+          <button onClick={handleSyncGoogle} disabled={loading} className="bg-surface-container-highest hover:bg-surface-bright text-on-surface font-bold text-xs py-2.5 px-5 rounded-full cursor-pointer transition-all active:scale-95 flex items-center gap-2 border border-outline-variant/30">
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             <span>{loading ? t('მიმდინარეობს სინქრონიზაცია...', 'Syncing...') : 'Google Sync'}</span>
           </button>
-          <button onClick={() => setShowFormModal(true)} className="btn btn-primary">
+          <button onClick={() => setShowFormModal(true)} className="bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-xs py-2.5 px-5 rounded-full cursor-pointer transition-all active:scale-95 flex items-center gap-2 border-none">
             <Plus size={16} />
             <span>{t('ივენთის დამატება', 'Add Event')}</span>
           </button>
@@ -328,45 +328,28 @@ export const CalendarPage = ({ language }) => {
       </header>
 
       {/* Calendar Header Switcher */}
-      <GlassCard style={{ padding: '1rem 1.5rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, textTransform: 'capitalize' }}>
+      <GlassCard className="p-4 md:px-6 flex justify-between items-center rounded-2xl mb-6">
+        <h3 className="font-headline-md text-lg font-extrabold text-on-surface capitalize">
           {monthNames[month]} {year}
         </h3>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button onClick={handlePrevMonth} className="btn btn-secondary" style={{ padding: '0.5rem' }}>
+        <div className="flex gap-2">
+          <button onClick={handlePrevMonth} className="bg-surface-container-highest hover:bg-surface-bright text-on-surface font-semibold p-2 rounded-xl cursor-pointer transition-all border border-outline-variant/30 active:scale-95 flex items-center justify-center">
             <ChevronLeft size={16} />
           </button>
-          <button onClick={() => setCurrentDate(new Date(2026, 5, 12))} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
+          <button onClick={() => setCurrentDate(new Date(2026, 5, 12))} className="bg-surface-container-highest hover:bg-surface-bright text-on-surface font-semibold py-2 px-4 rounded-xl cursor-pointer transition-all border border-outline-variant/30 active:scale-95 text-xs">
             {t('დღეს', 'Today')}
           </button>
-          <button onClick={handleNextMonth} className="btn btn-secondary" style={{ padding: '0.5rem' }}>
+          <button onClick={handleNextMonth} className="bg-surface-container-highest hover:bg-surface-bright text-on-surface font-semibold p-2 rounded-xl cursor-pointer transition-all border border-outline-variant/30 active:scale-95 flex items-center justify-center">
             <ChevronRight size={16} />
           </button>
         </div>
       </GlassCard>
 
       {/* Calendar Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(7, 1fr)',
-        gap: '1px',
-        background: 'var(--border-light)',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        border: '1px solid var(--border-light)',
-        boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)'
-      }}>
+      <div className="grid grid-cols-7 gap-[1px] bg-outline-variant/10 rounded-2xl overflow-hidden border border-outline-variant/10 shadow-2xl">
         {/* Days of Week */}
         {daysOfWeek.map(day => (
-          <div key={day} style={{
-            background: 'hsl(var(--bg-surface-elevated))',
-            padding: '0.75rem',
-            textAlign: 'center',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            color: 'hsl(var(--text-secondary))',
-            borderBottom: '1px solid var(--border-light)'
-          }}>
+          <div key={day} className="bg-surface-container-highest/60 py-3 text-center font-label text-[10px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant/10">
             {day}
           </div>
         ))}
@@ -379,57 +362,33 @@ export const CalendarPage = ({ language }) => {
           return (
             <div 
               key={index} 
-              style={{
-                background: cell.isCurrentMonth ? 'rgba(23, 28, 48, 0.35)' : 'rgba(10, 15, 30, 0.45)',
-                minHeight: '110px',
-                padding: '0.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                opacity: cell.isCurrentMonth ? 1 : 0.4,
-                borderRight: '1px solid var(--border-light)',
-                borderBottom: '1px solid var(--border-light)',
-                position: 'relative'
-              }}
+              className={`min-h-[110px] p-2.5 flex flex-col relative border-b border-r border-outline-variant/10 transition-all hover:bg-surface-container-low/20 ${
+                cell.isCurrentMonth 
+                  ? 'bg-surface-container-low/30' 
+                  : 'bg-surface-container-lowest/10 opacity-30'
+              }`}
             >
               {/* Day Number */}
-              <span style={{ 
-                fontWeight: 700, 
-                color: isToday ? 'white' : 'hsl(var(--text-secondary))',
-                background: isToday ? 'hsl(var(--primary))' : 'transparent',
-                width: isToday ? '24px' : 'auto',
-                height: isToday ? '24px' : 'auto',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '0.5rem',
-                fontSize: isToday ? '0.75rem' : '0.8rem'
-              }}>
+              <span className={`font-headline-md text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center mb-2 ${
+                isToday 
+                  ? 'bg-primary-fixed text-on-primary-fixed' 
+                  : 'text-on-surface-variant'
+              }`}>
                 {cell.day}
               </span>
 
               {/* Render Events */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', overflowY: 'hidden', flex: 1 }}>
+              <div className="flex flex-col gap-1 overflow-hidden flex-1">
                 {dateEvents.slice(0, 3).map(event => (
                   <div 
                     key={event.id} 
                     onClick={() => setSelectedEvent(event)}
-                    style={{ 
-                      fontSize: '0.65rem', 
-                      padding: '0.2rem 0.4rem', 
-                      borderRadius: '4px',
-                      background: event.type === 'task' && event.completed ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.03)',
-                      color: event.type === 'task' && event.completed ? 'hsl(var(--accent-emerald))' : 'white',
-                      borderLeft: `3px solid ${event.color}`,
-                      whiteSpace: 'nowrap',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.2rem'
-                    }}
+                    className={`text-[10px] py-1 px-1.5 rounded border border-outline-variant/10 truncate cursor-pointer font-semibold flex items-center gap-1 transition-all hover:brightness-110 active:scale-95 ${
+                      event.type === 'task' && event.completed 
+                        ? 'bg-green-400/10 text-green-400 border-green-400/20' 
+                        : 'bg-surface-container-high text-on-surface'
+                    }`}
+                    style={{ borderLeft: `3px solid ${event.color}` }}
                   >
                     {event.type === 'meeting' && <Video size={10} style={{ color: 'hsl(var(--accent-blue))', flexShrink: 0 }} />}
                     {event.type === 'task' && <CheckSquare size={10} style={{ color: 'hsl(var(--primary))', flexShrink: 0 }} />}
@@ -438,7 +397,7 @@ export const CalendarPage = ({ language }) => {
                 ))}
                 
                 {dateEvents.length > 3 && (
-                  <span style={{ fontSize: '0.6rem', color: 'hsl(var(--text-muted))', paddingLeft: '0.25rem' }}>
+                  <span className="font-label text-[9px] text-on-surface-variant/70 pl-1 mt-0.5">
                     +{dateEvents.length - 3} {t('სხვა...', 'more...')}
                   </span>
                 )}
@@ -450,48 +409,31 @@ export const CalendarPage = ({ language }) => {
 
       {/* Event Details Modal */}
       {selectedEvent && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0, 0, 0, 0.65)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 1000, padding: '1rem'
-        }}>
-          <div style={{
-            background: 'hsl(var(--bg-surface-elevated))',
-            border: '1px solid var(--border-light)',
-            borderRadius: '16px',
-            width: '100%', maxWidth: '400px',
-            padding: '1.75rem',
-            boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)'
-          }}>
-            <h3 style={{ 
-              fontWeight: 800, 
-              fontSize: '1.2rem', 
-              marginBottom: '1rem', 
-              borderLeft: `4px solid ${selectedEvent.color}`, 
-              paddingLeft: '0.5rem' 
-            }}>
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl max-w-sm w-full p-6 md:p-8 flex flex-col gap-5 border border-outline-variant/20 shadow-2xl">
+            <h3 
+              className="font-headline-md text-base font-black border-l-4 pl-3"
+              style={{ borderColor: selectedEvent.color }}
+            >
               {selectedEvent.title}
             </h3>
 
             {selectedEvent.description && (
-              <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+              <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
                 {selectedEvent.description}
               </p>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem', fontSize: '0.8rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--text-secondary))' }}>
-                <Clock size={14} style={{ color: 'hsl(var(--primary))' }} />
-                <span>{t('თარიღი: ', 'Date: ')} <strong>{selectedEvent.date}</strong> {selectedEvent.time && ` | ${selectedEvent.time}`}</span>
+            <div className="flex flex-col gap-3 text-xs">
+              <div className="flex items-center gap-2 text-on-surface-variant">
+                <Clock size={14} className="text-primary-fixed-dim" />
+                <span>{t('თარიღი: ', 'Date: ')} <strong className="text-on-surface">{selectedEvent.date}</strong> {selectedEvent.time && ` | ${selectedEvent.time}`}</span>
               </div>
 
               {selectedEvent.meetLink && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--text-secondary))' }}>
-                  <Video size={14} style={{ color: 'hsl(var(--accent-blue))' }} />
-                  <a href={selectedEvent.meetLink} target="_blank" rel="noopener noreferrer" style={{ color: 'hsl(var(--accent-blue))', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                <div className="flex items-center gap-2 text-on-surface-variant">
+                  <Video size={14} className="text-primary-fixed-dim" />
+                  <a href={selectedEvent.meetLink} target="_blank" rel="noopener noreferrer" className="text-primary-fixed-dim hover:underline flex items-center gap-1">
                     {t('Google Meet შეხვედრა', 'Google Meet Meeting')}
                     <Link size={10} />
                   </a>
@@ -499,11 +441,11 @@ export const CalendarPage = ({ language }) => {
               )}
 
               {selectedEvent.participants && selectedEvent.participants.length > 0 && (
-                <div>
-                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem' }}>{t('მონაწილეები:', 'Participants:')}</span>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                <div className="flex flex-col gap-1.5">
+                  <span className="font-semibold text-on-surface">{t('მონაწილეები:', 'Participants:')}</span>
+                  <div className="flex flex-wrap gap-1">
                     {selectedEvent.participants.map(p => (
-                      <span key={p} style={{ fontSize: '0.7rem', padding: '0.1rem 0.35rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
+                      <span key={p} className="text-[10px] px-2 py-0.5 bg-surface-container-highest border border-outline-variant/10 rounded">
                         {p}
                       </span>
                     ))}
@@ -512,7 +454,7 @@ export const CalendarPage = ({ language }) => {
               )}
 
               {selectedEvent.googleSynced && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'hsl(var(--accent-amber))', fontWeight: 600 }}>
+                <div className="flex items-center gap-1 text-orange-400 font-semibold">
                   <Clock size={12} />
                   <span>{t('სინქრონიზებულია Google Calendar-თან', 'Synced with Google Calendar')}</span>
                 </div>
@@ -521,8 +463,7 @@ export const CalendarPage = ({ language }) => {
 
             <button 
               onClick={() => setSelectedEvent(null)} 
-              className="btn btn-primary" 
-              style={{ width: '100%', padding: '0.5rem' }}
+              className="w-full bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border-none active:scale-95 mt-2"
             >
               {t('დახურვა', 'Close')}
             </button>
@@ -532,30 +473,16 @@ export const CalendarPage = ({ language }) => {
 
       {/* Add Event Form Modal */}
       {showFormModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0, 0, 0, 0.65)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 1000, padding: '1rem'
-        }}>
-          <div style={{
-            background: 'hsl(var(--bg-surface-elevated))',
-            border: '1px solid var(--border-light)',
-            borderRadius: '16px',
-            width: '100%', maxWidth: '400px',
-            padding: '1.75rem',
-            boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)'
-          }}>
-            <h3 style={{ fontWeight: 800, fontSize: '1.2rem', marginBottom: '1.25rem' }}>{t('ივენთის დამატება', 'Add Event')}</h3>
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl max-w-sm w-full p-6 md:p-8 flex flex-col gap-5 border border-outline-variant/20 shadow-2xl">
+            <h3 className="font-headline-md text-base font-bold text-on-surface border-b border-outline-variant/10 pb-2">{t('ივენთის დამატება', 'Add Event')}</h3>
 
-            <form onSubmit={handleAddEvent} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('სათაური', 'Title')}</label>
+            <form onSubmit={handleAddEvent} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('სათაური', 'Title')}</label>
                 <input 
                   type="text" 
-                  className="form-input" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                   placeholder={t("ივენთის დასახელება", "Event Title")} 
                   value={formTitle}
                   onChange={e => setFormTitle(e.target.value)}
@@ -563,35 +490,35 @@ export const CalendarPage = ({ language }) => {
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('ტიპი', 'Type')}</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('ტიპი', 'Type')}</label>
                 <select 
-                  className="form-select" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer" 
                   value={formType}
                   onChange={e => setFormType(e.target.value)}
                 >
-                  <option value="event">{t('ივენთი (Event)', 'Event')}</option>
-                  <option value="task">{t('დავალება (Task)', 'Task')}</option>
+                  <option value="event" className="bg-surface-container-high">{t('ივენთი (Event)', 'Event')}</option>
+                  <option value="task" className="bg-surface-container-high">{t('დავალება (Task)', 'Task')}</option>
                 </select>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">{t('თარიღი', 'Date')}</label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col gap-2">
+                  <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('თარიღი', 'Date')}</label>
                   <input 
                     type="date" 
-                    className="form-input" 
+                    className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                     value={formDate}
                     onChange={e => setFormDate(e.target.value)}
                     required 
                   />
                 </div>
 
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">{t('დრო', 'Time')}</label>
+                <div className="flex flex-col gap-2">
+                  <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('დრო', 'Time')}</label>
                   <input 
                     type="time" 
-                    className="form-input" 
+                    className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                     value={formTime}
                     onChange={e => setFormTime(e.target.value)}
                     required 
@@ -599,10 +526,10 @@ export const CalendarPage = ({ language }) => {
                 </div>
               </div>
 
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('აღწერა', 'Description')}</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('აღწერა', 'Description')}</label>
                 <textarea 
-                  className="form-textarea" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors" 
                   placeholder={t("დამატებითი დეტალები...", "Additional details...")} 
                   rows="2"
                   value={formDesc}
@@ -612,37 +539,29 @@ export const CalendarPage = ({ language }) => {
 
               {/* Google Integration options if connected */}
               {integrations.connected && (
-                <div style={{ 
-                  background: 'rgba(139, 92, 246, 0.03)', 
-                  border: '1px solid rgba(139, 92, 246, 0.1)', 
-                  borderRadius: '10px', 
-                  padding: '1rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem'
-                }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--primary-hover))', marginBottom: '0.25rem' }}>
+                <div className="bg-primary-fixed/5 border border-primary-fixed/15 rounded-xl p-4 flex flex-col gap-3">
+                  <div className="font-label text-[10px] font-bold uppercase tracking-wider text-primary-fixed-dim">
                     Smart Google Automation
                   </div>
                   
-                  <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center gap-2 cursor-pointer text-xs text-on-surface">
                       <input 
                         type="checkbox" 
                         checked={syncToGoogle} 
                         onChange={e => setSyncToGoogle(e.target.checked)}
-                        style={{ accentColor: 'hsl(var(--primary))' }}
+                        className="accent-primary-fixed-dim"
                       />
                       <span>Create Google Calendar Event</span>
                     </label>
 
                     {syncToGoogle && (
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                      <label className="flex items-center gap-2 cursor-pointer text-xs text-on-surface pl-4">
                         <input 
                           type="checkbox" 
                           checked={sendInvites} 
                           onChange={e => setSendInvites(e.target.checked)}
-                          style={{ accentColor: 'hsl(var(--primary))' }}
+                          className="accent-primary-fixed-dim"
                         />
                         <span>Send Email Invitation (via Gmail)</span>
                       </label>
@@ -651,51 +570,40 @@ export const CalendarPage = ({ language }) => {
 
                   {/* Participants list for calendar event */}
                   {syncToGoogle && sendInvites && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.25rem' }}>
-                      <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: 0 }}>
+                    <div className="flex flex-col gap-2 pl-4">
+                      <label className="font-body-md text-[10px] font-semibold text-on-surface-variant">
                         {t('მოწვეული მონაწილეები', 'Invited Participants (Email)')}
                       </label>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <div className="flex gap-2">
                         <input 
                           type="email" 
-                          className="form-input" 
+                          className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-xl px-3 py-2 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim" 
                           placeholder="invitee@example.com" 
                           value={participantInput} 
                           onChange={e => setParticipantInput(e.target.value)} 
                           onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddParticipant())}
-                          style={{ padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
                         />
                         <button 
                           type="button" 
                           onClick={handleAddParticipant} 
-                          className="btn btn-secondary" 
-                          style={{ padding: '0.4rem 0.6rem' }}
+                          className="bg-surface-container-highest hover:bg-surface-bright text-on-surface p-2.5 rounded-xl cursor-pointer border border-outline-variant/30 active:scale-95"
                         >
                           <UserPlus size={14} />
                         </button>
                       </div>
 
                       {participants.length > 0 && (
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.25rem' }}>
+                        <div className="flex flex-wrap gap-1.5 mt-1">
                           {participants.map(p => (
                             <span 
                               key={p} 
-                              style={{ 
-                                fontSize: '0.7rem', 
-                                background: 'rgba(255, 255, 255, 0.05)', 
-                                border: '1px solid var(--border-light)', 
-                                padding: '0.15rem 0.4rem', 
-                                borderRadius: '4px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '0.25rem'
-                              }}
+                              className="text-[10px] bg-surface-container-highest border border-outline-variant/10 px-2 py-0.5 rounded flex items-center gap-1.5 text-on-surface"
                             >
                               {p}
                               <button 
                                 type="button" 
                                 onClick={() => handleRemoveParticipant(p)}
-                                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-rose))', fontSize: '0.65rem', padding: '0 0.1rem' }}
+                                className="bg-transparent border-none cursor-pointer text-error text-[10px] p-0 font-bold"
                               >
                                 ✕
                               </button>
@@ -708,20 +616,18 @@ export const CalendarPage = ({ language }) => {
                 </div>
               )}
 
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+              <div className="flex gap-3 mt-4">
                 <button 
                   type="button" 
                   onClick={() => setShowFormModal(false)} 
-                  className="btn btn-secondary" 
-                  style={{ flex: 1 }}
+                  className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-on-surface font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border border-outline-variant/30 active:scale-95"
                   disabled={syncLoading}
                 >
                   {t('გაუქმება', 'Cancel')}
                 </button>
                 <button 
                   type="submit" 
-                  className="btn btn-primary" 
-                  style={{ flex: 1 }}
+                  className="flex-1 bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-semibold text-xs py-3 px-4 rounded-full cursor-pointer transition-all border-none active:scale-95"
                   disabled={syncLoading}
                 >
                   {syncLoading ? t('მიმდინარეობს სინქრონიზაცია...', 'Syncing...') : t('დამატება', 'Add')}

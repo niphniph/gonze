@@ -174,96 +174,106 @@ export const Insights = ({ language }) => {
   const finInsights = getFinancialInsights();
 
   return (
-    <div className="insights-page">
-      <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('ინსაითები & AI', 'AI Insights')}</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('პერსონალიზებული AI რეკომენდაციები და პროდუქტიულობის/ფინანსური ანალიტიკა', 'Personalized AI recommendations and productivity/financial analytics')}</p>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col gap-2">
+        <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('ინსაითები & AI', 'AI Insights')}</h2>
+        <p className="font-body-md text-on-surface-variant">{t('პერსონალიზებული AI რეკომენდაციები და პროდუქტიულობის/ფინანსური ანალიტიკა', 'Personalized AI recommendations and productivity/financial analytics')}</p>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Productivity Insights */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.75rem' }}>
-            <Sparkles size={20} style={{ color: 'hsl(var(--primary))' }} />
-            {t('პროდუქტიულობის ინსაითები', 'Productivity Insights')}
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2 border-b border-outline-variant/10 pb-4">
+            <Sparkles size={20} className="text-primary-fixed-dim" />
+            <span>{t('პროდუქტიულობის ინსაითები', 'Productivity Insights')}</span>
           </h3>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+          <div className="flex flex-col gap-4 flex-1">
             {prodInsights.map((ins, index) => {
               const Icon = ins.icon;
+              
+              let bgClass = "bg-surface-container-low border-outline-variant/10";
+              let iconBg = "bg-primary-fixed/10";
+              let iconColor = "text-primary-fixed-dim";
+              
+              if (ins.type === 'success') {
+                bgClass = "bg-green-400/5 border-green-400/15";
+                iconBg = "bg-green-400/10";
+                iconColor = "text-green-400";
+              } else if (ins.type === 'warning') {
+                bgClass = "bg-orange-400/5 border-orange-400/15";
+                iconBg = "bg-orange-400/10";
+                iconColor = "text-orange-400";
+              } else if (ins.type === 'danger') {
+                bgClass = "bg-red-400/5 border-red-400/15";
+                iconBg = "bg-red-400/10";
+                iconColor = "text-red-400";
+              }
+
               return (
                 <div 
                   key={index} 
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '12px',
-                    background: ins.type === 'success' ? 'rgba(16, 185, 129, 0.04)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.04)' : 'rgba(255, 255, 255, 0.01)',
-                    border: '1px solid ' + (ins.type === 'success' ? 'rgba(16, 185, 129, 0.15)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.15)' : 'var(--border-light)'),
-                    display: 'flex',
-                    gap: '1rem',
-                    alignItems: 'flex-start'
-                  }}
+                  className={`p-4 rounded-xl border flex gap-4 items-start ${bgClass}`}
                 >
-                  <div style={{ 
-                    padding: '0.5rem', 
-                    borderRadius: '8px', 
-                    background: ins.type === 'success' ? 'rgba(16, 185, 129, 0.1)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(139, 92, 246, 0.1)',
-                    color: ins.type === 'success' ? 'hsl(var(--accent-emerald))' : ins.type === 'warning' ? 'hsl(var(--accent-amber))' : 'hsl(var(--primary-hover))',
-                    flexShrink: 0
-                  }}>
+                  <div className={`p-2.5 rounded-lg flex-shrink-0 flex items-center justify-center ${iconBg} ${iconColor}`}>
                     <Icon size={18} />
                   </div>
                   <div>
-                    <h4 style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem' }}>{ins.title}</h4>
-                    <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem', lineHeight: '1.4' }}>{ins.text}</p>
+                    <h4 className="font-headline-md text-sm font-bold text-on-surface mb-1">{ins.title}</h4>
+                    <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">{ins.text}</p>
                   </div>
                 </div>
               );
             })}
           </div>
-        </GlassCard>
+        </div>
 
         {/* Financial Insights */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.75rem' }}>
-            <Lightbulb size={20} style={{ color: 'hsl(var(--accent-amber))' }} />
-            {t('ფინანსური ინსაითები', 'Financial Insights')}
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2 border-b border-outline-variant/10 pb-4">
+            <Lightbulb size={20} className="text-secondary-fixed-dim" />
+            <span>{t('ფინანსური ინსაითები', 'Financial Insights')}</span>
           </h3>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+          <div className="flex flex-col gap-4 flex-1">
             {finInsights.map((ins, index) => {
               const Icon = ins.icon;
+              
+              let bgClass = "bg-surface-container-low border-outline-variant/10";
+              let iconBg = "bg-primary-fixed/10";
+              let iconColor = "text-primary-fixed-dim";
+              
+              if (ins.type === 'success') {
+                bgClass = "bg-green-400/5 border-green-400/15";
+                iconBg = "bg-green-400/10";
+                iconColor = "text-green-400";
+              } else if (ins.type === 'warning') {
+                bgClass = "bg-orange-400/5 border-orange-400/15";
+                iconBg = "bg-orange-400/10";
+                iconColor = "text-orange-400";
+              } else if (ins.type === 'danger') {
+                bgClass = "bg-red-400/5 border-red-400/15";
+                iconBg = "bg-red-400/10";
+                iconColor = "text-red-400";
+              }
+
               return (
                 <div 
                   key={index} 
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '12px',
-                    background: ins.type === 'success' ? 'rgba(16, 185, 129, 0.04)' : ins.type === 'danger' ? 'rgba(239, 68, 68, 0.04)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.04)' : 'rgba(255, 255, 255, 0.01)',
-                    border: '1px solid ' + (ins.type === 'success' ? 'rgba(16, 185, 129, 0.15)' : ins.type === 'danger' ? 'rgba(239, 68, 68, 0.15)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.15)' : 'var(--border-light)'),
-                    display: 'flex',
-                    gap: '1rem',
-                    alignItems: 'flex-start'
-                  }}
+                  className={`p-4 rounded-xl border flex gap-4 items-start ${bgClass}`}
                 >
-                  <div style={{ 
-                    padding: '0.5rem', 
-                    borderRadius: '8px', 
-                    background: ins.type === 'success' ? 'rgba(16, 185, 129, 0.1)' : ins.type === 'danger' ? 'rgba(239, 68, 68, 0.1)' : ins.type === 'warning' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                    color: ins.type === 'success' ? 'hsl(var(--accent-emerald))' : ins.type === 'danger' ? 'hsl(var(--accent-rose))' : ins.type === 'warning' ? 'hsl(var(--accent-amber))' : 'hsl(var(--text-secondary))',
-                    flexShrink: 0
-                  }}>
+                  <div className={`p-2.5 rounded-lg flex-shrink-0 flex items-center justify-center ${iconBg} ${iconColor}`}>
                     <Icon size={18} />
                   </div>
                   <div>
-                    <h4 style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem' }}>{ins.title}</h4>
-                    <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem', lineHeight: '1.4' }}>{ins.text}</p>
+                    <h4 className="font-headline-md text-sm font-bold text-on-surface mb-1">{ins.title}</h4>
+                    <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">{ins.text}</p>
                   </div>
                 </div>
               );
             })}
           </div>
-        </GlassCard>
+        </div>
       </div>
     </div>
   );

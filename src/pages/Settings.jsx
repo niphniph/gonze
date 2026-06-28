@@ -80,172 +80,164 @@ export const Settings = ({ language, handleSetLanguage }) => {
   };
 
   return (
-    <div className="settings-page">
-      <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('პარამეტრები', 'Settings')}</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('მართეთ პროფილის პარამეტრები, მონაცემთა ბაზა და უსაფრთხოების კონტროლი', 'Manage profile settings, database and security controls')}</p>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col gap-2">
+        <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('პარამეტრები', 'Settings')}</h2>
+        <p className="font-body-md text-on-surface-variant">{t('მართეთ პროფილის პარამეტრები, მონაცემთა ბაზა და უსაფრთხოების კონტროლი', 'Manage profile settings, database and security controls')}</p>
       </header>
 
       {successMsg && (
-        <div style={{
-          background: 'rgba(16, 185, 129, 0.1)',
-          border: '1px solid hsl(var(--accent-emerald))',
-          color: 'hsl(var(--accent-emerald))',
-          padding: '1rem',
-          borderRadius: '10px',
-          marginBottom: '2rem',
-          fontWeight: 600,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem'
-        }}>
+        <div className="bg-green-400/10 border border-green-400/20 text-green-400 p-4 rounded-xl flex items-center gap-3 font-semibold">
           <CheckCircle2 size={18} />
           <span>{successMsg}</span>
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         
         {/* User Profile settings */}
-        <GlassCard>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <User size={20} style={{ color: 'hsl(var(--primary))' }} />
-            {t('პროფილის პარამეტრები', 'Profile Settings')}
+        <div className="glass-card rounded-xl p-6 md:p-8">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
+            <User size={20} className="text-primary-fixed-dim" />
+            <span>{t('პროფილის პარამეტრები', 'Profile Settings')}</span>
           </h3>
 
-          <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('სრული სახელი', 'Full Name')}</label>
+          <form onSubmit={handleSaveProfile} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('სრული სახელი', 'Full Name')}</label>
               <input 
                 type="text" 
-                className="form-input" 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                 value={username} 
                 onChange={e => setUsername(e.target.value)} 
                 required 
               />
             </div>
 
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('ელ-ფოსტა', 'Email')}</label>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('ელ-ფოსტა', 'Email')}</label>
               <input 
                 type="email" 
-                className="form-input" 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 required 
               />
             </div>
 
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('პროექტის ენა', 'Project Language')}</label>
-              <select className="form-select" value={language} onChange={e => handleSetLanguage(e.target.value)}>
-                <option value="en">English (EN)</option>
-                <option value="ka">Georgian (KA)</option>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('პროექტის ენა', 'Project Language')}</label>
+              <select 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer" 
+                value={language} 
+                onChange={e => handleSetLanguage(e.target.value)}
+              >
+                <option value="en" className="bg-surface-container-high">English (EN)</option>
+                <option value="ka" className="bg-surface-container-high">Georgian (KA)</option>
               </select>
             </div>
 
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('ინტერფეისის თემა', 'Interface Theme')}</label>
-              <select className="form-select" value={theme} onChange={e => setTheme(e.target.value)}>
-                <option value="dark">Dark Theme (Glassmorphism)</option>
-                <option value="light" disabled>{t('Light Theme (მალე დაემატება)', 'Light Theme (coming soon)')}</option>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('ინტერფეისის თემა', 'Interface Theme')}</label>
+              <select 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer" 
+                value={theme} 
+                onChange={e => setTheme(e.target.value)}
+              >
+                <option value="dark" className="bg-surface-container-high">Dark Theme (Glassmorphism)</option>
+                <option value="light" disabled className="bg-surface-container-high">{t('Light Theme (მალე დაემატება)', 'Light Theme (coming soon)')}</option>
               </select>
             </div>
 
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
+            <button type="submit" className="w-full bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-sm py-3 px-6 rounded-full cursor-pointer transition-all border-none active:scale-95 mt-2">
               {t('შენახვა', 'Save')}
             </button>
           </form>
-        </GlassCard>
+        </div>
 
         {/* Database statistics and Telemetry */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <HardDrive size={20} style={{ color: 'hsl(var(--accent-blue))' }} />
-            {t('მონაცემების მოცულობა', 'Data Storage Volume')}
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2">
+            <HardDrive size={20} className="text-secondary-fixed-dim" />
+            <span>{t('მონაცემების მოცულობა', 'Data Storage Volume')}</span>
           </h3>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-light)' }}>
-              <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('დავალებები', 'Tasks')}</span>
-              <span style={{ fontWeight: 700 }}>{stats.tasks}</span>
+          <div className="flex flex-col gap-4 flex-1">
+            <div className="flex justify-between items-center text-xs pb-3 border-b border-outline-variant/10">
+              <span className="text-on-surface-variant">{t('დავალებები', 'Tasks')}</span>
+              <span className="font-bold text-on-surface">{stats.tasks}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-light)' }}>
-              <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('ჩვევები', 'Habits')}</span>
-              <span style={{ fontWeight: 700 }}>{stats.habits}</span>
+            <div className="flex justify-between items-center text-xs pb-3 border-b border-outline-variant/10">
+              <span className="text-on-surface-variant">{t('ჩვევები', 'Habits')}</span>
+              <span className="font-bold text-on-surface">{stats.habits}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-light)' }}>
-              <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('შეხვედრები', 'Meetings')}</span>
-              <span style={{ fontWeight: 700 }}>{stats.meetings}</span>
+            <div className="flex justify-between items-center text-xs pb-3 border-b border-outline-variant/10">
+              <span className="text-on-surface-variant">{t('შეხვედრები', 'Meetings')}</span>
+              <span className="font-bold text-on-surface">{stats.meetings}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-light)' }}>
-              <span style={{ color: 'hsl(var(--text-secondary))' }}>{t('ტრანზაქციები', 'Transactions')}</span>
-              <span style={{ fontWeight: 700 }}>{stats.transactions}</span>
+            <div className="flex justify-between items-center text-xs pb-3 border-b border-outline-variant/10">
+              <span className="text-on-surface-variant">{t('ტრანზაქციები', 'Transactions')}</span>
+              <span className="font-bold text-on-surface">{stats.transactions}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 700, paddingTop: '0.5rem' }}>
-              <span style={{ color: 'hsl(var(--primary-hover))' }}>{t('ბაზის მთლიანი ზომა', 'Total Database Size')}</span>
-              <span>{stats.storageSize}</span>
+            <div className="flex justify-between items-center text-sm font-bold pt-2">
+              <span className="text-primary-fixed-dim">{t('ბაზის მთლიანი ზომა', 'Total Database Size')}</span>
+              <span className="text-on-surface">{stats.storageSize}</span>
             </div>
           </div>
-        </GlassCard>
+        </div>
 
         {/* Modular database reset and deletion (privacy compliance) */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--accent-rose))' }}>
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col gap-5">
+          <h3 className="font-headline-md text-lg font-bold text-error flex items-center gap-2">
             <ShieldAlert size={20} />
-            {t('უსაფრთხოება & მონაცემების მართვა', 'Security & Data Management')}
+            <span>{t('უსაფრთხოება & მონაცემების მართვა', 'Security & Data Management')}</span>
           </h3>
-          <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem', lineHeight: '1.4' }}>
+          <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
             {t('კონფიდენციალურობის დაცვის მიზნით, შეგიძლიათ წაშლოთ ცალკეული მოდულების მონაცემები ან მთლიანად გაასუფთავოთ ბრაუზერის მეხსიერება.', 'For privacy protection, you can delete data of individual modules or completely clear the browser storage.')}
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+          <div className="flex flex-col gap-3 mt-2">
             <button 
               onClick={() => handleClearStore('tracker_tasks', 'დავალებები', 'Tasks')} 
-              className="btn btn-secondary" 
-              style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
+              className="w-full flex justify-between items-center bg-surface-container-high hover:bg-surface-bright text-xs text-on-surface px-4 py-3 rounded-xl border border-outline-variant/30 transition-all cursor-pointer"
             >
               <span>{t('დავალებების წაშლა', 'Delete Tasks')}</span>
-              <Trash2 size={14} style={{ color: 'hsl(var(--accent-rose))' }} />
+              <Trash2 size={14} className="text-error" />
             </button>
 
             <button 
               onClick={() => handleClearStore('tracker_habits', 'ჩვევები', 'Habits')} 
-              className="btn btn-secondary" 
-              style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
+              className="w-full flex justify-between items-center bg-surface-container-high hover:bg-surface-bright text-xs text-on-surface px-4 py-3 rounded-xl border border-outline-variant/30 transition-all cursor-pointer"
             >
               <span>{t('ჩვევების წაშლა', 'Delete Habits')}</span>
-              <Trash2 size={14} style={{ color: 'hsl(var(--accent-rose))' }} />
+              <Trash2 size={14} className="text-error" />
             </button>
 
             <button 
               onClick={() => handleClearStore('tracker_meetings', 'შეხვედრები', 'Meetings')} 
-              className="btn btn-secondary" 
-              style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
+              className="w-full flex justify-between items-center bg-surface-container-high hover:bg-surface-bright text-xs text-on-surface px-4 py-3 rounded-xl border border-outline-variant/30 transition-all cursor-pointer"
             >
               <span>{t('შეხვედრების წაშლა', 'Delete Meetings')}</span>
-              <Trash2 size={14} style={{ color: 'hsl(var(--accent-rose))' }} />
+              <Trash2 size={14} className="text-error" />
             </button>
 
             <button 
               onClick={() => handleClearStore('tracker_transactions', 'ტრანზაქციები', 'Transactions')} 
-              className="btn btn-secondary" 
-              style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 1rem' }}
+              className="w-full flex justify-between items-center bg-surface-container-high hover:bg-surface-bright text-xs text-on-surface px-4 py-3 rounded-xl border border-outline-variant/30 transition-all cursor-pointer"
             >
               <span>{t('საბანკო ტრანზაქციების წაშლა', 'Delete Bank Transactions')}</span>
-              <Trash2 size={14} style={{ color: 'hsl(var(--accent-rose))' }} />
+              <Trash2 size={14} className="text-error" />
             </button>
 
             <button 
               onClick={handleFullReset} 
-              className="btn btn-danger" 
-              style={{ width: '100%', padding: '0.75rem', marginTop: '0.5rem', fontWeight: 700 }}
+              className="w-full bg-error/10 hover:bg-error/20 text-error font-bold text-sm py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 border border-error/20 transition-all cursor-pointer active:scale-95 mt-2"
             >
               <RefreshCw size={14} />
               <span>{t('ყველა მონაცემის განულება', 'Reset All Data')}</span>
             </button>
           </div>
-        </GlassCard>
+        </div>
       </div>
     </div>
   );

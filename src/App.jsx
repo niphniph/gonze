@@ -62,7 +62,7 @@ function App() {
       <aside className="bg-surface-container-lowest h-screen w-72 hidden md:flex flex-col fixed left-0 top-0 border-r border-outline-variant/30 z-50">
         <div className="flex flex-col h-full py-lg">
           <div className="px-8 mb-12">
-            <h1 className="font-display text-3xl font-black text-primary-fixed-dim">Gonze</h1>
+            <h1 className="font-display text-3xl font-black text-primary-fixed-dim">Productivity</h1>
           </div>
           <div className="px-8 mb-10 flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center overflow-hidden ring-4 ring-primary-fixed/10">

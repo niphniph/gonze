@@ -187,25 +187,14 @@ export const Meetings = ({ language }) => {
   };
 
   return (
-    <div className="meetings-page">
-      <header className="page-header" style={{ marginBottom: '2.5rem' }}>
-        <h1 className="text-gradient" style={{ fontSize: '2.25rem', fontWeight: 800 }}>{t('შეხვედრები & Google Meet', 'Meetings & Google Meet')}</h1>
-        <p style={{ color: 'hsl(var(--text-secondary))', marginTop: '0.25rem' }}>{t('დაგეგმეთ შეხვედრები, დააგენერირეთ Google Meet ბმულები და გაუგზავნეთ მოწვევები მონაწილეებს', 'Schedule meetings, generate Google Meet links, and send invitations to participants')}</p>
+    <div className="px-margin-mobile md:px-margin-desktop py-stack-lg max-w-7xl mx-auto space-y-stack-lg pb-32">
+      <header className="flex flex-col gap-2">
+        <h2 className="font-headline-md text-2xl font-black text-primary-fixed-dim">{t('შეხვედრები & Google Meet', 'Meetings & Google Meet')}</h2>
+        <p className="font-body-md text-on-surface-variant">{t('დაგეგმეთ შეხვედრები, დააგენერირეთ Google Meet ბმულები და გაუგზავნეთ მოწვევები მონაწილეებს', 'Schedule meetings, generate Google Meet links, and send invitations to participants')}</p>
       </header>
 
       {successMsg && (
-        <div style={{
-          background: 'rgba(16, 185, 129, 0.1)',
-          border: '1px solid hsl(var(--accent-emerald))',
-          color: 'hsl(var(--accent-emerald))',
-          padding: '1rem',
-          borderRadius: '10px',
-          marginBottom: '2rem',
-          fontWeight: 600,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem'
-        }}>
+        <div className="bg-green-400/10 border border-green-400/20 text-green-400 p-4 rounded-xl flex items-center gap-3 font-semibold">
           <CheckCircle2 size={18} />
           <span>{successMsg}</span>
         </div>
@@ -213,43 +202,31 @@ export const Meetings = ({ language }) => {
 
       {/* Warning if Google is not connected */}
       {!integrations.connected && (
-        <div style={{
-          background: 'rgba(245, 158, 11, 0.1)',
-          border: '1px solid hsl(var(--accent-amber))',
-          color: 'hsl(var(--accent-amber))',
-          padding: '1rem 1.25rem',
-          borderRadius: '12px',
-          marginBottom: '2rem',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '1rem',
-          fontSize: '0.85rem',
-          lineHeight: '1.4'
-        }}>
-          <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
+        <div className="bg-amber-400/10 border border-amber-400/20 text-amber-400 p-5 rounded-xl flex items-start gap-4 text-xs leading-relaxed">
+          <AlertCircle size={20} className="flex-shrink-0 mt-0.5" />
           <div>
-            <strong>{t('Google ანგარიში არ არის დაკავშირებული!', 'Google account is not connected!')}</strong>
-            <p style={{ marginTop: '0.25rem', color: 'rgba(245, 158, 11, 0.8)' }}>
+            <strong className="font-headline-md text-sm font-bold block mb-1">{t('Google ანგარიში არ არის დაკავშირებული!', 'Google account is not connected!')}</strong>
+            <p className="text-on-surface-variant/80">
               {t("ავტომატური Google Meet ბმულების შესაქმნელად და მონაწილეებისთვის მოწვევების გასაგზავნად, ჯერ დააკავშირეთ თქვენი Google ანგარიში **Google ინტეგრაციის** გვერდიდან. ახლა შეხვედრები შეიქმნება ლოკალურად.", "To automatically generate Google Meet links and send invitations to participants, please connect your Google account from the **Google Integration** page first. For now, meetings will be created locally.")}
             </p>
           </div>
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Create Meeting Form */}
-        <GlassCard>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Plus size={20} style={{ color: 'hsl(var(--primary))' }} />
+        <div className="glass-card rounded-xl p-6 md:p-8">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
+            <Plus size={20} className="text-primary-fixed-dim" />
             {t('შეხვედრის დაგეგმვა', 'Schedule Meeting')}
           </h3>
 
-          <form onSubmit={handleCreateMeeting} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('სათაური', 'Title')}</label>
+          <form onSubmit={handleCreateMeeting} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('სათაური', 'Title')}</label>
               <input 
                 type="text" 
-                className="form-input" 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                 placeholder={t("მაგ: პროექტის განხილვა", "e.g. Project Discussion")} 
                 value={title} 
                 onChange={e => setTitle(e.target.value)} 
@@ -257,10 +234,10 @@ export const Meetings = ({ language }) => {
               />
             </div>
 
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('აღწერა (Description)', 'Description')}</label>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('აღწერა (Description)', 'Description')}</label>
               <textarea 
-                className="form-textarea" 
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                 placeholder={t("შეხვედრის დღის წესრიგი...", "Meeting agenda...")} 
                 rows="3"
                 value={description} 
@@ -268,23 +245,23 @@ export const Meetings = ({ language }) => {
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('თარიღი', 'Date')}</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('თარიღი', 'Date')}</label>
                 <input 
                   type="date" 
-                  className="form-input" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer"
                   value={date} 
                   onChange={e => setDate(e.target.value)} 
                   required 
                 />
               </div>
 
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">{t('დრო', 'Time')}</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('დრო', 'Time')}</label>
                 <input 
                   type="time" 
-                  className="form-input" 
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors cursor-pointer"
                   value={time} 
                   onChange={e => setTime(e.target.value)} 
                   required 
@@ -293,12 +270,12 @@ export const Meetings = ({ language }) => {
             </div>
 
             {/* Participants manager */}
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">{t('მონაწილეები (ელ-ფოსტა)', 'Participants (Email)')}</label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className="flex flex-col gap-2">
+              <label className="font-body-md text-xs font-semibold text-on-surface-variant">{t('მონაწილეები (ელ-ფოსტა)', 'Participants (Email)')}</label>
+              <div className="flex gap-2">
                 <input 
                   type="email" 
-                  className="form-input" 
+                  className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-xs text-on-surface focus:outline-none focus:border-primary-fixed-dim transition-colors"
                   placeholder="participants@example.com" 
                   value={participantInput} 
                   onChange={e => setParticipantInput(e.target.value)} 
@@ -307,8 +284,7 @@ export const Meetings = ({ language }) => {
                 <button 
                   type="button" 
                   onClick={handleAddParticipant} 
-                  className="btn btn-secondary" 
-                  style={{ padding: '0.625rem' }}
+                  className="bg-surface-container-high hover:bg-surface-bright text-on-surface p-3 rounded-xl border border-outline-variant/30 flex items-center justify-center transition-all cursor-pointer"
                 >
                   <UserPlus size={16} />
                 </button>
@@ -316,26 +292,17 @@ export const Meetings = ({ language }) => {
 
               {/* Render participants list */}
               {participants.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem' }}>
+                <div className="flex flex-wrap gap-2 mt-2">
                   {participants.map(p => (
                     <span 
                       key={p} 
-                      style={{ 
-                        fontSize: '0.75rem', 
-                        background: 'rgba(255, 255, 255, 0.05)', 
-                        border: '1px solid var(--border-light)', 
-                        padding: '0.2rem 0.5rem', 
-                        borderRadius: '6px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem'
-                      }}
+                      className="font-label text-[10px] bg-surface-container-high border border-outline-variant/20 px-2.5 py-1 rounded-full text-on-surface flex items-center gap-1.5"
                     >
                       {p}
                       <button 
                         type="button" 
                         onClick={() => handleRemoveParticipant(p)}
-                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'hsl(var(--accent-rose))', fontWeight: 'bold', fontSize: '0.7rem' }}
+                        className="text-error font-bold hover:scale-110 transition-transform cursor-pointer bg-transparent border-none p-0 text-[10px]"
                       >
                         ✕
                       </button>
@@ -347,49 +314,41 @@ export const Meetings = ({ language }) => {
 
             {/* Smart Google Automation Toggles */}
             {integrations.connected && (
-              <div style={{ 
-                background: 'rgba(139, 92, 246, 0.03)', 
-                border: '1px solid rgba(139, 92, 246, 0.1)', 
-                borderRadius: '10px', 
-                padding: '1rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.75rem'
-              }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'hsl(var(--primary-hover))', marginBottom: '0.25rem' }}>
+              <div className="bg-primary-fixed/5 border border-primary-fixed/10 rounded-xl p-4 flex flex-col gap-3">
+                <div className="font-label text-[10px] font-bold text-primary-fixed-dim uppercase tracking-wider mb-1">
                   Smart Google Automation
                 </div>
                 
                 {/* Sync to calendar */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                <label className="flex items-center gap-2.5 cursor-pointer font-body-md text-xs text-on-surface-variant">
                   <input 
                     type="checkbox" 
+                    className="w-4 h-4 rounded border-outline bg-transparent text-primary-fixed-dim focus:ring-primary-fixed-dim cursor-pointer"
                     checked={syncToCalendar} 
                     onChange={e => setSyncToCalendar(e.target.checked)}
-                    style={{ accentColor: 'hsl(var(--primary))' }}
                   />
                   <span>Create Google Calendar Event</span>
                 </label>
 
                 {/* Create Meet link */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                <label className="flex items-center gap-2.5 cursor-pointer font-body-md text-xs text-on-surface-variant">
                   <input 
                     type="checkbox" 
+                    className="w-4 h-4 rounded border-outline bg-transparent text-primary-fixed-dim focus:ring-primary-fixed-dim cursor-pointer"
                     checked={createMeetLink} 
                     onChange={e => setCreateMeetLink(e.target.checked)}
-                    style={{ accentColor: 'hsl(var(--primary))' }}
                   />
                   <span>Generate Google Meet Link</span>
                 </label>
 
                 {/* Send invites */}
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.8rem', opacity: participants.length === 0 ? 0.5 : 1 }}>
+                <label className={`flex items-center gap-2.5 cursor-pointer font-body-md text-xs text-on-surface-variant ${participants.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input 
                     type="checkbox" 
+                    className="w-4 h-4 rounded border-outline bg-transparent text-primary-fixed-dim focus:ring-primary-fixed-dim cursor-pointer"
                     checked={sendGmailInvites} 
                     disabled={participants.length === 0}
                     onChange={e => setSendGmailInvites(e.target.checked)}
-                    style={{ accentColor: 'hsl(var(--primary))' }}
                   />
                   <span>Send Email Invitations (via Gmail)</span>
                 </label>
@@ -398,81 +357,64 @@ export const Meetings = ({ language }) => {
 
             <button 
               type="submit" 
-              className="btn btn-primary" 
               disabled={loading}
-              style={{ width: '100%', padding: '0.75rem', marginTop: '0.5rem' }}
+              className="w-full bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container font-bold text-sm py-3 px-6 rounded-full cursor-pointer transition-all border-none flex items-center justify-center gap-2 active:scale-95 mt-2"
             >
               <Video size={16} />
               <span>{loading ? t('მიმდინარეობს შექმნა...', 'Creating...') : t('შეხვედრის დაგეგმვა', 'Schedule Meeting')}</span>
             </button>
           </form>
-        </GlassCard>
+        </div>
 
         {/* Scheduled Meetings List */}
-        <GlassCard style={{ display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Users size={20} style={{ color: 'hsl(var(--accent-blue))' }} />
+        <div className="glass-card rounded-xl p-6 md:p-8 flex flex-col min-h-[500px]">
+          <h3 className="font-headline-md text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
+            <Users size={20} className="text-secondary-fixed-dim" />
             {t('დაგეგმილი შეხვედრები', 'Scheduled Meetings')} ({meetings.length})
           </h3>
 
           {meetings.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', overflowY: 'auto', maxHeight: '500px', paddingRight: '0.25rem' }}>
+            <div className="flex flex-col gap-4 overflow-y-auto max-h-[550px] pr-2 custom-scrollbar">
               {meetings.map(meeting => (
                 <div 
                   key={meeting.id} 
-                  style={{ 
-                    padding: '1.25rem', 
-                    background: 'rgba(255, 255, 255, 0.01)', 
-                    border: '1px solid var(--border-light)', 
-                    borderRadius: '12px',
-                    position: 'relative',
-                    transition: 'all 0.2s'
-                  }}
+                  className="p-5 bg-surface-container-low border border-outline-variant/10 hover:border-primary-fixed-dim/20 transition-all rounded-xl relative group"
                 >
                   {/* Delete Button */}
                   <button 
                     onClick={() => handleDeleteMeeting(meeting.id)}
-                    style={{ 
-                      position: 'absolute', 
-                      top: '1rem', 
-                      right: '1rem', 
-                      background: 'transparent', 
-                      border: 'none', 
-                      cursor: 'pointer', 
-                      color: 'hsl(var(--accent-rose))',
-                      opacity: 0.7
-                    }}
+                    className="absolute top-4 right-4 text-on-surface-variant hover:text-error cursor-pointer bg-transparent border-none p-1 transition-colors opacity-70 hover:opacity-100"
                   >
                     <Trash2 size={16} />
                   </button>
 
-                  <h4 style={{ fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.5rem', paddingRight: '1.5rem' }}>{meeting.title}</h4>
+                  <h4 className="font-headline-md text-base font-bold text-on-surface mb-2 pr-6">{meeting.title}</h4>
                   
                   {meeting.description && (
-                    <p style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.8rem', marginBottom: '1rem' }}>{meeting.description}</p>
+                    <p className="font-body-md text-xs text-on-surface-variant mb-4 leading-relaxed">{meeting.description}</p>
                   )}
 
                   {/* Metadata: Date and Time */}
-                  <div style={{ display: 'flex', gap: '1rem', color: 'hsl(var(--text-muted))', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Calendar size={12} />
+                  <div className="flex gap-4 text-on-surface-variant/70 font-label text-[10px] mb-4">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar size={12} className="text-primary-fixed-dim" />
                       {meeting.date}
                     </span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Clock size={12} />
+                    <span className="flex items-center gap-1.5">
+                      <Clock size={12} className="text-primary-fixed-dim" />
                       {meeting.time}
                     </span>
                   </div>
 
                   {/* Attendees */}
                   {meeting.participants && meeting.participants.length > 0 && (
-                    <div style={{ marginBottom: '1rem' }}>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'hsl(var(--text-secondary))', display: 'block', marginBottom: '0.25rem' }}>
+                    <div className="mb-4">
+                      <span className="font-body-md text-xs font-semibold text-on-surface-variant block mb-1.5">
                         {t('მონაწილეები (', 'Participants (')}{meeting.participants.length}):
                       </span>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                      <div className="flex flex-wrap gap-1.5">
                         {meeting.participants.map(p => (
-                          <span key={p} style={{ fontSize: '0.7rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-light)', padding: '0.15rem 0.4rem', borderRadius: '4px', color: 'hsl(var(--text-secondary))' }}>
+                          <span key={p} className="font-label text-[9px] bg-surface-container-highest border border-outline-variant/20 px-2 py-0.5 rounded text-on-surface-variant">
                             {p}
                           </span>
                         ))}
@@ -481,15 +423,15 @@ export const Meetings = ({ language }) => {
                   )}
 
                   {/* Integration Status Flags */}
-                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                  <div className="flex gap-2 flex-wrap mb-4">
                     {meeting.googleSynced && (
-                      <span style={{ fontSize: '0.65rem', padding: '0.2rem 0.4rem', borderRadius: '4px', background: 'rgba(139, 92, 246, 0.1)', color: 'hsl(var(--primary-hover))', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.2' }}>
+                      <span className="font-label text-[9px] px-2 py-0.5 rounded bg-primary-fixed/10 text-primary-fixed-dim font-bold flex items-center gap-1">
                         <CheckCircle2 size={10} />
                         Calendar Synced
                       </span>
                     )}
                     {meeting.gmailSent && (
-                      <span style={{ fontSize: '0.65rem', padding: '0.2rem 0.4rem', borderRadius: '4px', background: 'rgba(14, 165, 233, 0.1)', color: 'hsl(var(--accent-blue))', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.2' }}>
+                      <span className="font-label text-[9px] px-2 py-0.5 rounded bg-sky-400/10 text-sky-400 font-bold flex items-center gap-1">
                         <Mail size={10} />
                         Invites Sent
                       </span>
@@ -502,31 +444,14 @@ export const Meetings = ({ language }) => {
                       href={meeting.meetLink} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="btn btn-primary" 
-                      style={{ 
-                        width: '100%', 
-                        padding: '0.5rem', 
-                        fontSize: '0.8rem', 
-                        background: 'rgba(139, 92, 246, 0.15)',
-                        border: '1px solid rgba(139, 92, 246, 0.3)',
-                        color: 'hsl(var(--primary-hover))',
-                        boxShadow: 'none'
-                      }}
+                      className="w-full bg-primary-fixed/5 hover:bg-primary-fixed/10 border border-primary-fixed/20 hover:border-primary-fixed/30 text-primary-fixed-dim font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 text-center"
                     >
                       <Video size={14} />
                       <span>{t('Google Meet-ზე შესვლა', 'Join Google Meet')}</span>
                       <ExternalLink size={12} />
                     </a>
                   ) : (
-                    <div style={{ 
-                      fontSize: '0.75rem', 
-                      color: 'hsl(var(--text-muted))', 
-                      background: 'rgba(255, 255, 255, 0.02)', 
-                      padding: '0.5rem', 
-                      borderRadius: '8px', 
-                      textAlign: 'center',
-                      border: '1px dashed var(--border-light)' 
-                    }}>
+                    <div className="font-body-md text-xs text-on-surface-variant/50 bg-surface-container-high/40 py-2.5 px-4 rounded-xl text-center border border-dashed border-outline-variant/10">
                       {t('შეხვედრის ონლაინ ბმული არ არის დაგენერირებული', 'Online meeting link is not generated')}
                     </div>
                   )}
@@ -534,11 +459,11 @@ export const Meetings = ({ language }) => {
               ))}
             </div>
           ) : (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 1rem', color: 'hsl(var(--text-muted))' }}>
+            <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant text-sm py-12">
               {t('დაგეგმილი შეხვედრები არ მოიძებნა.', 'No scheduled meetings found.')}
             </div>
           )}
-        </GlassCard>
+        </div>
       </div>
     </div>
   );
