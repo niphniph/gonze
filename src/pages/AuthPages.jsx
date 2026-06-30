@@ -1,11 +1,27 @@
 import { useState, useEffect } from 'react';
 
-// Common header for authentication pages
-function AuthHeader() {
+// Common Background Orbs and Layout wrapper
+function AuthLayout({ children }) {
   return (
-    <div className="text-center mb-8">
-      <h1 className="font-display text-4xl font-black text-primary-fixed-dim tracking-tight mb-2">Productivity</h1>
-      <p className="font-body text-sm text-outline opacity-75">Your unified habits, tasks, and finance tracker</p>
+    <div className="min-h-screen w-full flex items-center justify-center bg-background px-margin-mobile py-12 relative overflow-hidden antialiased">
+      {/* Background Glow Orbs */}
+      <div className="absolute rounded-full blur-[100px] opacity-15 pointer-events-none -z-10 bg-primary w-[400px] h-[400px] -top-[100px] -left-[100px]"></div>
+      <div className="absolute rounded-full blur-[100px] opacity-15 pointer-events-none -z-10 bg-secondary w-[300px] h-[300px] -bottom-[50px] -right-[50px]"></div>
+      <div className="w-full max-w-md relative z-10 flex flex-col gap-6">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// Common Brand Header
+function AuthHeader({ subtitle }) {
+  return (
+    <div className="text-center">
+      <h1 className="font-headline-lg text-headline-lg brand-logo-text mb-2 bg-gradient-to-r from-text-primary to-primary bg-clip-text text-transparent">
+        Nine's Tracker
+      </h1>
+      <p className="font-body-md text-body-md text-text-muted">{subtitle}</p>
     </div>
   );
 }
@@ -61,7 +77,6 @@ export function LoginPage({ navigate, onLoginSuccess }) {
       navigate('/dashboard');
     } catch (err) {
       if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
-        // LocalStorage Fallback Mode
         const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
         const cleanEmail = email.trim().toLowerCase();
         const found = localUsers.find(u => u.email === cleanEmail && u.password === password);
@@ -72,7 +87,6 @@ export function LoginPage({ navigate, onLoginSuccess }) {
           return;
         }
 
-        // Simulating login success (token = null signals local session)
         onLoginSuccess(null, { name: found.name, email: found.email });
         navigate('/dashboard');
       } else {
@@ -84,79 +98,94 @@ export function LoginPage({ navigate, onLoginSuccess }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-margin-mobile py-12">
-      <div className="w-full max-w-md">
-        <AuthHeader />
-        <div className="glass-card rounded-2xl p-8 border border-outline-variant/30">
-          <h2 className="text-2xl font-black text-on-surface mb-6">Log In</h2>
-          
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-error-container/20 border border-error/30 text-error font-body text-sm">
-              {error}
-            </div>
-          )}
+    <AuthLayout>
+      <AuthHeader subtitle="Your Life, Quantified." />
+      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 md:p-10 rounded-xl flex flex-col gap-6">
+        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Welcome Back</h2>
+        
+        {error && (
+          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+            {error}
+          </div>
+        )}
 
-          {successMessage && (
-            <div className="mb-6 p-4 rounded-xl bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body text-sm">
-              {successMessage}
-            </div>
-          )}
+        {successMessage && (
+          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm">
+            {successMessage}
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="email">
+              Email Address
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted select-none pointer-events-none">
+                mail
+              </span>
               <input
+                className="bg-surface-variant border border-transparent text-text-primary placeholder:text-text-muted w-full rounded-lg h-12 pl-12 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_4px_12px_rgba(192,193,255,0.1)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
+                id="email"
                 type="email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-input"
-                placeholder="name@example.com"
                 required
               />
             </div>
-            
-            <div className="form-group">
-              <div className="flex justify-between items-center mb-2">
-                <label className="form-label mb-0">Password</label>
-                <button
-                  type="button"
-                  onClick={() => navigate('/forgot-password')}
-                  className="text-xs text-primary-fixed-dim hover:underline cursor-pointer"
-                >
-                  Forgot password?
-                </button>
-              </div>
+          </div>
+          
+          <div className="space-y-2">
+            <div className="flex justify-between items-center px-1">
+              <label className="font-label-md text-label-md text-on-surface-variant block" htmlFor="password">
+                Password
+              </label>
+              <button
+                type="button"
+                onClick={() => navigate('/forgot-password')}
+                className="font-label-sm text-label-sm text-primary hover:text-primary-fixed-dim transition-colors cursor-pointer"
+              >
+                Forgot password?
+              </button>
+            </div>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted select-none pointer-events-none">
+                lock
+              </span>
               <input
+                className="bg-surface-variant border border-transparent text-text-primary placeholder:text-text-muted w-full rounded-lg h-12 pl-12 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_4px_12px_rgba(192,193,255,0.1)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
+                id="password"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-input"
-                placeholder="••••••••"
                 required
               />
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full py-3 rounded-full mt-4"
-            >
-              {loading ? 'Logging in...' : 'Log In'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center text-sm font-body text-outline">
-            Don't have an account?{' '}
-            <button
-              onClick={() => navigate('/register')}
-              className="text-primary-fixed-dim font-bold hover:underline cursor-pointer"
-            >
-              Sign Up
-            </button>
           </div>
-        </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-8 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </form>
+
+        <p className="mt-4 text-center font-body-md text-body-md text-text-muted">
+          Don't have an account?{' '}
+          <button
+            onClick={() => navigate('/register')}
+            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+          >
+            Register
+          </button>
+        </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
 
@@ -210,11 +239,9 @@ export function RegisterPage({ navigate }) {
         throw new Error(data.error || 'Failed to register');
       }
 
-      // API successful -> Redirect to verify code
       navigate(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err) {
       if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
-        // LocalStorage Fallback Mode
         const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
         const cleanEmail = email.trim().toLowerCase();
         
@@ -227,7 +254,6 @@ export function RegisterPage({ navigate }) {
         localUsers.push({ name: name.trim(), email: cleanEmail, password });
         localStorage.setItem('tracker_local_users', JSON.stringify(localUsers));
 
-        // Skip verification on local mock, redirect to login directly
         navigate(`/login?success=${encodeURIComponent("Account created successfully. Please log in.")}`);
       } else {
         setError(err.message);
@@ -238,88 +264,119 @@ export function RegisterPage({ navigate }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-margin-mobile py-12">
-      <div className="w-full max-w-md">
-        <AuthHeader />
-        <div className="glass-card rounded-2xl p-8 border border-outline-variant/30">
-          <h2 className="text-2xl font-black text-on-surface mb-6">Create Account</h2>
-          
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-error-container/20 border border-error/30 text-error font-body text-sm">
-              {error}
-            </div>
-          )}
+    <AuthLayout>
+      <AuthHeader subtitle="Create your sanctuary for life tracking." />
+      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
+        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Create Account</h2>
+        
+        {error && (
+          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+            {error}
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="fullName">
+              Full Name
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                person
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
+                id="fullName"
                 type="text"
+                placeholder="Jane Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="form-input"
-                placeholder="Alex Rivers"
                 required
               />
             </div>
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
+          <div className="space-y-1.5">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="email">
+              Email Address
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                mail
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
+                id="email"
                 type="email"
+                placeholder="jane@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-input"
-                placeholder="name@example.com"
                 required
               />
             </div>
-            
-            <div className="form-group">
-              <label className="form-label">Password</label>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="password">
+              Password
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                lock
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
+                id="password"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-input"
-                placeholder="At least 8 chars with letter & number"
                 required
               />
             </div>
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Confirm Password</label>
+          <div className="space-y-1.5">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="confirmPassword">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                lock_reset
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
+                id="confirmPassword"
                 type="password"
+                placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="form-input"
-                placeholder="Repeat password"
                 required
               />
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full py-3 rounded-full mt-4"
-            >
-              {loading ? 'Creating Account...' : 'Register'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center text-sm font-body text-outline">
-            Already have an account?{' '}
-            <button
-              onClick={() => navigate('/login')}
-              className="text-primary-fixed-dim font-bold hover:underline cursor-pointer"
-            >
-              Log In
-            </button>
           </div>
-        </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-inverse-primary text-on-primary hover:opacity-90 hover:shadow-[0_10px_20px_-10px_theme(colors.primary)] active:translate-y-0 transition-all duration-200 cursor-pointer"
+          >
+            {loading ? 'Creating Account...' : 'Create Account'}
+            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </form>
+
+        <p className="mt-4 text-center font-body-md text-body-md text-text-muted">
+          Already have an account?{' '}
+          <button
+            onClick={() => navigate('/login')}
+            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+          >
+            Login
+          </button>
+        </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
 
@@ -420,80 +477,89 @@ export function VerifyEmailPage({ navigate }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-margin-mobile py-12">
-      <div className="w-full max-w-md">
-        <AuthHeader />
-        <div className="glass-card rounded-2xl p-8 border border-outline-variant/30">
-          <h2 className="text-2xl font-black text-on-surface mb-2">Verify Email</h2>
-          <p className="font-body text-sm text-outline opacity-75 mb-6">
-            Enter the 6-digit verification code sent to your email.
-          </p>
-          
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-error-container/20 border border-error/30 text-error font-body text-sm">
-              {error}
-            </div>
-          )}
+    <AuthLayout>
+      <AuthHeader subtitle="Verify your account to access your dashboard." />
+      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
+        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Verify Email</h2>
+        <p className="font-body-md text-sm text-text-muted text-center">
+          Enter the 6-digit verification code sent to your email.
+        </p>
+        
+        {error && (
+          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+            {error}
+          </div>
+        )}
 
-          {success && (
-            <div className="mb-6 p-4 rounded-xl bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body text-sm">
-              {success}
-            </div>
-          )}
+        {success && (
+          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm">
+            {success}
+          </div>
+        )}
 
-          <form onSubmit={handleVerify} className="space-y-6">
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
+        <form onSubmit={handleVerify} className="space-y-6">
+          <div className="space-y-2">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
+              Email Address
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                mail
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
                 type="email"
+                placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-input"
-                placeholder="name@example.com"
                 required
               />
             </div>
-            
-            <div className="form-group">
-              <label className="form-label">6-Digit Verification Code</label>
+          </div>
+          
+          <div className="space-y-2">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
+              6-Digit Verification Code
+            </label>
+            <div className="relative">
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 text-center text-2xl tracking-[0.5em] font-bold focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
                 type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value.trim())}
-                className="form-input text-center text-2xl tracking-[0.5em] font-bold"
                 placeholder="000000"
                 maxLength={6}
+                value={code}
+                onChange={(e) => setCode(e.target.value.trim())}
                 required
               />
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full py-3 rounded-full mt-4"
-            >
-              {loading ? 'Verifying...' : 'Verify Account'}
-            </button>
-          </form>
-
-          <div className="flex justify-between items-center mt-8 text-sm font-body">
-            <button
-              onClick={handleResend}
-              disabled={resending}
-              className="text-primary-fixed-dim font-bold hover:underline cursor-pointer"
-            >
-              {resending ? 'Sending...' : 'Resend verification code'}
-            </button>
-            <button
-              onClick={() => navigate('/login')}
-              className="text-outline hover:text-on-surface cursor-pointer"
-            >
-              Back to Login
-            </button>
           </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
+          >
+            {loading ? 'Verifying...' : 'Verify Account'}
+          </button>
+        </form>
+
+        <div className="flex justify-between items-center mt-4 text-sm font-body-md">
+          <button
+            onClick={handleResend}
+            disabled={resending}
+            className="text-primary font-medium hover:underline cursor-pointer"
+          >
+            {resending ? 'Sending...' : 'Resend code'}
+          </button>
+          <button
+            onClick={() => navigate('/login')}
+            className="text-text-muted hover:text-text-primary cursor-pointer"
+          >
+            Back to Login
+          </button>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
 
@@ -525,7 +591,7 @@ export function ForgotPasswordPage({ navigate }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      setSuccess('If the email exists, a password reset link has been sent. Please check your inbox.');
+      setSuccess('If the email exists, a password reset link has been sent.');
     } catch (err) {
       if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
         const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
@@ -546,60 +612,65 @@ export function ForgotPasswordPage({ navigate }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-margin-mobile py-12">
-      <div className="w-full max-w-md">
-        <AuthHeader />
-        <div className="glass-card rounded-2xl p-8 border border-outline-variant/30">
-          <h2 className="text-2xl font-black text-on-surface mb-2">Forgot Password</h2>
-          <p className="font-body text-sm text-outline opacity-75 mb-6">
-            Enter your email and we'll send you a link to reset your password.
-          </p>
-          
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-error-container/20 border border-error/30 text-error font-body text-sm">
-              {error}
-            </div>
-          )}
+    <AuthLayout>
+      <AuthHeader subtitle="Password Recovery" />
+      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
+        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Forgot Password</h2>
+        <p className="font-body-md text-sm text-text-muted text-center">
+          Enter your email to receive a password recovery link.
+        </p>
+        
+        {error && (
+          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+            {error}
+          </div>
+        )}
 
-          {success && (
-            <div className="mb-6 p-4 rounded-xl bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body text-sm">
-              {success}
-            </div>
-          )}
+        {success && (
+          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm break-all">
+            {success}
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
+              Email Address
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                mail
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
                 type="email"
+                placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-input"
-                placeholder="name@example.com"
                 required
               />
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full py-3 rounded-full mt-4"
-            >
-              {loading ? 'Sending link...' : 'Send Reset Link'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center text-sm font-body">
-            <button
-              onClick={() => navigate('/login')}
-              className="text-primary-fixed-dim font-bold hover:underline cursor-pointer"
-            >
-              Back to Login
-            </button>
           </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
+          >
+            {loading ? 'Sending link...' : 'Send Reset Link'}
+          </button>
+        </form>
+
+        <div className="text-center mt-4">
+          <button
+            onClick={() => navigate('/login')}
+            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+          >
+            Back to Login
+          </button>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
 
@@ -685,73 +756,85 @@ export function ResetPasswordPage({ navigate }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-margin-mobile py-12">
-      <div className="w-full max-w-md">
-        <AuthHeader />
-        <div className="glass-card rounded-2xl p-8 border border-outline-variant/30">
-          <h2 className="text-2xl font-black text-on-surface mb-2">Reset Password</h2>
-          <p className="font-body text-sm text-outline opacity-75 mb-6">
-            Enter your new secure password.
-          </p>
-          
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-error-container/20 border border-error/30 text-error font-body text-sm">
-              {error}
-            </div>
-          )}
+    <AuthLayout>
+      <AuthHeader subtitle="Password Recovery" />
+      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
+        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Reset Password</h2>
+        <p className="font-body-md text-sm text-text-muted text-center">
+          Enter your new password below.
+        </p>
+        
+        {error && (
+          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+            {error}
+          </div>
+        )}
 
-          {success && (
-            <div className="mb-6 p-4 rounded-xl bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body text-sm">
-              {success}
-            </div>
-          )}
+        {success && (
+          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm">
+            {success}
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-group">
-              <label className="form-label">New Password</label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
+              New Password
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                lock
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-input"
-                placeholder="At least 8 chars with letter & number"
                 required
                 disabled={!token}
               />
             </div>
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Confirm New Password</label>
+          <div className="space-y-2">
+            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
+              Confirm New Password
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
+                lock_reset
+              </span>
               <input
+                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
                 type="password"
+                placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="form-input"
-                placeholder="Repeat password"
                 required
                 disabled={!token}
               />
             </div>
-
-            <button
-              type="submit"
-              disabled={loading || !token}
-              className="btn btn-primary w-full py-3 rounded-full mt-4"
-            >
-              {loading ? 'Resetting...' : 'Reset Password'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center text-sm font-body">
-            <button
-              onClick={() => navigate('/login')}
-              className="text-primary-fixed-dim font-bold hover:underline cursor-pointer"
-            >
-              Back to Login
-            </button>
           </div>
+
+          <button
+            type="submit"
+            disabled={loading || !token}
+            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
+          >
+            {loading ? 'Resetting...' : 'Reset Password'}
+          </button>
+        </form>
+
+        <div className="text-center mt-4">
+          <button
+            onClick={() => navigate('/login')}
+            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+          >
+            Back to Login
+          </button>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
