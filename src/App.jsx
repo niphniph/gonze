@@ -30,6 +30,17 @@ const MOBILE_NAV_ITEMS = [
   { id: 'finance', label: 'Finance', icon: 'account_balance_wallet' },
 ];
 
+const BASE_PATH = '/tracker';
+
+// Get clean path relative to BASE_PATH
+const getCleanPath = (pathname) => {
+  if (pathname.startsWith(BASE_PATH)) {
+    const clean = pathname.substring(BASE_PATH.length);
+    return clean === '' ? '/' : clean;
+  }
+  return pathname;
+};
+
 function App() {
   const [activePage, setActivePage] = useState('dashboard');
   const [language, setLanguage] = useState(localStorage.getItem('tracker_lang') || 'en');
@@ -38,7 +49,8 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const navigate = (path) => {
-    window.history.pushState(null, '', path);
+    // path is clean path, e.g. '/login'
+    window.history.pushState(null, '', BASE_PATH + path);
     const pageId = path.replace('/', '').split('?')[0] || 'dashboard';
     setActivePage(pageId);
   };
@@ -46,14 +58,14 @@ function App() {
   const handleSetActivePage = (pageId) => {
     let path = '/' + pageId;
     if (pageId === 'dashboard') path = '/';
-    window.history.pushState(null, '', path);
+    window.history.pushState(null, '', BASE_PATH + path);
     setActivePage(pageId);
   };
 
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname;
-      const pageId = path.replace('/', '') || 'dashboard';
+      const cleanPath = getCleanPath(window.location.pathname);
+      const pageId = cleanPath.replace('/', '') || 'dashboard';
       setActivePage(pageId);
     };
     window.addEventListener('popstate', handlePopState);
@@ -143,7 +155,7 @@ function App() {
   };
 
   useEffect(() => {
-    const currentPath = window.location.pathname;
+    const cleanPath = getCleanPath(window.location.pathname);
     const publicPaths = ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password'];
     const localEmail = localStorage.getItem('tracker_email');
 
@@ -155,18 +167,18 @@ function App() {
       db.loadUserSpecificData(localEmail);
       setLoading(false);
       
-      if (publicPaths.includes(currentPath)) {
+      if (publicPaths.includes(cleanPath)) {
         navigate('/dashboard');
       } else {
-        const pageId = currentPath.replace('/', '').split('?')[0] || 'dashboard';
+        const pageId = cleanPath.replace('/', '').split('?')[0] || 'dashboard';
         setActivePage(pageId);
       }
     } else {
       setLoading(false);
-      if (!publicPaths.includes(currentPath)) {
+      if (!publicPaths.includes(cleanPath)) {
         navigate('/login');
       } else {
-        const pageId = currentPath.replace('/', '').split('?')[0] || 'dashboard';
+        const pageId = cleanPath.replace('/', '').split('?')[0] || 'dashboard';
         setActivePage(pageId);
       }
     }
@@ -189,10 +201,10 @@ function App() {
   }
 
   const publicPaths = ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password'];
-  const currentPath = window.location.pathname;
+  const cleanPath = getCleanPath(window.location.pathname);
   const isAuthenticated = token || user;
 
-  if (publicPaths.includes(currentPath) || !isAuthenticated) {
+  if (publicPaths.includes(cleanPath) || !isAuthenticated) {
     const authProps = { navigate, onLoginSuccess: handleLoginSuccess };
     switch (activePage) {
       case 'login': return <LoginPage {...authProps} />;
