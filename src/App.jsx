@@ -66,12 +66,18 @@ function App() {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
 
+      if (userRes.status === 404) {
+        throw new Error('API_NOT_FOUND');
+      }
+
       if (!userRes.ok) {
         throw new Error('Session invalid');
       }
 
       const userData = await userRes.json();
       setUser(userData.user);
+      localStorage.setItem('tracker_email', userData.user.email);
+      db.loadUserSpecificData(userData.user.email);
 
       if (!userData.user.is_verified) {
         navigate(`/verify-email?email=${encodeURIComponent(userData.user.email)}`);
@@ -94,34 +100,67 @@ function App() {
         }
       }
     } catch (err) {
-      console.warn("Session loading failed, logging out:", err.message);
-      handleLogout();
+      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
+        // Fallback to local session
+        const localEmail = localStorage.getItem('tracker_email');
+        if (localEmail) {
+          setUser({ name: localEmail.split('@')[0], email: localEmail });
+          db.loadUserSpecificData(localEmail);
+        } else {
+          handleLogout();
+        }
+      } else {
+        console.warn("Session loading failed, logging out:", err.message);
+        handleLogout();
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleLoginSuccess = (newToken, loggedInUser) => {
-    localStorage.setItem('tracker_token', newToken);
-    setToken(newToken);
+    if (newToken) {
+      localStorage.setItem('tracker_token', newToken);
+      setToken(newToken);
+    }
+    localStorage.setItem('tracker_email', loggedInUser.email);
     setUser(loggedInUser);
-    db.saveProfile({ name: loggedInUser.name, email: loggedInUser.email });
-    loadUserData(newToken);
+    db.loadUserSpecificData(loggedInUser.email);
+    
+    if (newToken) {
+      loadUserData(newToken);
+    } else {
+      setLoading(false);
+      navigate('/dashboard');
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('tracker_token');
+    db.clearActiveSession();
     setToken(null);
     setUser(null);
-    db.resetDatabase();
+    navigate('/login');
   };
 
   useEffect(() => {
     const currentPath = window.location.pathname;
     const publicPaths = ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password'];
+    const localEmail = localStorage.getItem('tracker_email');
 
     if (token) {
       loadUserData(token);
+    } else if (localEmail) {
+      // Local fallback session
+      setUser({ name: localEmail.split('@')[0], email: localEmail });
+      db.loadUserSpecificData(localEmail);
+      setLoading(false);
+      
+      if (publicPaths.includes(currentPath)) {
+        navigate('/dashboard');
+      } else {
+        const pageId = currentPath.replace('/', '').split('?')[0] || 'dashboard';
+        setActivePage(pageId);
+      }
     } else {
       setLoading(false);
       if (!publicPaths.includes(currentPath)) {
@@ -151,8 +190,9 @@ function App() {
 
   const publicPaths = ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password'];
   const currentPath = window.location.pathname;
+  const isAuthenticated = token || user;
 
-  if (publicPaths.includes(currentPath) || !token) {
+  if (publicPaths.includes(currentPath) || !isAuthenticated) {
     const authProps = { navigate, onLoginSuccess: handleLoginSuccess };
     switch (activePage) {
       case 'login': return <LoginPage {...authProps} />;
@@ -254,8 +294,18 @@ function App() {
                 <span className="material-symbols-outlined text-primary-fixed-dim text-lg group-hover:rotate-12 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
                 <span className="font-body-md font-bold text-on-surface text-xs md:text-sm">AI Assistant</span>
               </button>
+              
               <div className="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center cursor-pointer hover:bg-surface-bright transition-colors">
                 <span className="material-symbols-outlined text-xl">notifications</span>
+              </div>
+
+              {/* Top Header Logout Button */}
+              <div 
+                onClick={handleLogout}
+                className="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center cursor-pointer hover:bg-error-container/20 hover:text-error transition-colors"
+                title="Log Out"
+              >
+                <span className="material-symbols-outlined text-xl">logout</span>
               </div>
             </div>
           </div>

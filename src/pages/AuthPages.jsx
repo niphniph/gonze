@@ -15,7 +15,16 @@ export function LoginPage({ navigate, onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const msg = params.get('success') || params.get('message');
+    if (msg) {
+      setSuccessMessage(msg);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +33,7 @@ export function LoginPage({ navigate, onLoginSuccess }) {
       return;
     }
     setError('');
+    setSuccessMessage('');
     setLoading(true);
 
     try {
@@ -32,11 +42,15 @@ export function LoginPage({ navigate, onLoginSuccess }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
+
+      if (res.status === 404) {
+        throw new Error('API_NOT_FOUND');
+      }
+
       const data = await res.json();
 
       if (!res.ok) {
         if (data.notVerified) {
-          // If not verified, redirect to verification page with email in query param
           navigate(`/verify-email?email=${encodeURIComponent(data.email)}`);
           return;
         }
@@ -46,7 +60,24 @@ export function LoginPage({ navigate, onLoginSuccess }) {
       onLoginSuccess(data.token, data.user);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
+        // LocalStorage Fallback Mode
+        const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
+        const cleanEmail = email.trim().toLowerCase();
+        const found = localUsers.find(u => u.email === cleanEmail && u.password === password);
+        
+        if (!found) {
+          setError('Invalid email or password');
+          setLoading(false);
+          return;
+        }
+
+        // Simulating login success (token = null signals local session)
+        onLoginSuccess(null, { name: found.name, email: found.email });
+        navigate('/dashboard');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,6 +93,12 @@ export function LoginPage({ navigate, onLoginSuccess }) {
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-error-container/20 border border-error/30 text-error font-body text-sm">
               {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="mb-6 p-4 rounded-xl bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body text-sm">
+              {successMessage}
             </div>
           )}
 
@@ -146,6 +183,13 @@ export function RegisterPage({ navigate }) {
       setError('Password must be at least 8 characters long and contain both letters and numbers');
       return;
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email format');
+      return;
+    }
+
     setError('');
     setLoading(true);
 
@@ -155,16 +199,39 @@ export function RegisterPage({ navigate }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, confirmPassword })
       });
+
+      if (res.status === 404) {
+        throw new Error('API_NOT_FOUND');
+      }
+
       const data = await res.json();
 
       if (!res.ok) {
         throw new Error(data.error || 'Failed to register');
       }
 
-      // Successful registration -> Go to verification page
+      // API successful -> Redirect to verify code
       navigate(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err) {
-      setError(err.message);
+      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
+        // LocalStorage Fallback Mode
+        const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
+        const cleanEmail = email.trim().toLowerCase();
+        
+        if (localUsers.some(u => u.email === cleanEmail)) {
+          setError('Email is already registered');
+          setLoading(false);
+          return;
+        }
+
+        localUsers.push({ name: name.trim(), email: cleanEmail, password });
+        localStorage.setItem('tracker_local_users', JSON.stringify(localUsers));
+
+        // Skip verification on local mock, redirect to login directly
+        navigate(`/login?success=${encodeURIComponent("Account created successfully. Please log in.")}`);
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -266,7 +333,6 @@ export function VerifyEmailPage({ navigate }) {
   const [resending, setResending] = useState(false);
 
   useEffect(() => {
-    // Parse code and email from URL parameters
     const params = new URLSearchParams(window.location.search);
     const emailParam = params.get('email') || '';
     const codeParam = params.get('code') || '';
@@ -274,7 +340,6 @@ export function VerifyEmailPage({ navigate }) {
     if (emailParam) setEmail(emailParam);
     if (codeParam) setCode(codeParam);
 
-    // If both code and email are present in link, auto-verify!
     if (emailParam && codeParam) {
       autoVerify(emailParam, codeParam);
     }
@@ -455,12 +520,26 @@ export function ForgotPasswordPage({ navigate }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
+      if (res.status === 404) throw new Error('API_NOT_FOUND');
+      
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
       setSuccess('If the email exists, a password reset link has been sent. Please check your inbox.');
     } catch (err) {
-      setError(err.message);
+      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
+        const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
+        const cleanEmail = email.trim().toLowerCase();
+        const found = localUsers.find(u => u.email === cleanEmail);
+        
+        if (found) {
+          setSuccess(`Local Reset Link (mocked): /reset-password?token=local_reset_${cleanEmail}`);
+        } else {
+          setSuccess('If the email is registered, a password reset link has been sent.');
+        }
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -571,13 +650,35 @@ export function ResetPasswordPage({ navigate }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password, confirmPassword })
       });
+      if (res.status === 404) throw new Error('API_NOT_FOUND');
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
       setSuccess('Password reset successfully! Redirecting to login...');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err.message);
+      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
+        if (token.startsWith('local_reset_')) {
+          const email = token.replace('local_reset_', '');
+          const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
+          const idx = localUsers.findIndex(u => u.email === email);
+          
+          if (idx !== -1) {
+            localUsers[idx].password = password;
+            localStorage.setItem('tracker_local_users', JSON.stringify(localUsers));
+            
+            setSuccess('Password reset successfully! Redirecting to login...');
+            setTimeout(() => navigate('/login'), 2000);
+          } else {
+            setError('User not found');
+          }
+        } else {
+          setError('Invalid or expired reset token');
+        }
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
