@@ -1,32 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Common Background Orbs and Layout wrapper
-function AuthLayout({ children }) {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-background px-margin-mobile py-12 relative overflow-hidden antialiased">
-      {/* Background Glow Orbs */}
-      <div className="absolute rounded-full blur-[100px] opacity-15 pointer-events-none -z-10 bg-primary w-[400px] h-[400px] -top-[100px] -left-[100px]"></div>
-      <div className="absolute rounded-full blur-[100px] opacity-15 pointer-events-none -z-10 bg-secondary w-[300px] h-[300px] -bottom-[50px] -right-[50px]"></div>
-      <div className="w-full max-w-md relative z-10 flex flex-col gap-6">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-// Common Brand Header
-function AuthHeader({ subtitle }) {
-  return (
-    <div className="text-center">
-      <h1 className="font-headline-lg text-headline-lg brand-logo-text mb-2 bg-gradient-to-r from-text-primary to-primary bg-clip-text text-transparent">
-        Nine's Tracker
-      </h1>
-      <p className="font-body-md text-body-md text-text-muted">{subtitle}</p>
-    </div>
-  );
-}
-
 // 1. LOGIN PAGE
 export function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate();
@@ -100,94 +74,75 @@ export function LoginPage({ onLoginSuccess }) {
   };
 
   return (
-    <AuthLayout>
-      <AuthHeader subtitle="Your Life, Quantified." />
-      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 md:p-10 rounded-xl flex flex-col gap-6">
-        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Welcome Back</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">Nine's Tracker</h1>
+        <p className="auth-subtitle">Your Life, Quantified.</p>
         
         {error && (
-          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-red-900/30 border border-red-500/40 text-red-200 text-sm text-center">
             {error}
           </div>
         )}
 
         {successMessage && (
-          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-purple-900/30 border border-purple-500/40 text-purple-200 text-sm text-center">
             {successMessage}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="email">
-              Email Address
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted select-none pointer-events-none">
-                mail
-              </span>
-              <input
-                className="bg-surface-variant border border-transparent text-text-primary placeholder:text-text-muted w-full rounded-lg h-12 pl-12 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_4px_12px_rgba(192,193,255,0.1)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-group">
+            <label className="auth-label" htmlFor="email">Email Address</label>
+            <input
+              className="auth-input"
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
           
-          <div className="space-y-2">
-            <div className="flex justify-between items-center px-1">
-              <label className="font-label-md text-label-md text-on-surface-variant block" htmlFor="password">
-                Password
-              </label>
+          <div className="auth-group">
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="auth-label mb-0" htmlFor="password">Password</label>
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="font-label-sm text-label-sm text-primary hover:text-primary-fixed-dim transition-colors cursor-pointer"
+                className="text-xs text-indigo-300 hover:text-indigo-200 transition-colors"
               >
                 Forgot password?
               </button>
             </div>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted select-none pointer-events-none">
-                lock
-              </span>
-              <input
-                className="bg-surface-variant border border-transparent text-text-primary placeholder:text-text-muted w-full rounded-lg h-12 pl-12 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_4px_12px_rgba(192,193,255,0.1)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <input
+              className="auth-input"
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-8 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
-          >
+          <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Logging in...' : 'Login'}
-            <span className="material-symbols-outlined">arrow_forward</span>
           </button>
         </form>
 
-        <p className="mt-4 text-center font-body-md text-body-md text-text-muted">
+        <p className="auth-footer">
           Don't have an account?{' '}
           <button
             onClick={() => navigate('/register')}
-            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+            className="auth-link bg-transparent border-none p-0 cursor-pointer"
           >
             Register
           </button>
         </p>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
 
@@ -267,119 +222,86 @@ export function RegisterPage() {
   };
 
   return (
-    <AuthLayout>
-      <AuthHeader subtitle="Create your sanctuary for life tracking." />
-      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
-        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Create Account</h2>
+    <div className="auth-page">
+      <div className="auth-card auth-card-register">
+        <h1 className="auth-title">Nine's Tracker</h1>
+        <p className="auth-subtitle">Create your sanctuary for life tracking.</p>
         
         {error && (
-          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-red-900/30 border border-red-500/40 text-red-200 text-sm text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="fullName">
-              Full Name
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                person
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                id="fullName"
-                type="text"
-                placeholder="Jane Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-group">
+            <label className="auth-label" htmlFor="fullName">Full Name</label>
+            <input
+              className="auth-input"
+              id="fullName"
+              type="text"
+              placeholder="Jane Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="email">
-              Email Address
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                mail
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                id="email"
-                type="email"
-                placeholder="jane@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+          <div className="auth-group">
+            <label className="auth-label" htmlFor="email">Email Address</label>
+            <input
+              className="auth-input"
+              id="email"
+              type="email"
+              placeholder="jane@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="password">
-              Password
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                lock
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+          <div className="auth-group">
+            <label className="auth-label" htmlFor="password">Password</label>
+            <input
+              className="auth-input"
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1" htmlFor="confirmPassword">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                lock_reset
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
+          <div className="auth-group">
+            <label className="auth-label" htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              className="auth-input"
+              id="confirmPassword"
+              type="password"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-inverse-primary text-on-primary hover:opacity-90 hover:shadow-[0_10px_20px_-10px_theme(colors.primary)] active:translate-y-0 transition-all duration-200 cursor-pointer"
-          >
+          <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Creating Account...' : 'Create Account'}
-            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
           </button>
         </form>
 
-        <p className="mt-4 text-center font-body-md text-body-md text-text-muted">
+        <p className="auth-footer">
           Already have an account?{' '}
           <button
             onClick={() => navigate('/login')}
-            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+            className="auth-link bg-transparent border-none p-0 cursor-pointer"
           >
             Login
           </button>
         </p>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
 
@@ -481,89 +403,71 @@ export function VerifyEmailPage() {
   };
 
   return (
-    <AuthLayout>
-      <AuthHeader subtitle="Verify your account to access your dashboard." />
-      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
-        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Verify Email</h2>
-        <p className="font-body-md text-sm text-text-muted text-center">
-          Enter the 6-digit verification code sent to your email.
-        </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">Verify Email</h1>
+        <p className="auth-subtitle">Verify your account to access your dashboard.</p>
         
         {error && (
-          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-red-900/30 border border-red-500/40 text-red-200 text-sm text-center">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-purple-900/30 border border-purple-500/40 text-purple-200 text-sm text-center">
             {success}
           </div>
         )}
 
-        <form onSubmit={handleVerify} className="space-y-6">
-          <div className="space-y-2">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
-              Email Address
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                mail
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+        <form onSubmit={handleVerify} className="auth-form">
+          <div className="auth-group">
+            <label className="auth-label">Email Address</label>
+            <input
+              className="auth-input"
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
           
-          <div className="space-y-2">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
-              6-Digit Verification Code
-            </label>
-            <div className="relative">
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 text-center text-2xl tracking-[0.5em] font-bold focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                type="text"
-                placeholder="000000"
-                maxLength={6}
-                value={code}
-                onChange={(e) => setCode(e.target.value.trim())}
-                required
-              />
-            </div>
+          <div className="auth-group">
+            <label className="auth-label">6-Digit Verification Code</label>
+            <input
+              className="auth-input text-center text-xl font-bold tracking-widest"
+              type="text"
+              placeholder="000000"
+              maxLength={6}
+              value={code}
+              onChange={(e) => setCode(e.target.value.trim())}
+              required
+            />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
-          >
+          <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Verifying...' : 'Verify Account'}
           </button>
         </form>
 
-        <div className="flex justify-between items-center mt-4 text-sm font-body-md">
+        <div className="flex justify-between items-center mt-6 text-sm">
           <button
             onClick={handleResend}
             disabled={resending}
-            className="text-primary font-medium hover:underline cursor-pointer"
+            className="text-indigo-300 hover:text-indigo-200 transition-colors bg-transparent border-none cursor-pointer font-medium"
           >
             {resending ? 'Sending...' : 'Resend code'}
           </button>
           <button
             onClick={() => navigate('/login')}
-            className="text-text-muted hover:text-text-primary cursor-pointer"
+            className="text-slate-300 hover:text-white transition-colors bg-transparent border-none cursor-pointer"
           >
             Back to Login
           </button>
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
 
@@ -617,65 +521,51 @@ export function ForgotPasswordPage() {
   };
 
   return (
-    <AuthLayout>
-      <AuthHeader subtitle="Password Recovery" />
-      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
-        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Forgot Password</h2>
-        <p className="font-body-md text-sm text-text-muted text-center">
-          Enter your email to receive a password recovery link.
-        </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">Forgot Password</h1>
+        <p className="auth-subtitle">Enter your email to receive a recovery link.</p>
         
         {error && (
-          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-red-900/30 border border-red-500/40 text-red-200 text-sm text-center">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm break-all">
+          <div className="p-3 mb-4 rounded bg-purple-900/30 border border-purple-500/40 text-purple-200 text-sm text-center break-all">
             {success}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
-              Email Address
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                mail
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-group">
+            <label className="auth-label">Email Address</label>
+            <input
+              className="auth-input"
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
-          >
+          <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Sending link...' : 'Send Reset Link'}
           </button>
         </form>
 
-        <div className="text-center mt-4">
+        <div className="text-center mt-6">
           <button
             onClick={() => navigate('/login')}
-            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+            className="auth-link bg-transparent border-none p-0 cursor-pointer text-sm"
           >
             Back to Login
           </button>
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
 
@@ -762,85 +652,64 @@ export function ResetPasswordPage() {
   };
 
   return (
-    <AuthLayout>
-      <AuthHeader subtitle="Password Recovery" />
-      <div className="bg-surface border-t border-l border-white/5 shadow-[0_25px_50px_-12px_rgba(15,23,42,0.5)] shadow-primary/5 backdrop-blur-md p-8 rounded-xl flex flex-col gap-6">
-        <h2 className="font-headline-lg text-headline-lg text-center text-text-primary">Reset Password</h2>
-        <p className="font-body-md text-sm text-text-muted text-center">
-          Enter your new password below.
-        </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">Reset Password</h1>
+        <p className="auth-subtitle">Enter your new password below.</p>
         
         {error && (
-          <div className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-red-900/30 border border-red-500/40 text-red-200 text-sm text-center">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="p-4 rounded-lg bg-primary-container/20 border border-primary-fixed-dim/30 text-primary-fixed-dim font-body-md text-sm">
+          <div className="p-3 mb-4 rounded bg-purple-900/30 border border-purple-500/40 text-purple-200 text-sm text-center">
             {success}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
-              New Password
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                lock
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={!token}
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-group">
+            <label className="auth-label">New Password</label>
+            <input
+              className="auth-input"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={!token}
+            />
           </div>
 
-          <div className="space-y-2">
-            <label className="font-label-md text-label-md text-on-surface-variant block ml-1">
-              Confirm New Password
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline select-none pointer-events-none">
-                lock_reset
-              </span>
-              <input
-                className="bg-surface-container border border-transparent text-on-surface placeholder:text-outline-variant w-full rounded-lg h-12 pl-10 pr-4 font-body-md text-body-md focus:border-b-primary focus:shadow-[0_2px_0_0_theme(colors.primary)] focus:bg-surface-container-high focus:outline-none transition-all duration-300"
-                type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                disabled={!token}
-              />
-            </div>
+          <div className="auth-group">
+            <label className="auth-label">Confirm New Password</label>
+            <input
+              className="auth-input"
+              type="password"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              disabled={!token}
+            />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading || !token}
-            className="w-full h-12 rounded-lg font-title-lg text-title-lg flex items-center justify-center gap-2 mt-6 bg-gradient-to-r from-primary-container to-primary text-on-primary hover:opacity-90 hover:shadow-[0_8px_20px_rgba(192,193,255,0.2)] active:translate-y-[1px] transition-all duration-200 cursor-pointer"
-          >
+          <button type="submit" disabled={loading || !token} className="auth-button">
             {loading ? 'Resetting...' : 'Reset Password'}
           </button>
         </form>
 
-        <div className="text-center mt-4">
+        <div className="text-center mt-6">
           <button
             onClick={() => navigate('/login')}
-            className="text-primary hover:text-primary-fixed-dim font-medium transition-colors cursor-pointer"
+            className="auth-link bg-transparent border-none p-0 cursor-pointer text-sm"
           >
             Back to Login
           </button>
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
