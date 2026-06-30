@@ -1,0 +1,373 @@
+GONZE TRACKER
+Antigravity Assignment Brief
+Build a premium AI planning, habit tracking, meeting automation, email, and finance intelligence platform
+Target site: https://nine13.site/gonze/
+Use this document as the full task assignment for Antigravity. The goal is to inspect the existing project, analyze the industry, and implement an end-to-end product upgrade plan.
+1. Executive Assignment for Antigravity
+Mission: 
+Transform Gonze Tracker from a basic productivity, habit, and finance tracker into a differentiated AI-native operating system for personal planning, meetings, email follow-up, and financial decision-making.
+Inspect the current codebase, UI, database, authentication model, and deployment setup before implementation.
+Research the productivity, planning, meeting automation, email productivity, and personal finance management industries.
+Compare Gonze against leading competitors and identify where it can win through combined planning + meetings + finance intelligence.
+Design and implement Google Calendar, Google Meet, and Gmail integrations with secure OAuth-based permission control.
+Design and implement a financial analyzer with secure bank-provider architecture, mock provider support, transaction import, categorization, budgets, and insights.
+Produce clean, scalable, production-ready code with clear documentation and testing instructions.
+2. Current Product Context
+Observed positioning: 
+The public page identifies Gonze Tracker as a productivity, habits, and finance product. This is a strong starting point because the market is moving toward tools that do not only store tasks, but actively schedule time, automate follow-up, and connect daily behavior with real financial outcomes.
+Area
+Current Direction
+Strategic Upgrade
+Planning
+Daily and weekly planning / productivity tracking
+AI-assisted planning with calendar-aware scheduling and automatic time blocking
+Habits
+Habit tracking and routine building
+Habit-to-goal analytics connected to calendar consistency and financial behavior
+Meetings
+Not yet a core differentiator
+Google Meet generation, calendar invites, attendee email workflows, meeting reminders
+Email
+Not yet deeply connected
+Gmail-powered invitations, follow-ups, summaries, and plan-based notifications
+Finance
+Finance tracking direction exists
+Bank-connected analyzer with budgets, cash flow, savings goals, and spending intelligence
+Insights
+Basic tracking potential
+Actionable recommendations across time, habits, meetings, and money
+3. Industry and Market Requirements
+Antigravity should treat this as a product strategy + implementation assignment. The platform sits at the intersection of five markets:
+Productivity and planner apps: Notion, Todoist, TickTick, Sunsama, Motion, Akiflow, ClickUp, Asana.
+AI scheduling and calendar intelligence: Reclaim, Motion, Clockwise, Calendly, Google Calendar workflows.
+Meeting automation: Google Meet, Zoom, Fireflies, Otter, Fathom, meeting assistants.
+Email productivity: Gmail, Superhuman, Spark, Front, workflow-based follow-up tools.
+Personal finance and budgeting: Rocket Money, YNAB, Monarch Money, Copilot Money, Plaid-powered apps, open banking tools.
+Market direction to design for: 
+Productivity tools are increasingly judged by automation depth, integration quality, AI assistance, and whether they reduce manual planning work. For finance, users expect secure account linking, automatic categorization, budget recommendations, and plain-English insights rather than raw transaction lists.
+Industry Demand
+Why It Matters
+How Gonze Should Respond
+AI-native planning
+Users do not want to manually drag every task into a calendar.
+Turn plans into scheduled events automatically, suggest best time slots, and reschedule intelligently.
+Calendar-first workflows
+Work happens around calendars and meetings.
+Make every task, weekly plan, and reminder calendar-aware.
+Deep integrations
+Users expect tools to connect with Google, email, banking, and notifications.
+Create OAuth-based Google integrations and modular finance-provider architecture.
+Financial awareness
+Planning without money context is incomplete.
+Connect budgets, bills, savings goals, and spending patterns to weekly planning.
+Trust and privacy
+Calendar, email, and financial data are highly sensitive.
+Use consent screens, token security, encryption, audit logs, and user-controlled disconnect/delete flows.
+Mobile responsiveness
+Planning and money decisions happen on the go.
+Make all dashboards, modals, and onboarding flows responsive and fast.
+4. Competitive Analysis Framework
+Competitor Type
+Examples
+Strengths
+Gap Gonze Can Exploit
+Task managers
+Todoist, TickTick
+Fast task capture, reminders, habits
+Usually weak on financial context and meeting/email automation.
+AI schedulers
+Motion, Reclaim, Akiflow
+Calendar automation, time blocking
+Often expensive and focused on scheduling, not finance or habits.
+Workspace tools
+Notion, ClickUp, Asana
+Flexible databases, team workflows
+Can be complex and not optimized for personal finance + daily execution.
+Finance apps
+YNAB, Monarch, Rocket Money
+Budgeting, transaction categorization, financial insights
+Usually disconnected from daily/weekly planning and productivity.
+Meeting tools
+Calendly, Google Meet, Otter, Fireflies
+Scheduling, video, transcription, summaries
+Do not connect meeting outcomes to habits, tasks, and finance planning.
+Differentiation thesis: 
+Gonze can win by becoming the personal execution layer that connects what users plan, when they meet, what they email, what they spend, and what they should improve next week.
+5. Research Work Assignment
+Before coding, run a research workflow inside Antigravity. Create research notes or files under /research and use them to guide implementation.
+Research top productivity and planner tools. Document their main features, pricing, onboarding, integrations, and UX patterns.
+Research AI scheduling tools and identify the minimum feature set for calendar-aware planning.
+Research Google Calendar, Google Meet, and Gmail API requirements, OAuth scopes, consent, rate limits, and implementation patterns.
+Research personal finance management products and identify expected dashboards, categories, charts, and insights.
+Research Plaid, Salt Edge, and Open Banking provider models. Decide how to build a provider abstraction that can work with mock data now and real providers later.
+Summarize findings into a product requirements document before implementation.
+6. Product Vision and Core User Stories
+Persona
+Problem
+Desired Outcome
+Student / creator
+Needs structure for daily tasks, content, studying, and meetings.
+A weekly plan that becomes actual calendar events and reminders.
+Founder / freelancer
+Needs meetings, email follow-up, money tracking, and priorities in one system.
+One dashboard that shows schedule, obligations, cash flow, and next actions.
+Budget-conscious user
+Wants to plan life based on money reality.
+Spending insights that inform weekly goals and savings decisions.
+Productivity enthusiast
+Uses many apps but lacks a unified system.
+A clean, premium dashboard that turns fragmented data into decisions.
+As a user, I can connect my Google account securely and choose which permissions to grant.
+As a user, I can create a task or weekly plan and instantly turn it into a Google Calendar event.
+As a user, I can add a Google Meet link when a task is a meeting or call.
+As a user, I can invite participants by email and send updates through Gmail integration.
+As a user, I can connect a bank provider or use mock/demo financial data.
+As a user, I can see income, expenses, balance, categories, budget progress, trends, and financial health.
+As a user, I can receive weekly insights that connect my calendar, habits, and finances.
+7. Feature Module A: Google Calendar, Google Meet, and Gmail
+7.1 Required Capabilities
+Google OAuth connection flow with clear consent and permissions explanation.
+Integration settings page showing connection status, granted scopes, sync status, and disconnect button.
+Calendar event creation from daily plan, weekly plan, task, reminder, or meeting object.
+Automatic Google Meet link creation for meeting-type events.
+Participant invitation flow with attendee email addresses.
+Gmail invitation or follow-up email workflow when a plan item requires communication.
+Error handling for missing permissions, expired tokens, invalid attendee emails, timezone problems, and API failures.
+7.2 UX Requirements
+In every task/plan creation form, include toggles: Add to Google Calendar, Add Google Meet link, Send email invitation.
+If the user has not connected Google, show a non-blocking Connect Google Account call-to-action.
+If the task includes a participant email, suggest sending an invitation.
+After event creation, show the calendar event status and Meet link.
+Support editing or deleting linked events where technically possible.
+7.3 Suggested Data Model
+Table / Model
+Purpose
+Important Fields
+integrations
+Stores connected providers
+user_id, provider, status, scopes, access_token_encrypted, refresh_token_encrypted, expires_at
+calendar_events
+Maps internal events to Google events
+user_id, task_id, google_event_id, meet_link, start_time, end_time, timezone, sync_status
+meeting_participants
+Stores invitees
+event_id, email, name, invitation_status
+email_logs
+Tracks Gmail-based sends
+user_id, event_id, recipient, subject, status, sent_at, error_message
+8. Feature Module B: Finance Analyzer
+8.1 Required Capabilities
+Bank connection UI with explicit permission and privacy explanation.
+Provider abstraction that supports mock provider immediately and can later support Plaid, Salt Edge, or Open Banking.
+Import accounts, balances, and transactions through provider interface.
+Automatic transaction categorization with editable categories.
+Budget creation by category and month.
+Savings goals with progress tracking.
+Cash flow analysis, weekly/monthly trends, and financial health score.
+AI-style insights written in plain English with concrete recommendations.
+Disconnect bank account and delete financial data actions.
+8.2 Finance Dashboard Requirements
+Widget
+Description
+Empty State
+Total Income
+Income for selected period
+Prompt user to connect account or add sample data.
+Total Expenses
+Expenses for selected period
+Explain that transactions will appear after sync.
+Current Balance
+Aggregated balance across accounts
+Show mock balance in demo mode.
+Spending by Category
+Chart and table of category totals
+Show default categories with zero values.
+Monthly Trend
+Income vs expenses over time
+Show sample line chart if demo mode is active.
+Budget Performance
+Budgeted vs actual spending
+Prompt user to create first budget.
+Savings Goals
+Goal progress and projected completion
+Prompt user to create a savings goal.
+Financial Health Score
+Simple score with drivers
+Explain score methodology.
+Insights
+Actionable recommendations
+Show examples until enough transaction data exists.
+8.3 Suggested Data Model
+Table / Model
+Purpose
+Important Fields
+financial_connections
+Stores provider connection metadata
+user_id, provider, status, consent_status, access_token_encrypted, last_sync_at
+financial_accounts
+Stores bank/finance accounts
+connection_id, account_name, account_type, currency, balance_current, balance_available
+transactions
+Stores imported transactions
+account_id, amount, currency, merchant, category, date, pending, provider_transaction_id
+budgets
+Stores user budgets
+user_id, period, category, limit_amount, spent_amount
+savings_goals
+Stores goals
+user_id, name, target_amount, current_amount, target_date
+financial_insights
+Stores generated insights
+user_id, insight_type, title, body, severity, period_start, period_end
+9. Security, Privacy, and Compliance Requirements
+Never store Google, Gmail, or banking passwords.
+Use OAuth or provider-approved token flows only.
+Encrypt access tokens, refresh tokens, and sensitive financial identifiers at rest.
+Use HTTPS in production and secure cookies/session handling.
+Use least-privilege scopes: request only permissions needed for the feature.
+Add clear consent screens explaining what data is accessed and why.
+Add disconnect/revoke access flows for Google and finance providers.
+Add delete imported financial data option.
+Log integration errors without exposing tokens or sensitive data.
+Create a privacy notice page or modal for calendar, email, and financial data.
+10. Technical Architecture Requirements
+Layer
+Requirement
+Frontend
+Reusable components for integrations, planning forms, finance cards, charts, modals, loading states, error states, and empty states.
+Backend
+Service layer for Google integrations, Gmail email workflow, finance provider abstraction, transaction sync, and insight generation.
+Database
+Normalized schema for integrations, events, participants, financial accounts, transactions, budgets, goals, and insights.
+Auth
+User-specific integration ownership and permission checks before every API call.
+Jobs / Sync
+Background or manual sync mechanism for calendar status and financial transactions.
+AI / Insights
+Deterministic rule-based insights first; optional AI summarization later.
+Testing
+Unit tests for providers and services; integration tests for API endpoints; UI tests for critical flows if stack supports it.
+Documentation
+README updates, environment variable instructions, API setup instructions, and demo mode instructions.
+11. Copy-Paste Prompt for Antigravity
+Use the following prompt inside Antigravity:
+You are working on the existing Gonze Tracker project at https://nine13.site/gonze/. Treat this as a full product strategy, market research, and implementation assignment.
+Goal: Transform Gonze Tracker into a premium AI-native planning, habit, meeting, email, and finance intelligence platform. The product should compete with productivity tools, AI schedulers, meeting automation tools, and personal finance apps by combining all of these workflows into one clean system.
+Before coding:
+1. Inspect the full codebase, architecture, database, authentication, UI components, routes, and deployment setup.
+2. Research the market and competitors: Notion, Todoist, TickTick, Motion, Reclaim, Akiflow, ClickUp, Sunsama, YNAB, Monarch Money, Rocket Money, Copilot Money, Plaid-powered apps, Calendly, Google Meet, and meeting assistant tools.
+3. Create a short internal product requirements note summarizing what users expect in this industry and where Gonze can differentiate.
+Feature A: Google Calendar + Google Meet + Gmail Integration
+Implement secure Google OAuth connection. Users must explicitly grant permission. Never store passwords. Store tokens securely. Add a Google Integrations settings page with connect, disconnect, permission status, Calendar access status, Gmail access status, and sync status.
+When a user creates a daily plan, weekly plan, task, event, reminder, or meeting, add options to:
+- Create Google Calendar Event
+- Add Google Meet Link
+- Add Participants
+- Send Email Invitation
+- Schedule Reminder
+If the user provides title, description, date, time, timezone, and participant emails, the app should create a Google Calendar event and attach a Google Meet link. It should optionally send an invitation/follow-up through Gmail. Add success states, loading states, and error states.
+Feature B: Finance Analyzer
+Build a finance module that supports secure, permission-based bank or provider connections. If real banking API access is not available yet, implement a clean provider abstraction with a mock bank provider so the product works in demo mode and can later support Plaid, Salt Edge, or Open Banking.
+Finance Analyzer must include:
+- Account connection flow
+- Transaction import
+- Income and expense tracking
+- Automatic categorization with editable categories
+- Budget planning
+- Savings goals
+- Cash flow analysis
+- Spending trends
+- Weekly and monthly reports
+- Financial health score
+- Actionable AI-style insights
+- Disconnect account and delete financial data options
+Finance dashboard must display:
+- Total income
+- Total expenses
+- Current balance
+- Spending by category
+- Monthly trend
+- Budget performance
+- Savings progress
+- Financial health score
+- Financial insights
+Security requirements:
+- Use OAuth/token-based flows only
+- Encrypt sensitive tokens and financial data at rest
+- Use least-privilege permissions
+- Add privacy notice and consent explanation
+- Never expose tokens in logs
+- Allow users to revoke access and delete imported data
+Product/UX requirements:
+- Keep the existing design direction but upgrade it into a premium SaaS-style interface
+- Add navigation sections: Planner, Calendar, Meetings, Google Integrations, Finance Analyzer, Insights, Settings
+- Make all flows responsive and mobile-friendly
+- Add loading, error, and empty states
+- Add demo/mock data for development mode
+- Use reusable components and services
+Suggested implementation deliverables:
+- Product requirements note based on market/competitor analysis
+- Google OAuth service
+- Calendar event and Google Meet creation service
+- Gmail invitation/follow-up workflow
+- Integrations settings page
+- Finance provider interface
+- Mock finance provider
+- Finance dashboard
+- Transaction/category/budget/goal/insight models
+- Secure connect/disconnect/delete flows
+- Tests or validation steps
+- Updated README with setup instructions
+Implementation approach:
+1. Propose the best architecture after inspecting the project.
+2. Implement the features end-to-end using the existing stack where possible.
+3. Keep code clean, modular, secure, and production-ready.
+4. After implementation, run the app, test the main flows, fix errors, and provide a summary of what changed.
+12. Implementation Milestones
+Milestone
+Output
+Acceptance Criteria
+M1: Codebase Audit
+Architecture note
+Current stack, routes, models, auth, UI patterns, risks documented.
+M2: Market/Competitor Research
+PRD note
+Clear competitor analysis and feature priorities.
+M3: Google Integrations
+Working OAuth + settings page
+User can connect/disconnect Google and see status.
+M4: Meeting Automation
+Calendar + Meet flow
+User can create a plan item and generate a calendar event with Meet link.
+M5: Gmail Workflow
+Email invitation/follow-up
+User can send invitation or follow-up from a meeting/task.
+M6: Finance Architecture
+Provider abstraction + mock provider
+Demo data can simulate accounts, balances, and transactions.
+M7: Finance Dashboard
+Working dashboard
+Income, expenses, balance, categories, trends, budgets, goals, and insights shown.
+M8: Security + Polish
+Production readiness
+Tokens encrypted, permissions clear, delete/disconnect works, UX states complete.
+13. Final QA Checklist
+Google connection works and can be revoked.
+Calendar event creation works with correct timezone handling.
+Google Meet link appears on created meeting events.
+Gmail invitation/follow-up flow works or fails gracefully with useful error messages.
+Finance dashboard works with mock provider and is ready for real provider integration.
+Transactions can be categorized and shown in charts/tables.
+Budgets, goals, and insights render correctly.
+Sensitive data is not exposed in frontend, logs, or local storage.
+All new pages are responsive.
+README explains required environment variables and setup steps.
+The product feels more premium, more automated, and more differentiated than a standard tracker.
+14. Reference Sources Used for This Brief
+Original assignment structure: user-provided Hands-On Assignments markdown file.
+Gonze public page: https://nine13.site/gonze/
+Google Calendar API documentation: Create events and manage Calendar API flows.
+Google Meet REST API documentation: Meeting spaces and Workspace event workflows.
+Plaid documentation: Transactions, accounts, balances, and financial data products.
+Salt Edge documentation: Open Banking Gateway and Account Information API concepts.
+Recent productivity-market coverage: AI scheduling, calendar-centric workflows, and integration depth trends.
