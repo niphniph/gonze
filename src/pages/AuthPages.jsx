@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Common Background Orbs and Layout wrapper
 function AuthLayout({ children }) {
@@ -27,7 +28,8 @@ function AuthHeader({ subtitle }) {
 }
 
 // 1. LOGIN PAGE
-export function LoginPage({ navigate, onLoginSuccess }) {
+export function LoginPage({ onLoginSuccess }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -190,7 +192,8 @@ export function LoginPage({ navigate, onLoginSuccess }) {
 }
 
 // 2. REGISTER PAGE
-export function RegisterPage({ navigate }) {
+export function RegisterPage() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -381,7 +384,8 @@ export function RegisterPage({ navigate }) {
 }
 
 // 3. VERIFY EMAIL PAGE
-export function VerifyEmailPage({ navigate }) {
+export function VerifyEmailPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
@@ -564,7 +568,8 @@ export function VerifyEmailPage({ navigate }) {
 }
 
 // 4. FORGOT PASSWORD PAGE
-export function ForgotPasswordPage({ navigate }) {
+export function ForgotPasswordPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -675,7 +680,8 @@ export function ForgotPasswordPage({ navigate }) {
 }
 
 // 5. RESET PASSWORD PAGE
-export function ResetPasswordPage({ navigate }) {
+export function ResetPasswordPage() {
+  const navigate = useNavigate();
   const [token, setToken] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

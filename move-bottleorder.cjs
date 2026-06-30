@@ -16,6 +16,21 @@ function moveFolder(folderName) {
     }
 }
 
+function copyFile(fileName) {
+    const src = path.join(__dirname, 'dist', 'tracker', fileName);
+    const dest = path.join(__dirname, 'dist', fileName);
+
+    if (fs.existsSync(src)) {
+        if (fs.existsSync(dest)) {
+            fs.rmSync(dest, { force: true });
+        }
+        fs.copyFileSync(src, dest);
+        console.log(`Successfully copied ${fileName} to dist/${fileName} for root hosting!`);
+    } else {
+        console.warn(`Warning: dist/tracker/${fileName} not found`);
+    }
+}
+
 function moveFile(fileName) {
     const src = path.join(__dirname, 'dist', 'tracker', fileName);
     const dest = path.join(__dirname, 'dist', fileName);
@@ -39,4 +54,5 @@ moveFolder('portfolio');
 moveFolder('pawn');
 moveFolder('nineos');
 moveFile('_redirects');
+copyFile('index.html');
 
