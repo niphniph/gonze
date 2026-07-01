@@ -15,7 +15,8 @@ export async function onRequest(context) {
     const { request, env } = context;
     const db = env.DB;
     if (!db) {
-      return new Response(JSON.stringify({ error: "Database binding DB is missing" }), {
+      console.error("Cloudflare D1 database binding 'DB' is missing in environment.");
+      return new Response(JSON.stringify({ error: "Database is not connected. Please configure Cloudflare D1 binding named DB." }), {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
@@ -31,7 +32,7 @@ export async function onRequest(context) {
     }
 
     // 2. Fetch latest user state from DB
-    const user = await db.prepare("SELECT id, name, email, is_verified FROM users WHERE id = ?").bind(payload.sub).first();
+    const user = await db.prepare("SELECT id, full_name, email, email_verified FROM users WHERE id = ?").bind(payload.sub).first();
     if (!user) {
       return new Response(JSON.stringify({ error: "User not found" }), {
         status: 404,
@@ -39,13 +40,15 @@ export async function onRequest(context) {
       });
     }
 
+    const userName = user.full_name || 'User';
+
     return new Response(JSON.stringify({
       success: true,
       user: {
         id: user.id,
-        name: user.name,
+        name: userName,
         email: user.email,
-        is_verified: user.is_verified === 1
+        email_verified: user.email_verified === 1
       }
     }), {
       status: 200,

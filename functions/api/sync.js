@@ -24,7 +24,8 @@ export async function onRequest(context) {
   const { request, env } = context;
   const db = env.DB;
   if (!db) {
-    return new Response(JSON.stringify({ error: "Database binding DB is missing" }), {
+    console.error("Cloudflare D1 database binding 'DB' is missing in environment.");
+    return new Response(JSON.stringify({ error: "Database is not connected. Please configure Cloudflare D1 binding named DB." }), {
       status: 500,
       headers: { "Content-Type": "application/json", ...corsHeaders }
     });

@@ -1,20 +1,31 @@
--- Database schema for productivity tracker authentication and user data
+-- Database schema for productivity tracker
+DROP TABLE IF EXISTS tracker_data;
+DROP TABLE IF EXISTS verification_codes;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
+  id TEXT PRIMARY KEY,
+  full_name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
-  is_verified INTEGER DEFAULT 0,
-  verification_code TEXT,
-  verification_code_expires INTEGER,
+  email_verified INTEGER DEFAULT 0,
   reset_token TEXT,
   reset_token_expires INTEGER,
-  created_at INTEGER NOT NULL
+  created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS verification_codes (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  email TEXT NOT NULL,
+  code TEXT NOT NULL,
+  token TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  created_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tracker_data (
-  user_id INTEGER PRIMARY KEY,
+  user_id TEXT PRIMARY KEY,
   tasks TEXT,
   habits TEXT,
   habits_history TEXT,

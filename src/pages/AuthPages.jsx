@@ -29,15 +29,11 @@ export function LoginPage({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-
-      if (res.status === 404) {
-        throw new Error('API_NOT_FOUND');
-      }
 
       const data = await res.json();
 
@@ -52,22 +48,7 @@ export function LoginPage({ onLoginSuccess }) {
       onLoginSuccess(data.token, data.user);
       navigate('/dashboard');
     } catch (err) {
-      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
-        const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
-        const cleanEmail = email.trim().toLowerCase();
-        const found = localUsers.find(u => u.email === cleanEmail && u.password === password);
-        
-        if (!found) {
-          setError('Invalid email or password');
-          setLoading(false);
-          return;
-        }
-
-        onLoginSuccess(null, { name: found.name, email: found.email });
-        navigate('/dashboard');
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -166,8 +147,8 @@ export function RegisterPage() {
       setError('Passwords do not match');
       return;
     }
-    if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
-      setError('Password must be at least 8 characters long and contain both letters and numbers');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
       return;
     }
 
@@ -181,15 +162,11 @@ export function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, confirmPassword })
+        body: JSON.stringify({ fullName: name, email, password, confirmPassword })
       });
-
-      if (res.status === 404) {
-        throw new Error('API_NOT_FOUND');
-      }
 
       const data = await res.json();
 
@@ -199,23 +176,7 @@ export function RegisterPage() {
 
       navigate(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err) {
-      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
-        const localUsers = JSON.parse(localStorage.getItem('tracker_local_users') || '[]');
-        const cleanEmail = email.trim().toLowerCase();
-        
-        if (localUsers.some(u => u.email === cleanEmail)) {
-          setError('Email is already registered');
-          setLoading(false);
-          return;
-        }
-
-        localUsers.push({ name: name.trim(), email: cleanEmail, password });
-        localStorage.setItem('tracker_local_users', JSON.stringify(localUsers));
-
-        navigate(`/login?success=${encodeURIComponent("Account created successfully. Please log in.")}`);
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -319,25 +280,52 @@ export function VerifyEmailPage() {
     const params = new URLSearchParams(window.location.search);
     const emailParam = params.get('email') || '';
     const codeParam = params.get('code') || '';
+    const tokenParam = params.get('token') || '';
     
     if (emailParam) setEmail(emailParam);
     if (codeParam) setCode(codeParam);
 
-    if (emailParam && codeParam) {
-      autoVerify(emailParam, codeParam);
+    if (tokenParam) {
+      autoVerifyToken(tokenParam);
+    } else if (emailParam && codeParam) {
+      autoVerifyCode(emailParam, codeParam);
     }
   }, []);
 
-  const autoVerify = async (emailVal, codeVal) => {
+  const autoVerifyToken = async (tokenVal) => {
     setLoading(true);
+    setError('');
+    setSuccess('');
     try {
-      const res = await fetch('/api/auth/verify', {
+      const res = await fetch('/api/verify-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: tokenVal })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Verification failed');
+
+      setSuccess('Email verified successfully! Redirecting to login...');
+      setTimeout(() => navigate('/login'), 2500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const autoVerifyCode = async (emailVal, codeVal) => {
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+      const res = await fetch('/api/verify-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailVal, code: codeVal })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || 'Verification failed');
 
       setSuccess('Email verified successfully! Redirecting to login...');
       setTimeout(() => navigate('/login'), 2500);
@@ -359,13 +347,13 @@ export function VerifyEmailPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/verify', {
+      const res = await fetch('/api/verify-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || 'Verification failed');
 
       setSuccess('Email verified successfully! You can now log in.');
       setTimeout(() => navigate('/login'), 2000);
@@ -386,13 +374,13 @@ export function VerifyEmailPage() {
     setResending(true);
 
     try {
-      const res = await fetch('/api/auth/resend', {
+      const res = await fetch('/api/resend-verification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || 'Failed to resend code');
 
       setSuccess('Verification code resent successfully!');
     } catch (err) {

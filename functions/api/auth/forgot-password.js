@@ -63,7 +63,7 @@ export async function onRequest(context) {
     const appUrl = env.APP_URL || "http://localhost:5173";
     const resetLink = `${appUrl}/reset-password?token=${resetToken}`;
     
-    const emailHtml = getResetEmailTemplate(user.name, resetLink);
+    const emailHtml = getResetEmailTemplate(user.full_name, resetLink);
     await sendEmail({
       to: cleanEmail,
       subject: "Reset your password - Productivity Tracker",

@@ -1,4 +1,4 @@
-import { verifyPassword, signJwt, corsHeaders, handleOptions } from './authUtils.js';
+import { verifyPassword, signJwt, corsHeaders, handleOptions } from './auth/authUtils.js';
 
 export async function onRequest(context) {
   const optionsResponse = handleOptions(context.request);
@@ -11,16 +11,17 @@ export async function onRequest(context) {
     });
   }
 
-  try {
-    const { request, env } = context;
-    const db = env.DB;
-    if (!db) {
-      return new Response(JSON.stringify({ error: "Database binding DB is missing" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
-      });
-    }
+  const { request, env } = context;
+  const db = env.DB;
+  if (!db) {
+    console.error("Cloudflare D1 database binding 'DB' is missing in environment.");
+    return new Response(JSON.stringify({ error: "Database is not connected. Please configure Cloudflare D1 binding named DB." }), {
+      status: 500,
+      headers: { "Content-Type": "application/json", ...corsHeaders }
+    });
+  }
 
+  try {
     const { email, password } = await request.json();
 
     if (!email || !password) {
@@ -32,7 +33,7 @@ export async function onRequest(context) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // 1. Fetch user from DB
+    // 1. Find user by email
     const user = await db.prepare("SELECT * FROM users WHERE email = ?").bind(cleanEmail).first();
     if (!user) {
       return new Response(JSON.stringify({ error: "Invalid email or password" }), {
@@ -41,7 +42,7 @@ export async function onRequest(context) {
       });
     }
 
-    // 2. Verify password
+    // 2. Check password
     const passwordMatch = await verifyPassword(password, user.password_hash);
     if (!passwordMatch) {
       return new Response(JSON.stringify({ error: "Invalid email or password" }), {
@@ -50,10 +51,10 @@ export async function onRequest(context) {
       });
     }
 
-    // 3. Block login if email is not verified
-    if (user.is_verified === 0) {
+    // 3. If email_verified = 0, block login
+    if (user.email_verified === 0) {
       return new Response(JSON.stringify({
-        error: "Email is not verified. Please verify your email first.",
+        error: "Please verify your email first.",
         notVerified: true,
         email: user.email
       }), {
@@ -71,25 +72,24 @@ export async function onRequest(context) {
       });
     }
 
-    const userName = user.full_name || user.name || 'User';
-
     const payload = {
       sub: user.id,
       email: user.email,
-      name: userName,
+      name: user.full_name,
       exp: Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 days expiration
     };
 
     const token = await signJwt(payload, jwtSecret);
 
+    // 5. Return token and user
     return new Response(JSON.stringify({
       success: true,
       token,
       user: {
         id: user.id,
-        name: userName,
+        name: user.full_name,
         email: user.email,
-        is_verified: true
+        email_verified: true
       }
     }), {
       status: 200,

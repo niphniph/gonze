@@ -178,12 +178,15 @@ export async function getAuthenticatedUser(request, env) {
 
 // Send email using Resend API (or fallback to logging)
 export async function sendEmail({ to, subject, html }, env) {
-  const apiKey = env.EMAIL_PROVIDER_API_KEY;
+  const apiKey = env.RESEND_API_KEY || env.EMAIL_PROVIDER_API_KEY;
+  const fromEmail = env.FROM_EMAIL || "Nine Tracker <verify@nine13.site>";
+
   if (!apiKey) {
     console.log("==========================================");
-    console.log("MOCK EMAIL SENT (EMAIL_PROVIDER_API_KEY not configured):");
+    console.log("MOCK EMAIL SENT (RESEND_API_KEY or EMAIL_PROVIDER_API_KEY not configured):");
     console.log(`To: ${to}`);
     console.log(`Subject: ${subject}`);
+    console.log(`From: ${fromEmail}`);
     console.log(`Body: ${html}`);
     console.log("==========================================");
     return { success: true, mock: true };
@@ -197,7 +200,7 @@ export async function sendEmail({ to, subject, html }, env) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        from: "Productivity Tracker <onboarding@resend.dev>",
+        from: fromEmail,
         to: to,
         subject: subject,
         html: html

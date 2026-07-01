@@ -12,6 +12,7 @@ import { CalendarPage } from '../pages/CalendarPage';
 import { Meetings } from '../pages/Meetings';
 import { GoogleIntegrations } from '../pages/GoogleIntegrations';
 import { FinanceAnalyzer } from '../pages/FinanceAnalyzer';
+import { Navbar } from './Navbar';
 import { db } from '../utils/db';
 
 const NAV_ITEMS = [
@@ -36,70 +37,57 @@ export default function MainDashboardLayout() {
   const [language, setLanguage] = useState(localStorage.getItem('tracker_lang') || 'en');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dbError, setDbError] = useState('');
 
   const loadUserData = async () => {
     const token = localStorage.getItem('tracker_token');
-    const localEmail = localStorage.getItem('tracker_email');
 
-    if (!token && !localEmail) {
+    if (!token) {
       navigate('/login');
       return;
     }
 
     try {
-      if (token) {
-        const userRes = await fetch('/api/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+      const userRes = await fetch('/api/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
 
-        if (userRes.status === 404) {
-          throw new Error('API_NOT_FOUND');
-        }
+      const userData = await userRes.json();
 
-        if (!userRes.ok) {
-          throw new Error('Session invalid');
-        }
-
-        const userData = await userRes.json();
-        setUser(userData.user);
-        db.loadUserSpecificData(userData.user.email);
-
-        if (!userData.user.is_verified) {
-          navigate(`/verify-email?email=${encodeURIComponent(userData.user.email)}`);
+      if (!userRes.ok) {
+        if (userData.error && userData.error.includes("Database is not connected")) {
+          setDbError(userData.error);
+          setLoading(false);
           return;
         }
+        throw new Error(userData.error || 'Session invalid');
+      }
 
-        // Sync D1 data
-        const syncRes = await fetch('/api/sync', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (syncRes.ok) {
-          const syncData = await syncRes.json();
-          if (syncData.success && syncData.data) {
-            Object.keys(syncData.data).forEach(key => {
-              if (syncData.data[key] !== null) {
-                localStorage.setItem(key, JSON.stringify(syncData.data[key]));
-              }
-            });
-          }
+      setUser(userData.user);
+      db.loadUserSpecificData(userData.user.email);
+
+      if (!userData.user.email_verified) {
+        navigate(`/verify-email?email=${encodeURIComponent(userData.user.email)}`);
+        return;
+      }
+
+      // Sync D1 data
+      const syncRes = await fetch('/api/sync', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (syncRes.ok) {
+        const syncData = await syncRes.json();
+        if (syncData.success && syncData.data) {
+          Object.keys(syncData.data).forEach(key => {
+            if (syncData.data[key] !== null) {
+              localStorage.setItem(key, JSON.stringify(syncData.data[key]));
+            }
+          });
         }
-      } else if (localEmail) {
-        setUser({ name: localEmail.split('@')[0], email: localEmail });
-        db.loadUserSpecificData(localEmail);
       }
     } catch (err) {
-      if (err.message === 'API_NOT_FOUND' || err.message.includes('fetch')) {
-        // Fallback to local session
-        if (localEmail) {
-          setUser({ name: localEmail.split('@')[0], email: localEmail });
-          db.loadUserSpecificData(localEmail);
-        } else {
-          handleLogout();
-        }
-      } else {
-        console.warn("Session loading failed, logging out:", err.message);
-        handleLogout();
-      }
+      console.warn("Session loading failed, logging out:", err.message);
+      handleLogout();
     } finally {
       setLoading(false);
     }
@@ -130,6 +118,28 @@ export default function MainDashboardLayout() {
     );
   }
 
+  if (dbError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="glass-card max-w-md w-full p-8 rounded-xl border border-red-500/20 text-center">
+          <div className="w-16 h-16 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center mx-auto mb-6">
+            <span className="material-symbols-outlined text-3xl">database_alert</span>
+          </div>
+          <h2 className="font-display text-xl font-bold text-on-surface mb-4">Database Connection Error</h2>
+          <p className="font-body text-sm text-red-200 leading-relaxed mb-6">
+            {dbError}
+          </p>
+          <button 
+            onClick={handleLogout}
+            className="bg-primary-fixed-dim text-on-primary-fixed hover:bg-primary-container px-6 py-3 rounded-full font-bold text-sm transition-all"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const renderPage = () => {
     const pageProps = { language, setActivePage };
     switch (activePage) {
@@ -153,56 +163,17 @@ export default function MainDashboardLayout() {
 
   return (
     <div className="flex min-h-screen overflow-hidden bg-background w-full">
-      {/* Desktop Sidebar */}
-      <aside className="bg-surface-container-lowest h-screen w-72 hidden md:flex flex-col fixed left-0 top-0 border-r border-outline-variant/30 z-50">
-        <div className="flex flex-col h-full py-lg">
-          <div className="px-8 mb-12">
-            <h1 className="font-display text-3xl font-black text-primary">Nine's Tracker</h1>
-          </div>
-          <div className="px-8 mb-10 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center overflow-hidden ring-4 ring-primary-fixed/10 font-bold text-on-primary-container text-lg">
-              {userInitials}
-            </div>
-            <div className="flex flex-col overflow-hidden">
-              <span className="font-headline-md text-base font-bold text-on-surface truncate">{user?.name || 'User'}</span>
-              <span className="font-label text-[10px] text-primary uppercase tracking-widest truncate">{user?.email || 'Pro Member'}</span>
-            </div>
-          </div>
-          <nav className="flex-1 px-4 space-y-2">
-            {NAV_ITEMS.map((item) => {
-              const isActive = activePage === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActivePage(item.id)}
-                  className={`w-full flex items-center gap-4 px-6 py-4 rounded-full transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? 'text-primary font-bold bg-primary-container/20'
-                      : 'text-on-surface-variant font-medium hover:bg-surface-container-highest'
-                  }`}
-                >
-                  <span className="material-symbols-outlined">{item.icon}</span>
-                  <span className="font-body-md">{item.label}</span>
-                </button>
-              );
-            })}
-            
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center gap-4 px-6 py-4 rounded-full transition-all duration-300 cursor-pointer text-outline hover:bg-error-container/15 hover:text-error mt-4"
-            >
-              <span className="material-symbols-outlined text-error">logout</span>
-              <span className="font-body-md text-error">Log Out</span>
-            </button>
-          </nav>
-          <div className="px-8 mt-auto">
-            <p className="font-label text-[10px] text-outline opacity-50">v2.4.0</p>
-          </div>
-        </div>
-      </aside>
+      {/* Sidebar and Mobile Bottom Navigation */}
+      <Navbar 
+        activePage={activePage} 
+        setActivePage={setActivePage} 
+        language={language} 
+        setLanguage={handleSetLanguage} 
+        onLogout={handleLogout} 
+      />
 
       {/* Main Canvas */}
-      <main className="flex-1 md:ml-72 w-full h-screen overflow-y-auto relative pb-24 md:pb-0">
+      <main className="flex-1 md:ml-64 w-full h-screen overflow-y-auto relative pb-24 md:pb-0">
         {/* Top App Bar */}
         <header className="bg-surface/90 backdrop-blur-2xl sticky top-0 z-40 border-b border-outline-variant/20">
           <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full">
@@ -239,34 +210,6 @@ export default function MainDashboardLayout() {
 
         {renderPage()}
       </main>
-
-      {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-4 bg-surface-container-lowest/90 backdrop-blur-2xl border-t border-outline-variant/20 md:hidden">
-        {MOBILE_NAV_ITEMS.map((item) => {
-          const isActive = activePage === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActivePage(item.id)}
-              className={`flex flex-col items-center justify-center rounded-full transition-all cursor-pointer ${
-                isActive
-                  ? 'text-primary bg-primary-container/20 w-14 h-14'
-                  : 'text-on-surface-variant w-14 h-14'
-              }`}
-            >
-              <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
-                {item.icon}
-              </span>
-            </button>
-          );
-        })}
-        <button
-          onClick={handleLogout}
-          className="flex flex-col items-center justify-center rounded-full transition-all cursor-pointer text-error w-14 h-14"
-        >
-          <span className="material-symbols-outlined">logout</span>
-        </button>
-      </nav>
     </div>
   );
 }

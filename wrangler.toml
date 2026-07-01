@@ -1,0 +1,14 @@
+name = "nine13-tracker"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nine13-tracker-db"
+database_id = "bae7778c-d993-4763-878a-116e87445ab9"
+
+[vars]
+APP_URL = "https://nine13.site"
+JWT_SECRET = "CHANGE_THIS_SECRET"
+RESEND_API_KEY = "PASTE_RESEND_OR_EMAIL_PROVIDER_KEY_HERE"
+FROM_EMAIL = "Nine Tracker <verify@nine13.site>"

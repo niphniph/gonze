@@ -15,13 +15,13 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/tracker">
       <Routes>
-        <Route path="/" element={<Navigate to="/tracker" replace />} />
-        <Route path="/tracker" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/verify" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route
@@ -32,7 +32,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/tracker" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

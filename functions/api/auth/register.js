@@ -38,7 +38,6 @@ export async function onRequest(context) {
       });
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return new Response(JSON.stringify({ error: "Invalid email format" }), {
@@ -47,7 +46,6 @@ export async function onRequest(context) {
       });
     }
 
-    // Password strength check (min 8 chars, at least one letter and one number)
     if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
       return new Response(JSON.stringify({ error: "Password must be at least 8 characters long and contain both letters and numbers" }), {
         status: 400,
@@ -68,19 +66,19 @@ export async function onRequest(context) {
 
     // 3. Hash password and generate verification code
     const pwdHash = await hashPassword(password);
-    
-    // Generate 6-digit random code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const codeExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours from now
+    const codeExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+    // Generate random UUID
+    const userId = crypto.randomUUID();
+    const nowIso = new Date().toISOString();
 
     // 4. Save user to DB
-    const insertResult = await db.prepare(
-      "INSERT INTO users (name, email, password_hash, is_verified, verification_code, verification_code_expires, created_at) VALUES (?, ?, ?, 0, ?, ?, ?)"
+    await db.prepare(
+      "INSERT INTO users (id, full_name, email, password_hash, is_verified, verification_code, verification_code_expires, created_at) VALUES (?, ?, ?, ?, 0, ?, ?, ?)"
     )
-    .bind(name.trim(), cleanEmail, pwdHash, code, codeExpires, Date.now())
+    .bind(userId, name.trim(), cleanEmail, pwdHash, code, codeExpires, nowIso)
     .run();
-
-    const userId = insertResult.meta.last_row_id || 1;
 
     // Create empty tracker data row for this user
     await db.prepare("INSERT OR IGNORE INTO tracker_data (user_id) VALUES (?)").bind(userId).run();

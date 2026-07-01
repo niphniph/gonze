@@ -11,11 +11,12 @@ import {
   Link as LinkIcon, 
   PieChart, 
   Sparkles, 
-  Settings
+  Settings,
+  LogOut
 } from 'lucide-react';
 import { db } from '../utils/db';
 
-export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => {
+export const Navbar = ({ activePage, setActivePage, language, setLanguage, onLogout }) => {
   const t = (ka, en) => (language === 'ka' ? ka : en);
   const profile = db.getProfile();
 
@@ -130,6 +131,17 @@ export const Navbar = ({ activePage, setActivePage, language, setLanguage }) => 
               </div>
             ))}
           </nav>
+
+          {/* Logout Button */}
+          <div className="px-4 mt-auto border-t border-border-hairline/20 pt-4">
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full transition-all duration-150 cursor-pointer text-red-400 hover:bg-red-400/10 font-medium"
+            >
+              <LogOut size={18} className="text-red-400" />
+              <span className="font-body-md text-body-md">{t('გასვლა', 'Log Out')}</span>
+            </button>
+          </div>
         </div>
       </aside>
 
