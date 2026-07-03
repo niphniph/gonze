@@ -1,0 +1,1302 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Supreme Barber Lounge | Precision &amp; Prestige</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "gold-dark": "#996515",
+                        "on-error": "#690005",
+                        "surface-tint": "#e9c349",
+                        "surface-container-lowest": "#110e07",
+                        "primary-fixed": "#ffe088",
+                        "on-tertiary-container": "#434546",
+                        "surface-container": "#231f17",
+                        "on-primary-fixed-variant": "#574500",
+                        "surface-dim": "#16130b",
+                        "secondary": "#c8c6c5",
+                        "charcoal-surface": "#1A1A1A",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "surface": "#16130b",
+                        "primary-container": "#d4af37",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-surface": "#eae1d4",
+                        "inverse-primary": "#735c00",
+                        "surface-container-low": "#1f1b13",
+                        "tertiary-fixed": "#e2e2e2",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "inverse-on-surface": "#343027",
+                        "outline-variant": "#4d4635",
+                        "surface-bright": "#3d392f",
+                        "tertiary": "#cecece",
+                        "on-primary-fixed": "#241a00",
+                        "on-surface-variant": "#d0c5af",
+                        "on-tertiary": "#2f3131",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "tertiary-container": "#b2b3b3",
+                        "error": "#ffb4ab",
+                        "charcoal-muted": "#2A2A2A",
+                        "on-secondary": "#313030",
+                        "inverse-surface": "#eae1d4",
+                        "on-secondary-fixed-variant": "#474646",
+                        "metallic-gold": "#D4AF37",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#bab8b7",
+                        "primary": "#f2ca50",
+                        "outline": "#99907c",
+                        "surface-container-high": "#2d2a21",
+                        "on-background": "#eae1d4",
+                        "background": "#16130b",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#38342b",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-primary": "#3c2f00",
+                        "secondary-container": "#4a4949",
+                        "gold-light": "#F9E5A2",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-primary-container": "#554300",
+                        "surface-variant": "#38342b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "label-sm": ["JetBrains Mono"],
+                        "display-lg-mobile": ["IBM Plex Sans"],
+                        "display-lg": ["IBM Plex Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.fill-1 {
+    font-variation-settings: "FILL" 1 !important;
+}
+.metallic-gradient {
+    background: linear-gradient(135deg, #D4AF37 0%, #F9E5A2 50%, #996515 100%)
+    }
+.charcoal-noise {
+    background-color: #16130b;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBeSxiBVOpraqpV8P55IbvbIWREYoCruvllR8CsZiAeGvoouKtl3B5VhTP0wGT_746t8-VE7sjzNUNuekHHAyu9vOihL8HJTgDBwK-vIp8zSXw-icOU24L4UXbk8igBCAUYjdoNyDZWNCm2PIQKUMluV84BaGJlqUqR7cdFsIv_sAQkC6CxJKNxrWiAu6_51Qoz2NiYnZXgtYKrA5XmetDaLjzjT50lkqSHNLcZR7jHeWvMSY-eIU4KMbiZX4QCQq2fWyBO8wXCWmM)
+    }
+.hero-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%)
+    }
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+.animate-shake {
+    animation: shake 0.2s ease-in-out 2;
+}</style>
+  <script type="module" crossorigin src="./assets/index-NEiw7bYV.js"></script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-metallic-gold selection:text-background">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-background border-b border-charcoal-muted dark:border-outline-variant">
+<nav class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-metallic-gold uppercase tracking-tighter">
+                Supreme Barber Lounge
+            </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-sm text-label-sm" href="#">Home</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-label-sm text-label-sm" href="#services">Services</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-label-sm text-label-sm" href="#booking">Booking</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-label-sm text-label-sm" href="#gallery">Gallery</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-label-sm text-label-sm" href="#reviews">Reviews</a>
+<a id="nav-client-portal" class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 font-label-sm text-label-sm cursor-pointer" onclick="openClientAuthModal()">Client Portal</a>
+</div>
+<button onclick="scrollToBooking()" class="bg-metallic-gold text-background px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                Book Appointment
+            </button>
+</nav>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[90vh] flex items-center overflow-hidden charcoal-noise hero-clip">
+<div class="absolute inset-0 z-0 opacity-40">
+<div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A cinematic, high-contrast interior shot of a luxury barber shop at night. The space features deep charcoal walls, high-end leather barber chairs, and dramatic overhead ring lighting reflecting off polished surfaces. The atmosphere is professional, exclusive, and moody, perfectly embodying the Supreme Barber Lounge brand with hints of metallic gold accents in the decor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdIvkRM1FgzmuZEVF-IC2btBLP2IPoXHKDiww5U41kgz7RpZTvyVdARwqu9IY-gf7ZTXyyeEyObO9IgRvXWX1ug1Bjz1A1WFkcxbs0k6ltzsDctPBKWMeD1Mps6sI-DqpaVqrDpq6lOARlpmVF-4kacmYVCjzOuAB3Q5i4ZlWH2y3pwVDTmi6yCjDgeo0FI_vA9B-P5EsGoSUvExBwEdmEqAJ5VelrVsY8Xp-RSFGBcou5grEE7cYQ-BCaTRexbVw2PDF8BF7u01A">
+</div>
+<div class="relative z-10 px-margin-desktop max-w-container-max mx-auto w-full">
+<div class="max-w-2xl">
+<span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-4 block">Est. In Haines City</span>
+<h1 class="font-display-lg text-display-lg text-on-background mb-6 leading-tight">
+<span class="text-metallic-gold">Precision</span> &amp; <br>Prestige
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg">
+                        Experience the gold standard of grooming. Our master barbers specialize in high-end fades and traditional hot towel shaves in an atmosphere of ultimate luxury.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button onclick="scrollToBooking()" class="bg-metallic-gold text-background px-10 py-4 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all">
+                            Book Now
+                        </button>
+<button onclick="scrollToServices()" class="border border-metallic-gold text-metallic-gold px-10 py-4 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-metallic-gold hover:text-background transition-all">
+                            View Services
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- About Section (Bento Grid) -->
+<section class="py-24 px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="md:col-span-2 bg-charcoal-surface p-12 border border-charcoal-muted flex flex-col justify-center">
+<h2 class="font-headline-md text-headline-md text-metallic-gold uppercase mb-6 tracking-tight">The Lounge Philosophy</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+                        At Supreme Barber Lounge, we don't just cut hair; we curate confidence. As a proud <span class="text-on-background font-semibold underline decoration-metallic-gold">Black-owned establishment</span>, we bring cultural precision and modern flair to every chair.
+                    </p>
+<div class="flex items-center gap-4">
+<div class="h-[1px] flex-grow bg-charcoal-muted"></div>
+<div class="flex gap-4">
+<span class="px-4 py-1 bg-surface-container-highest font-label-sm text-label-sm text-metallic-gold">AUTHENTIC</span>
+<span class="px-4 py-1 bg-surface-container-highest font-label-sm text-label-sm text-metallic-gold">PROFESSIONAL</span>
+</div>
+</div>
+</div>
+<div class="bg-metallic-gold p-8 flex flex-col justify-between group cursor-default">
+<span class="material-symbols-outlined text-4xl text-background" data-icon="clean_hands" data-weight="fill">clean_hands</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-background uppercase mb-2">Pristine Space</h3>
+<p class="font-body-md text-body-md text-on-primary-container">
+                            Our commitment to a <span class="font-bold">clean environment</span> is unrivaled. Every station is sanitized between clients for your safety and comfort.
+                        </p>
+</div>
+</div>
+<div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-metallic-gold uppercase">Operational Hours</span>
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+</div>
+<div>
+<p class="font-display-lg-mobile text-display-lg-mobile text-on-background font-bold">Open Today</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Until 6:00 PM</p>
+</div>
+<div class="mt-auto pt-4 border-t border-charcoal-muted">
+<p class="font-label-sm text-label-sm uppercase">Visit Us</p>
+<p class="font-body-md text-body-md text-on-background">35564 US-27, Haines City, FL 33844</p>
+</div>
+</div>
+<div class="md:col-span-2 relative min-h-[300px] group overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A detailed, macro-style image focusing on professional barbering tools like gold-plated clippers, a straight razor, and a fine-tooth comb arranged neatly on a dark marble countertop. The lighting is sharp, creating crisp highlights on the metallic surfaces. The overall aesthetic is one of extreme precision and luxury craftsmanship, reflecting the high-end services of Supreme Barber Lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvpYQW5G1qNEH3jOCfEoXwnan-g6Bq_GAMtzRWchBgzGgc1G8Ihyq9bidUK9r6OzHiIPU3vCmVK72xO_90GsERCjvPizbxV9yDyY9-Syg0jDHzrDkGAaJhT-XNx4qaUAFGbqpuy1PPoo2cwh5I5-9zReJ-wpbkJquchj8hsITinzJ11l8V0tEXBVqgJvtaXX6-SNWixfy9uI6fe5oofQ5KznrQzlzsuIfNgtQcOAZpNILJTYqZ_z2tOjNADtAYD0bnB7GSDWmGTP0">
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-60"></div>
+<div class="absolute bottom-8 left-8">
+<p class="font-label-sm text-label-sm text-metallic-gold uppercase tracking-widest">Master Craftsmanship</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-24 px-margin-desktop max-w-container-max mx-auto border-t border-charcoal-muted">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+        <div>
+            <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block">Our Expertise</span>
+            <h2 class="font-display-lg text-display-lg uppercase tracking-tighter leading-none">
+                Grooming <br><span class="text-metallic-gold">Services</span>
+            </h2>
+        </div>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+            Every service is tailored to your unique structure and aesthetic. Choose a stand-alone craft or combine them for the ultimate prestige treatment.
+        </p>
+    </div>
+    
+    <!-- Category Tabs -->
+    <div class="flex gap-4 border-b border-charcoal-muted pb-4 mb-12 overflow-x-auto whitespace-nowrap scrollbar-none">
+        <button onclick="filterServices('all')" class="service-tab-btn px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider border-b-2 border-metallic-gold text-metallic-gold transition-all duration-200" id="tab-all">All Services</button>
+        <button onclick="filterServices('cuts')" class="service-tab-btn px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all duration-200" id="tab-cuts">Haircuts</button>
+        <button onclick="filterServices('shaves')" class="service-tab-btn px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all duration-200" id="tab-shaves">Shaves & Trims</button>
+        <button onclick="filterServices('packages')" class="service-tab-btn px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all duration-200" id="tab-packages">Packages</button>
+    </div>
+    
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="services-grid">
+        <!-- Service Card 1 -->
+        <div class="service-card bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-metallic-gold transition-all duration-300 group cursor-default" data-category="cuts">
+            <div>
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-3xl text-metallic-gold" data-icon="content_cut">content_cut</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-highest px-3 py-1">30 MIN</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-2 group-hover:text-metallic-gold transition-colors duration-200">Supreme Signature Fade</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                    Our hallmark service. High-precision transition, seamless blend, tailored neck trim, finished with premium styling products.
+                </p>
+            </div>
+            <div class="flex justify-between items-center pt-6 border-t border-charcoal-muted/50 mt-auto">
+                <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$40</span>
+                <button onclick="bookServiceDirect('Supreme Signature Fade', 40, 30)" class="bg-metallic-gold text-background px-4 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Book Service
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service Card 2 -->
+        <div class="service-card bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-metallic-gold transition-all duration-300 group cursor-default" data-category="cuts">
+            <div>
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-3xl text-metallic-gold" data-icon="brush">brush</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-highest px-3 py-1">45 MIN</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-2 group-hover:text-metallic-gold transition-colors duration-200">The Prestige Blend</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                    A tailored haircut combining modern clipper work and precision scissor styling. Includes a charcoal clay wash and scalp massage.
+                </p>
+            </div>
+            <div class="flex justify-between items-center pt-6 border-t border-charcoal-muted/50 mt-auto">
+                <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$55</span>
+                <button onclick="bookServiceDirect('The Prestige Blend', 55, 45)" class="bg-metallic-gold text-background px-4 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Book Service
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service Card 3 -->
+        <div class="service-card bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-metallic-gold transition-all duration-300 group cursor-default" data-category="shaves">
+            <div>
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-3xl text-metallic-gold" data-icon="soap">soap</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-highest px-3 py-1">30 MIN</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-2 group-hover:text-metallic-gold transition-colors duration-200">Royal Hot Towel Shave</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                    Traditional straight-razor shave with pre-shave essential oils, multi-stage hot towels, rich lather, and a cooling aftershave splash.
+                </p>
+            </div>
+            <div class="flex justify-between items-center pt-6 border-t border-charcoal-muted/50 mt-auto">
+                <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$35</span>
+                <button onclick="bookServiceDirect('Royal Hot Towel Shave', 35, 30)" class="bg-metallic-gold text-background px-4 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Book Service
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service Card 4 -->
+        <div class="service-card bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-metallic-gold transition-all duration-300 group cursor-default" data-category="shaves">
+            <div>
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-3xl text-metallic-gold" data-icon="face">face</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-highest px-3 py-1">20 MIN</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-2 group-hover:text-metallic-gold transition-colors duration-200">Beard Sculpt & Detail</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                    Sculpting and outlining with clippers and razor edges. Finished with a luxury beard balm massage and mustache detailing.
+                </p>
+            </div>
+            <div class="flex justify-between items-center pt-6 border-t border-charcoal-muted/50 mt-auto">
+                <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$30</span>
+                <button onclick="bookServiceDirect('Beard Sculpt & Detail', 30, 20)" class="bg-metallic-gold text-background px-4 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Book Service
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service Card 5 -->
+        <div class="service-card bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-metallic-gold transition-all duration-300 group cursor-default" data-category="packages">
+            <div>
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-3xl text-metallic-gold" data-icon="workspace_premium">workspace_premium</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-highest px-3 py-1">60 MIN</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-2 group-hover:text-metallic-gold transition-colors duration-200">The Royal VIP Treatment</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                    The supreme bundle. Signature fade, Royal hot towel shave, beard detailing, essential oil shampoo, premium facial wash, and complimentary beverage.
+                </p>
+            </div>
+            <div class="flex justify-between items-center pt-6 border-t border-charcoal-muted/50 mt-auto">
+                <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$85</span>
+                <button onclick="bookServiceDirect('The Royal VIP Treatment', 85, 60)" class="bg-metallic-gold text-background px-4 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Book Service
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service Card 6 -->
+        <div class="service-card bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-metallic-gold transition-all duration-300 group cursor-default" data-category="packages">
+            <div>
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-3xl text-metallic-gold" data-icon="group">group</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-highest px-3 py-1">75 MIN</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-2 group-hover:text-metallic-gold transition-colors duration-200">Father & Son Legacy</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                    A premium shared bonding session. Custom haircuts, hair wash, scalp massages, and traditional styling advice for two generations.
+                </p>
+            </div>
+            <div class="flex justify-between items-center pt-6 border-t border-charcoal-muted/50 mt-auto">
+                <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$70</span>
+                <button onclick="bookServiceDirect('Father & Son Legacy', 70, 75)" class="bg-metallic-gold text-background px-4 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Book Service
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Booking Section -->
+<section id="booking" class="py-24 px-margin-desktop max-w-container-max mx-auto border-t border-charcoal-muted">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+        <div>
+            <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block">Reservations</span>
+            <h2 class="font-display-lg text-display-lg uppercase tracking-tighter leading-none">
+                Secure Your <br><span class="text-metallic-gold">Time Slot</span>
+            </h2>
+        </div>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+            Skip the line. Use our real-time scheduling engine to lock in your appointment with one of our master barbers.
+        </p>
+    </div>
+
+    <!-- Active Booking Alert -->
+    <div id="active-booking-alert" class="hidden mb-12 bg-surface-container-high border border-metallic-gold p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-4xl text-metallic-gold animate-bounce">check_circle</span>
+            <div>
+                <h3 class="font-headline-md text-headline-md uppercase text-metallic-gold">You Have An Active Appointment</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant" id="active-booking-summary"></p>
+            </div>
+        </div>
+        <button onclick="cancelActiveBooking()" class="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider transition-all duration-150">
+            Cancel Booking
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 bg-charcoal-surface border border-charcoal-muted p-1">
+        <!-- Progress Sidebar -->
+        <div class="bg-surface-container p-8 border-b lg:border-b-0 lg:border-r border-charcoal-muted flex flex-col justify-between min-h-[350px]">
+            <div class="space-y-8">
+                <div class="font-label-sm text-label-sm text-metallic-gold uppercase tracking-widest">Grooming Wizard</div>
+                
+                <div class="flex items-start gap-4 active-step-indicator" id="step-ind-1">
+                    <span class="w-8 h-8 rounded-full border border-metallic-gold text-metallic-gold flex items-center justify-center font-bold text-sm bg-background font-label-sm" id="step-num-1">1</span>
+                    <div>
+                        <p class="font-label-sm text-label-sm font-bold text-on-background uppercase">Services</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Select standard treatments</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 opacity-50" id="step-ind-2">
+                    <span class="w-8 h-8 rounded-full border border-charcoal-muted text-on-surface-variant flex items-center justify-center font-bold text-sm bg-background font-label-sm" id="step-num-2">2</span>
+                    <div>
+                        <p class="font-label-sm text-label-sm font-bold text-on-background uppercase">Barber</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Select professional artist</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 opacity-50" id="step-ind-3">
+                    <span class="w-8 h-8 rounded-full border border-charcoal-muted text-on-surface-variant flex items-center justify-center font-bold text-sm bg-background font-label-sm" id="step-num-3">3</span>
+                    <div>
+                        <p class="font-label-sm text-label-sm font-bold text-on-background uppercase">Schedule</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Select date and time slot</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 opacity-50" id="step-ind-4">
+                    <span class="w-8 h-8 rounded-full border border-charcoal-muted text-on-surface-variant flex items-center justify-center font-bold text-sm bg-background font-label-sm" id="step-num-4">4</span>
+                    <div>
+                        <p class="font-label-sm text-label-sm font-bold text-on-background uppercase">Checkout</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Review details & complete</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt panel in sidebar -->
+            <div class="pt-8 border-t border-charcoal-muted mt-8">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Selected:</span>
+                    <span class="font-label-sm text-label-sm text-metallic-gold" id="receipt-count">0 items</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Est. Total:</span>
+                    <span class="font-headline-md text-headline-md text-metallic-gold font-bold" id="receipt-total">$0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wizard Content -->
+        <div class="lg:col-span-2 p-8 md:p-12 flex flex-col justify-between min-h-[500px]" id="booking-wizard-body">
+            <!-- Step 1 View: Services -->
+            <div id="wizard-step-1" class="space-y-6">
+                <h3 class="font-headline-md text-headline-md text-metallic-gold uppercase">Select Your Services</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant">Choose one or more grooming services from our catalog.</p>
+                
+                <div class="space-y-4 max-h-[350px] overflow-y-auto pr-2 border-b border-charcoal-muted/30 pb-4 scrollbar-none">
+                    <!-- Dynamic Checkboxes -->
+                    <label class="flex justify-between items-center p-4 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold cursor-pointer transition-colors duration-150">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" onchange="toggleServiceSelection('Supreme Signature Fade', 40, 30)" class="form-checkbox text-metallic-gold focus:ring-metallic-gold rounded-sm bg-background border-charcoal-muted" id="chk-fade">
+                            <div>
+                                <span class="font-body-md text-body-md font-bold text-on-background block">Supreme Signature Fade</span>
+                                <span class="font-label-sm text-xs text-on-surface-variant">30 Min | Scalp detailing & line-up</span>
+                            </div>
+                        </div>
+                        <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$40</span>
+                    </label>
+
+                    <label class="flex justify-between items-center p-4 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold cursor-pointer transition-colors duration-150">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" onchange="toggleServiceSelection('The Prestige Blend', 55, 45)" class="form-checkbox text-metallic-gold focus:ring-metallic-gold rounded-sm bg-background border-charcoal-muted" id="chk-prestige">
+                            <div>
+                                <span class="font-body-md text-body-md font-bold text-on-background block">The Prestige Blend</span>
+                                <span class="font-label-sm text-xs text-on-surface-variant">45 Min | Signature wash & custom styling</span>
+                            </div>
+                        </div>
+                        <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$55</span>
+                    </label>
+
+                    <label class="flex justify-between items-center p-4 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold cursor-pointer transition-colors duration-150">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" onchange="toggleServiceSelection('Royal Hot Towel Shave', 35, 30)" class="form-checkbox text-metallic-gold focus:ring-metallic-gold rounded-sm bg-background border-charcoal-muted" id="chk-shave">
+                            <div>
+                                <span class="font-body-md text-body-md font-bold text-on-background block">Royal Hot Towel Shave</span>
+                                <span class="font-label-sm text-xs text-on-surface-variant">30 Min | Essential oils & straight razor shave</span>
+                            </div>
+                        </div>
+                        <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$35</span>
+                    </label>
+
+                    <label class="flex justify-between items-center p-4 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold cursor-pointer transition-colors duration-150">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" onchange="toggleServiceSelection('Beard Sculpt & Detail', 30, 20)" class="form-checkbox text-metallic-gold focus:ring-metallic-gold rounded-sm bg-background border-charcoal-muted" id="chk-beard">
+                            <div>
+                                <span class="font-body-md text-body-md font-bold text-on-background block">Beard Sculpt & Detail</span>
+                                <span class="font-label-sm text-xs text-on-surface-variant">20 Min | Hot towel oil massage & outline</span>
+                            </div>
+                        </div>
+                        <span class="font-headline-md text-headline-md text-metallic-gold font-bold">$30</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 2 View: Barber Selection -->
+            <div id="wizard-step-2" class="space-y-6 hidden">
+                <h3 class="font-headline-md text-headline-md text-metallic-gold uppercase">Select Master Barber</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant">Our certified barbers are dedicated to precision. Choose your preferred artist.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Barber 1 -->
+                    <button onclick="selectBarber('Marcus')" id="barber-card-Marcus" class="flex flex-col items-center text-center p-6 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold transition-colors duration-150 w-full group">
+                        <div class="w-16 h-16 rounded-full bg-metallic-gold text-background flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-105 transition-transform duration-200">MC</div>
+                        <h4 class="font-body-md text-body-md font-bold text-on-background uppercase">Marcus</h4>
+                        <p class="font-label-sm text-xs text-metallic-gold mb-2">Master Barber</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Fades & Classic Shaves</p>
+                    </button>
+                    <!-- Barber 2 -->
+                    <button onclick="selectBarber('Andre')" id="barber-card-Andre" class="flex flex-col items-center text-center p-6 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold transition-colors duration-150 w-full group">
+                        <div class="w-16 h-16 rounded-full bg-metallic-gold text-background flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-105 transition-transform duration-200">AT</div>
+                        <h4 class="font-body-md text-body-md font-bold text-on-background uppercase">Andre</h4>
+                        <p class="font-label-sm text-xs text-metallic-gold mb-2">Fade Specialist</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Tapers & Beard Detail</p>
+                    </button>
+                    <!-- Barber 3 -->
+                    <button onclick="selectBarber('Sarah')" id="barber-card-Sarah" class="flex flex-col items-center text-center p-6 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold transition-colors duration-150 w-full group">
+                        <div class="w-16 h-16 rounded-full bg-metallic-gold text-background flex items-center justify-center font-bold text-xl mb-4 group-hover:scale-105 transition-transform duration-200">SE</div>
+                        <h4 class="font-body-md text-body-md font-bold text-on-background uppercase">Sarah</h4>
+                        <p class="font-label-sm text-xs text-metallic-gold mb-2">Styling Expert</p>
+                        <p class="font-body-md text-xs text-on-surface-variant">Textured Cuts & Designs</p>
+                    </button>
+                </div>
+                
+                <button onclick="selectBarber('Any Available Barber')" id="barber-card-Any" class="flex justify-between items-center w-full p-4 bg-surface-container-low border border-charcoal-muted hover:border-metallic-gold transition-colors duration-150 text-left">
+                    <div>
+                        <span class="font-body-md text-body-md font-bold text-on-background uppercase block">Any Available Barber</span>
+                        <span class="font-body-md text-xs text-on-surface-variant">Select for maximum availability</span>
+                    </div>
+                    <span class="material-symbols-outlined text-metallic-gold">arrow_forward</span>
+                </button>
+            </div>
+
+            <!-- Step 3 View: Schedule -->
+            <div id="wizard-step-3" class="space-y-6 hidden">
+                <h3 class="font-headline-md text-headline-md text-metallic-gold uppercase">Choose Date & Time</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant">We are open Monday to Saturday from 9:00 AM to 6:00 PM.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Custom Calendar -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-label-sm text-label-sm text-metallic-gold uppercase font-bold text-xs" id="calendar-month-year">June 2026</span>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="changeCalendarMonth(-1)" class="w-8 h-8 border border-charcoal-muted flex items-center justify-center text-on-surface-variant hover:border-metallic-gold hover:text-metallic-gold"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+                                <button type="button" onclick="changeCalendarMonth(1)" class="w-8 h-8 border border-charcoal-muted flex items-center justify-center text-on-surface-variant hover:border-metallic-gold hover:text-metallic-gold"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center font-label-sm text-xs text-on-surface-variant border-b border-charcoal-muted pb-2 mb-2">
+                            <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center" id="calendar-grid">
+                            <!-- Populated Dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Time Slots Grid -->
+                    <div>
+                        <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-4 tracking-wider text-xs">Available Slots (<span id="selected-date-display" class="text-metallic-gold">Select a Date</span>)</div>
+                        <div class="grid grid-cols-2 gap-2 overflow-y-auto max-h-[220px] pr-2 scrollbar-none" id="time-slots-grid">
+                            <p class="text-on-surface-variant text-xs col-span-full py-8 text-center italic">Please select a date to view available time slots.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 View: Checkout / Review -->
+            <div id="wizard-step-4" class="space-y-6 hidden">
+                <h3 class="font-headline-md text-headline-md text-metallic-gold uppercase">Confirm Appointment</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant">Please fill in your details to finalize your luxury grooming session.</p>
+                
+                <form id="booking-details-form" onsubmit="submitAppointmentForm(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Full Name *</label>
+                            <input type="text" id="cust-name" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="Enter full name">
+                        </div>
+                        <div>
+                            <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Phone Number *</label>
+                            <input type="tel" id="cust-phone" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="+1 863-555-0199">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Email Address *</label>
+                        <input type="email" id="cust-email" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="name@domain.com">
+                    </div>
+                    <div>
+                        <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Special Instructions (Optional)</label>
+                        <textarea id="cust-notes" rows="2" class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="e.g., skin sensitivity, beard oil preferences, style requests"></textarea>
+                    </div>
+                    <button type="submit" class="hidden" id="hidden-form-submit-btn"></button>
+                </form>
+            </div>
+
+            <!-- Success State View (Dynamic) -->
+            <div id="wizard-success-state" class="hidden flex flex-col items-center text-center justify-center py-6 space-y-6">
+                <span class="material-symbols-outlined text-6xl text-metallic-gold" data-icon="check_circle">check_circle</span>
+                <div>
+                    <h3 class="font-headline-md text-2xl text-metallic-gold uppercase mb-2">Grooming Session Secured</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant max-w-md">We have locked in your appointment. A digital receipt is generated below.</p>
+                </div>
+                <div class="bg-surface-container-low border border-charcoal-muted p-6 text-left w-full max-w-sm font-mono text-sm space-y-2">
+                    <p><span class="text-on-surface-variant font-sans font-bold">Booking ID:</span> <span class="text-metallic-gold font-bold" id="receipt-id">#SB-20456</span></p>
+                    <p><span class="text-on-surface-variant font-sans font-bold">Services:</span> <span class="text-on-background text-right" id="receipt-services"></span></p>
+                    <p><span class="text-on-surface-variant font-sans font-bold">Barber:</span> <span class="text-on-background" id="receipt-barber"></span></p>
+                    <p><span class="text-on-surface-variant font-sans font-bold">Schedule:</span> <span class="text-on-background text-xs" id="receipt-time"></span></p>
+                    <p class="pt-4 border-t border-charcoal-muted flex justify-between font-sans"><span class="text-on-surface-variant font-bold">Total Paid:</span> <span class="text-metallic-gold font-bold text-base" id="receipt-total-cost"></span></p>
+                </div>
+                
+                <!-- Post-booking registration prompt (shown if guest) -->
+                <div id="success-register-prompt" class="hidden w-full max-w-sm border border-metallic-gold/30 p-6 text-left bg-surface-container-high space-y-4 rounded">
+                    <h4 class="font-headline-sm text-sm font-bold uppercase tracking-wider text-metallic-gold flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base">mail</span> Verify Your Email & Track Booking
+                    </h4>
+                    <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">
+                        Create a password to register your account and receive your official email verification link.
+                    </p>
+                    <form id="success-register-form" onsubmit="handleSuccessRegister(event)" class="space-y-3">
+                        <div>
+                            <label class="font-label-sm text-[10px] uppercase text-on-surface-variant mb-1 block">Password</label>
+                            <input type="password" id="success-register-password" required minlength="6" class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-3 py-1.5 text-xs font-body-md" placeholder="At least 6 characters">
+                        </div>
+                        <div id="success-register-error" class="hidden text-red-500 font-label-sm text-[10px] uppercase bg-red-500/10 border border-red-500/20 p-2 text-center tracking-wider">
+                            Registration failed.
+                        </div>
+                        <button type="submit" class="w-full bg-metallic-gold text-background py-2 font-label-sm text-xs font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150 flex items-center justify-center gap-1.5">
+                            Register & Send Verification Link
+                        </button>
+                    </form>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="addToCalendar()" class="border border-metallic-gold text-metallic-gold px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-metallic-gold hover:text-background transition-all">
+                        Add to Calendar
+                    </button>
+                    <button onclick="resetWizard()" class="bg-metallic-gold text-background px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all">
+                        New Booking
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center pt-8 border-t border-charcoal-muted/30 mt-8" id="wizard-nav-panel">
+                <button onclick="navigateWizardStep(-1)" id="wizard-prev-btn" class="border border-charcoal-muted text-on-surface-variant hover:text-on-background px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-widest transition-all opacity-50 cursor-not-allowed" disabled>
+                    Back
+                </button>
+                <button onclick="navigateWizardStep(1)" id="wizard-next-btn" class="bg-metallic-gold text-background px-8 py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150">
+                    Next Step
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Cuts Section -->
+<section class="py-24 bg-surface-container-low" id="gallery">
+<div class="px-margin-desktop max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg uppercase tracking-tighter leading-none mb-4">Featured <br><span class="text-metallic-gold">Artistry</span></h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">Browse our latest work. From sharp tapers to perfectly sculpted beards, we define the trend.</p>
+</div>
+<button onclick="openLightbox(0)" class="font-label-sm text-label-sm text-on-background uppercase border-b border-metallic-gold pb-1 hover:text-metallic-gold transition-colors">View full gallery</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Featured Image 1 -->
+<div class="relative group">
+<div onclick="openLightbox(0)" class="overflow-hidden bg-charcoal-surface border border-charcoal-muted cursor-zoom-in">
+<img class="w-full aspect-[4/5] object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida/ADBb0ui1LA-7nLQ_DVqu7DTuWPoC-LdNz_rL6_oS327uupqD35yz8z9gu75zNIkcj3yjVlimJysumzqxWQyd_-rzzTcza82aGpQzCc1b3moqnfpJLjgBebviCYAjZAL0cMfspcaz9xoMH--AGPeoHj7Ox5-Eb7koS-mUV3ZKjrCTzbCihd2q7E88VDv-MleYJEWGgx8ZSHQwCtraAFaMsWDS4nqjkTZ5TmX2DMhQJb2t78hX_MJt7t6ajYLnTuJu0LPJKJAItwrABW4y-A">
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-headline-md uppercase">Supreme Signature Fade</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Clean transition with sharp line-up</p>
+</div>
+<span class="font-label-sm text-label-sm text-metallic-gold bg-charcoal-muted px-3 py-1">BESTSELLER</span>
+</div>
+</div>
+<!-- Featured Image 2 -->
+<div class="relative group mt-0 md:mt-24">
+<div onclick="openLightbox(1)" class="overflow-hidden bg-charcoal-surface border border-charcoal-muted cursor-zoom-in">
+<img class="w-full aspect-[4/5] object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHgPTBg0Y_MWW3YkuBgrmZmIiIzTyhm3pQmojlXrBk8nkdbmdDeAj7gyjryDpIYwHfwVY3NTyCzwDaVfqYj0gUporOlhJHO3GczqoYr6FmQvcgTVzswZ6unaKQ2A3LfKF_JE65QYMBNhrmuUjGNBXL2-WUG3gcotDSqWHuTF1Bpvq5ARy7Ue8wh9ryGaEtnxThlBsnlqOjiSLn19p7wOrr0f7DIW2Hasoe8B22CkSBhDC7EZkMYw8akru5p1U9TzR508SvZgSK3Tk">
+</div>
+<div class="mt-6 flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-headline-md uppercase">The Prestige Blend</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Soft taper with textured crown</p>
+</div>
+<span class="font-label-sm text-label-sm text-metallic-gold bg-charcoal-muted px-3 py-1">PREMIUM</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Reviews Section -->
+<section id="reviews" class="py-24 bg-surface-container-low border-t border-charcoal-muted">
+    <div class="px-margin-desktop max-w-container-max mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+            <div>
+                <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block">Client Reviews</span>
+                <h2 class="font-display-lg text-display-lg uppercase tracking-tighter leading-none">
+                    Prestige <br><span class="text-metallic-gold">Feedback</span>
+                </h2>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="openReviewModal()" class="border border-metallic-gold text-metallic-gold px-6 py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-metallic-gold hover:text-background transition-all">
+                    Write A Review
+                </button>
+            </div>
+        </div>
+
+        <!-- Rating Overview Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-16">
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col items-center justify-center text-center">
+                <p class="font-display-lg text-display-lg text-metallic-gold font-bold mb-2">4.9</p>
+                <div class="flex gap-1 text-metallic-gold mb-2 justify-center">
+                    <span class="material-symbols-outlined fill-1">star</span>
+                    <span class="material-symbols-outlined fill-1">star</span>
+                    <span class="material-symbols-outlined fill-1">star</span>
+                    <span class="material-symbols-outlined fill-1">star</span>
+                    <span class="material-symbols-outlined fill-1">star</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant">Based on 142 client reviews</p>
+            </div>
+            
+            <div class="lg:col-span-2 bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-center gap-3">
+                <!-- 5 star -->
+                <div class="flex items-center gap-4">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant w-12">5 star</span>
+                    <div class="flex-grow h-2 bg-surface-container-low rounded">
+                        <div class="h-2 bg-metallic-gold rounded" style="width: 92%"></div>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant w-8 text-right">92%</span>
+                </div>
+                <!-- 4 star -->
+                <div class="flex items-center gap-4">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant w-12">4 star</span>
+                    <div class="flex-grow h-2 bg-surface-container-low rounded">
+                        <div class="h-2 bg-metallic-gold rounded" style="width: 6%"></div>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant w-8 text-right">6%</span>
+                </div>
+                <!-- 3 star -->
+                <div class="flex items-center gap-4">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant w-12">3 star</span>
+                    <div class="flex-grow h-2 bg-surface-container-low rounded">
+                        <div class="h-2 bg-metallic-gold rounded" style="width: 2%"></div>
+                    </div>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant w-8 text-right">2%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="reviews-feed">
+            <!-- Review 1 -->
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-outline transition-all duration-300">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex gap-1 text-metallic-gold">
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant">2 days ago</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant italic mb-8 leading-relaxed">
+                        "The absolute best fade in Polk County. Marcus is a true master barber. The space is spotless, extremely professional, and the atmosphere feels like an exclusive lounge. Highly recommend!"
+                    </p>
+                </div>
+                <div class="flex items-center gap-4 pt-6 border-t border-charcoal-muted/50 mt-auto">
+                    <div class="w-10 h-10 rounded-full bg-metallic-gold text-background flex items-center justify-center font-bold font-label-sm">
+                        JD
+                    </div>
+                    <div>
+                        <h4 class="font-body-md text-body-md text-on-background font-bold">Jason Davis</h4>
+                        <p class="font-label-sm text-label-sm text-metallic-gold">Verified Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-outline transition-all duration-300">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex gap-1 text-metallic-gold">
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant">1 week ago</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant italic mb-8 leading-relaxed">
+                        "Cleanliness is very important to me, and this place exceeds all expectations. Andre has cut my hair twice now and both times were perfection. The hot towel treatment is next level."
+                    </p>
+                </div>
+                <div class="flex items-center gap-4 pt-6 border-t border-charcoal-muted/50 mt-auto">
+                    <div class="w-10 h-10 rounded-full bg-metallic-gold text-background flex items-center justify-center font-bold font-label-sm">
+                        MT
+                    </div>
+                    <div>
+                        <h4 class="font-body-md text-body-md text-on-background font-bold">Malik Thompson</h4>
+                        <p class="font-label-sm text-label-sm text-metallic-gold">Verified Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between hover:border-outline transition-all duration-300">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex gap-1 text-metallic-gold">
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                            <span class="material-symbols-outlined fill-1">star</span>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant">2 weeks ago</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant italic mb-8 leading-relaxed">
+                        "Outstanding Black-owned barbershop in Haines City. Sarah does an incredible job with the textured styling. She takes her time, makes sure everything is crisp, and gives great advice."
+                    </p>
+                </div>
+                <div class="flex items-center gap-4 pt-6 border-t border-charcoal-muted/50 mt-auto">
+                    <div class="w-10 h-10 rounded-full bg-metallic-gold text-background flex items-center justify-center font-bold font-label-sm">
+                        CR
+                    </div>
+                    <div>
+                        <h4 class="font-body-md text-body-md text-on-background font-bold">Carlos Rodriguez</h4>
+                        <p class="font-label-sm text-label-sm text-metallic-gold">Verified Client</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Info & Contact -->
+<section class="py-24 px-margin-desktop max-w-container-max mx-auto border-t border-charcoal-muted">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
+<div class="space-y-12">
+<h2 class="font-display-lg text-display-lg uppercase tracking-tight">Get in Touch</h2>
+<div class="space-y-8">
+<div class="flex gap-6 items-start">
+<div class="w-12 h-12 flex items-center justify-center border border-metallic-gold text-metallic-gold">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Our Location</p>
+<p class="font-body-lg text-body-lg text-on-background">35564 US-27, Haines City, FL 33844</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<div class="w-12 h-12 flex items-center justify-center border border-metallic-gold text-metallic-gold">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Call for Booking</p>
+<p class="font-body-lg text-body-lg text-on-background">+1 863-866-2182</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<div class="w-12 h-12 flex items-center justify-center border border-metallic-gold text-metallic-gold">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Status</p>
+<p class="font-body-lg text-body-lg text-on-background">Open Today: 9:00 AM - 6:00 PM</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-charcoal-surface border border-charcoal-muted p-1 hidden lg:block grayscale hover:grayscale-0 transition-all duration-700">
+<img class="w-full h-[450px] object-cover" data-alt="A stylized aerial map view of Haines City, Florida, rendered in a dark-mode palette of charcoal, slate, and metallic gold accents. The map highlights key transit routes near US-27, using elegant gold lines for major roads. The aesthetic is clean, professional, and high-tech, fitting the premium branding of the Supreme Barber Lounge." data-location="Haines City, FL" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOxkAXgSigxv7kDAkFk6CXDBGbDOF8Fq4_JSpWbL5TzwOoZUKLlacq4ru0Ykrv4XOvXWFe-tFNTfr9pvyTZ8RneeynA-YnhKhNdBfGJh0kVjn6D__uHp6i0nHBPmJ7wjxuTqU5umx1UdHaDvIa0crlncyqVP6Dhq7G01NJgCpQpWf-9nprjRVQtOJuN94sTYE_G6xqVWLYlxs4QzqvoM_1hlqlMUdg8-6EJTJ8HfcI1Rbf2677Og6A97fuEn6oHE09ADAZ4Cg3Yy4">
+</div>
+</div>
+</section>
+</main>
+
+<!-- Write Review Modal -->
+<div id="review-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="bg-charcoal-surface border border-charcoal-muted p-8 max-w-md w-full mx-4 relative transform scale-95 transition-all duration-300">
+        <button onclick="closeReviewModal()" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-background">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block">Supreme Lounge</span>
+        <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-6">Write A Review</h3>
+        
+        <form onsubmit="submitReviewForm(event)" class="space-y-4">
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Rating</label>
+                <div class="flex gap-2 text-3xl text-on-surface-variant" id="rating-stars-picker">
+                    <button type="button" onclick="setRatingPicker(1)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(2)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(3)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(4)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(5)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150 font-variation-settings-'FILL'-1 text-metallic-gold">star</button>
+                </div>
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Your Name</label>
+                <input type="text" id="review-name" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="Enter your name">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Review Description</label>
+                <textarea id="review-text" required rows="4" class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="Share your experience..."></textarea>
+            </div>
+            <button type="submit" class="w-full bg-metallic-gold text-background py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150">
+                Submit Review
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Gallery Lightbox Modal -->
+<div id="lightbox-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-lg transition-all duration-300 opacity-0 pointer-events-none">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-background z-50">
+        <span class="material-symbols-outlined text-4xl">close</span>
+    </button>
+    <button onclick="changeLightboxImage(-1)" class="absolute left-6 text-metallic-gold hover:text-gold-light z-50"><span class="material-symbols-outlined text-5xl">chevron_left</span></button>
+    <button onclick="changeLightboxImage(1)" class="absolute right-6 text-metallic-gold hover:text-gold-light z-50"><span class="material-symbols-outlined text-5xl">chevron_right</span></button>
+    
+    <div class="max-w-4xl w-full mx-4 flex flex-col items-center relative">
+        <img id="lightbox-img" class="max-h-[60vh] w-auto object-contain border border-charcoal-muted select-none" src="" alt="">
+        <div class="mt-6 text-center max-w-lg">
+            <span id="lightbox-tag" class="font-label-sm text-label-sm text-metallic-gold bg-charcoal-surface border border-charcoal-muted px-4 py-1 inline-block mb-2"></span>
+            <h3 id="lightbox-title" class="font-headline-md text-headline-md text-on-background uppercase mb-2"></h3>
+            <p id="lightbox-desc" class="font-body-md text-body-md text-on-surface-variant mb-6"></p>
+            <button onclick="bookStyleDirect()" class="bg-metallic-gold text-background px-8 py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all">
+                Request This Style
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container dark:bg-surface-container border-t border-charcoal-muted dark:border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-desktop py-12 gap-8 max-w-container-max mx-auto">
+<div class="flex flex-col items-center md:items-start gap-2">
+<div class="font-headline-md text-headline-md font-bold text-metallic-gold uppercase">Supreme Barber Lounge</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Precision &amp; Prestige.</p>
+</div>
+<div class="flex gap-8 flex-wrap justify-center">
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-gold-light dark:hover:text-gold-light transition-opacity duration-200" href="#">About Us</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-gold-light dark:hover:text-gold-light transition-opacity duration-200" href="#">Services</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-gold-light dark:hover:text-gold-light transition-opacity duration-200" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-gold-light dark:hover:text-gold-light transition-opacity duration-200" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-gold-light dark:hover:text-gold-light transition-opacity duration-200" href="#">Contact</a>
+</div>
+<div class="text-on-surface-variant font-label-sm text-label-sm text-center md:text-right mt-2 flex flex-col md:flex-row items-center justify-center md:justify-end gap-2">
+<span>© 2024 Supreme Barber Lounge. Precision &amp; Prestige.</span>
+<span class="hidden md:inline text-charcoal-muted">|</span>
+<button id="footer-client-portal" onclick="openClientAuthModal()" class="text-metallic-gold hover:text-gold-light flex items-center gap-1 font-label-sm uppercase text-xs font-bold tracking-wider transition-all active:scale-95 duration-100">
+<span class="material-symbols-outlined text-xs" style="font-size: 14px">person</span> Client Portal
+</button>
+<span class="hidden md:inline text-charcoal-muted">|</span>
+<button onclick="openAdminLoginModal()" class="text-metallic-gold hover:text-gold-light flex items-center gap-1 font-label-sm uppercase text-xs font-bold tracking-wider transition-all active:scale-95 duration-100">
+<span class="material-symbols-outlined text-xs" style="font-size: 14px">lock</span> Manager Portal
+</button>
+</div>
+</div>
+</footer>
+
+<!-- Write Review Modal -->
+<div id="review-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="bg-charcoal-surface border border-charcoal-muted p-8 max-w-md w-full mx-4 relative transform scale-95 transition-all duration-300">
+        <button onclick="closeReviewModal()" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-background">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block">Supreme Lounge</span>
+        <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-6">Write A Review</h3>
+        
+        <form onsubmit="submitReviewForm(event)" class="space-y-4">
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Rating</label>
+                <div class="flex gap-2 text-3xl text-on-surface-variant" id="rating-stars-picker">
+                    <button type="button" onclick="setRatingPicker(1)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(2)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(3)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(4)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150">star</button>
+                    <button type="button" onclick="setRatingPicker(5)" class="material-symbols-outlined focus:outline-none hover:scale-110 hover:text-metallic-gold transition-all duration-150 font-variation-settings-'FILL'-1 text-metallic-gold">star</button>
+                </div>
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Your Name</label>
+                <input type="text" id="review-name" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="Enter your name">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Review Description</label>
+                <textarea id="review-text" required rows="4" class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="Share your experience..."></textarea>
+            </div>
+            <button type="submit" class="w-full bg-metallic-gold text-background py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150">
+                Submit Review
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Gallery Lightbox Modal -->
+<div id="lightbox-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-lg transition-all duration-300 opacity-0 pointer-events-none">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-background z-50">
+        <span class="material-symbols-outlined text-4xl">close</span>
+    </button>
+    <button onclick="changeLightboxImage(-1)" class="absolute left-6 text-metallic-gold hover:text-gold-light z-50"><span class="material-symbols-outlined text-5xl">chevron_left</span></button>
+    <button onclick="changeLightboxImage(1)" class="absolute right-6 text-metallic-gold hover:text-gold-light z-50"><span class="material-symbols-outlined text-5xl">chevron_right</span></button>
+    
+    <div class="max-w-4xl w-full mx-4 flex flex-col items-center relative">
+        <img id="lightbox-img" class="max-h-[60vh] w-auto object-contain border border-charcoal-muted select-none" src="" alt="">
+        <div class="mt-6 text-center max-w-lg">
+            <span id="lightbox-tag" class="font-label-sm text-label-sm text-metallic-gold bg-charcoal-surface border border-charcoal-muted px-4 py-1 inline-block mb-2"></span>
+            <h3 id="lightbox-title" class="font-headline-md text-headline-md text-on-background uppercase mb-2"></h3>
+            <p id="lightbox-desc" class="font-body-md text-body-md text-on-surface-variant mb-6"></p>
+            <button onclick="bookStyleDirect()" class="bg-metallic-gold text-background px-8 py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all">
+                Request This Style
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Client Auth Modal -->
+<div id="client-auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="bg-charcoal-surface border border-charcoal-muted p-8 max-w-md w-full mx-4 relative transform scale-95 transition-all duration-300 rounded shadow-2xl" id="client-auth-card">
+        <button onclick="closeClientAuthModal()" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-background">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        
+        <!-- Tab Switcher -->
+        <div class="flex border-b border-charcoal-muted mb-6">
+            <button id="tab-client-login" onclick="switchClientAuthTab('login')" class="flex-1 pb-3 text-sm font-label-sm font-bold uppercase tracking-wider border-b-2 border-metallic-gold text-metallic-gold transition-all duration-200">
+                Login
+            </button>
+            <button id="tab-client-register" onclick="switchClientAuthTab('register')" class="flex-1 pb-3 text-sm font-label-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all duration-200">
+                Register
+            </button>
+        </div>
+        
+        <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block font-bold" id="client-auth-subtitle">Welcome Back</span>
+        <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-6 flex items-center gap-2" id="client-auth-title">
+            <span class="material-symbols-outlined text-metallic-gold">person</span> Client Login
+        </h3>
+        
+        <!-- Login Form -->
+        <form id="client-login-form" onsubmit="handleClientLogin(event)" class="space-y-4">
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Email Address</label>
+                <input type="email" id="client-login-email" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="yourname@example.com">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Password</label>
+                <input type="password" id="client-login-password" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="••••••••">
+            </div>
+            <div id="client-login-error" class="hidden text-red-500 font-label-sm text-xs uppercase bg-red-500/10 border border-red-500/20 p-3 text-center tracking-wider">
+                Invalid email or password.
+            </div>
+            <button type="submit" class="w-full bg-metallic-gold text-background py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150 flex items-center justify-center gap-2">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Register Form (Initially Hidden) -->
+        <form id="client-register-form" onsubmit="handleClientRegister(event)" class="space-y-4 hidden">
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Full Name</label>
+                <input type="text" id="client-register-name" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="John Doe">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Phone Number</label>
+                <input type="tel" id="client-register-phone" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="+1 863-000-0000">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Email Address</label>
+                <input type="email" id="client-register-email" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="yourname@example.com">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Password</label>
+                <input type="password" id="client-register-password" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="At least 6 characters">
+            </div>
+            <div id="client-register-error" class="hidden text-red-500 font-label-sm text-xs uppercase bg-red-500/10 border border-red-500/20 p-3 text-center tracking-wider">
+                Registration failed. Please try again.
+            </div>
+            <button type="submit" class="w-full bg-metallic-gold text-background py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150 flex items-center justify-center gap-2">
+                Create Account
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Client Dashboard View -->
+<div id="client-dashboard" class="fixed inset-0 z-40 bg-background overflow-y-auto hidden pt-20">
+    <!-- Dashboard Header -->
+    <header class="bg-surface-container border-b border-charcoal-muted sticky top-0 z-50">
+        <div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+            <div class="flex items-center gap-4">
+                <div class="font-headline-md text-headline-md font-bold text-metallic-gold uppercase tracking-tighter">
+                    Client Dashboard
+                </div>
+                <span class="bg-surface-container-highest text-metallic-gold font-label-sm text-xs px-3 py-1 font-bold tracking-widest uppercase" id="client-dashboard-greeting">WELCOME BACK</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="handleClientLogout()" class="border border-metallic-gold text-metallic-gold hover:bg-metallic-gold hover:text-background px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider transition-all active:scale-95 duration-100">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="py-12 px-margin-desktop max-w-container-max mx-auto space-y-12">
+        <!-- Email Verification Warning Banner -->
+        <div id="client-verify-banner" class="hidden bg-yellow-500/10 border border-yellow-500/30 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 rounded">
+            <div>
+                <h4 class="font-headline-sm text-base text-yellow-500 uppercase font-bold mb-1 flex items-center gap-2">
+                    <span class="material-symbols-outlined">warning</span> Verify Your Email Address
+                </h4>
+                <p class="font-body-md text-sm text-on-surface-variant">We have sent a verification link to your email. Please verify your account to unlock full benefits.</p>
+            </div>
+            <button onclick="resendClientVerification()" id="client-resend-btn" class="bg-yellow-500 text-background px-6 py-2 font-label-sm text-xs font-bold uppercase tracking-wider hover:bg-yellow-400 transition-all active:scale-95 duration-100 whitespace-nowrap">
+                Resend Link
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- User Profile Card -->
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 space-y-6 self-start">
+                <div class="border-b border-charcoal-muted pb-4">
+                    <h3 class="font-headline-md text-headline-md text-metallic-gold uppercase mb-2">My Profile</h3>
+                    <p class="font-body-md text-sm text-on-surface-variant">Your secure membership details</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="font-label-sm text-[10px] uppercase text-metallic-gold tracking-widest block mb-1">Full Name</label>
+                        <p class="font-body-lg text-lg text-on-background font-bold" id="client-profile-name">-</p>
+                    </div>
+                    <div>
+                        <label class="font-label-sm text-[10px] uppercase text-metallic-gold tracking-widest block mb-1">Email Address</label>
+                        <p class="font-body-md text-on-background" id="client-profile-email">-</p>
+                    </div>
+                    <div>
+                        <label class="font-label-sm text-[10px] uppercase text-metallic-gold tracking-widest block mb-1">Phone Number</label>
+                        <p class="font-body-md text-on-background" id="client-profile-phone">-</p>
+                    </div>
+                    <div>
+                        <label class="font-label-sm text-[10px] uppercase text-metallic-gold tracking-widest block mb-1">Verification Status</label>
+                        <span id="client-profile-status" class="inline-block px-3 py-1 font-label-sm text-[10px] font-bold tracking-widest uppercase bg-charcoal-muted text-on-surface-variant rounded">-</span>
+                    </div>
+                </div>
+                <div class="pt-6 border-t border-charcoal-muted">
+                    <button onclick="bookMoreFromDashboard()" class="w-full bg-metallic-gold text-background py-3 font-label-sm text-xs font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-100 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-sm">add</span> Book New Appointment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Appointments Table -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex justify-between items-center border-b border-charcoal-muted pb-4">
+                    <h3 class="font-headline-md text-headline-md text-on-background uppercase">My Reservations</h3>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase font-bold" id="client-bookings-count">0 secured</span>
+                </div>
+                <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-none" id="client-bookings-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Manager Login Modal -->
+<div id="admin-login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="bg-charcoal-surface border border-charcoal-muted p-8 max-w-md w-full mx-4 relative transform scale-95 transition-all duration-300 rounded shadow-2xl" id="admin-login-card">
+        <button onclick="closeAdminLoginModal()" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-background">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <span class="font-label-sm text-label-sm text-metallic-gold tracking-widest uppercase mb-2 block font-bold">Staff Secure Entry</span>
+        <h3 class="font-headline-md text-headline-md text-on-background uppercase mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-metallic-gold">shield_person</span> Manager Portal
+        </h3>
+        
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Manager Email</label>
+                <input type="email" id="admin-email" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="ninekapanadze@gmail.com">
+            </div>
+            <div>
+                <label class="font-label-sm text-xs uppercase text-on-surface-variant mb-2 block">Security Password</label>
+                <input type="password" id="admin-password" required class="w-full bg-surface-container-low border border-charcoal-muted focus:border-metallic-gold text-on-background focus:ring-0 px-4 py-2 font-body-md" placeholder="••••••••">
+            </div>
+            <div id="admin-login-error" class="hidden text-red-500 font-label-sm text-xs uppercase bg-red-500/10 border border-red-500/20 p-3 text-center tracking-wider">
+                Invalid credentials. Check and try again.
+            </div>
+            <button type="submit" class="w-full bg-metallic-gold text-background py-3 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 duration-150 flex items-center justify-center gap-2">
+                Authenticate Securely
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Manager Dashboard View -->
+<div id="admin-dashboard" class="fixed inset-0 z-40 bg-background overflow-y-auto hidden">
+    <!-- Dashboard Header -->
+    <header class="bg-surface-container border-b border-charcoal-muted sticky top-0 z-50">
+        <div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+            <div class="flex items-center gap-4">
+                <div class="font-headline-md text-headline-md font-bold text-metallic-gold uppercase tracking-tighter">
+                    Manager Dashboard
+                </div>
+                <span class="bg-surface-container-highest text-metallic-gold font-label-sm text-xs px-3 py-1 font-bold tracking-widest">LIVE DATA SYNC</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <span class="hidden md:inline font-label-sm text-xs text-on-surface-variant uppercase font-bold" id="admin-profile-email">ninekapanadze@gmail.com</span>
+                <button onclick="handleAdminLogout()" class="border border-metallic-gold text-metallic-gold hover:bg-metallic-gold hover:text-background px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-wider transition-all active:scale-95 duration-100">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="py-12 px-margin-desktop max-w-container-max mx-auto space-y-12">
+        <!-- KPIs Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between group cursor-default">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-4xl text-metallic-gold">calendar_month</span>
+                    <span class="font-label-sm text-xs text-metallic-gold bg-charcoal-muted px-3 py-1">BOOKINGS</span>
+                </div>
+                <div>
+                    <h3 class="font-display-lg text-4xl text-on-background font-bold mb-2" id="kpi-total-bookings">0</h3>
+                    <p class="font-body-md text-sm text-on-surface-variant">Total appointments secured</p>
+                </div>
+            </div>
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between group cursor-default">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-4xl text-metallic-gold">payments</span>
+                    <span class="font-label-sm text-xs text-metallic-gold bg-charcoal-muted px-3 py-1">EST. REVENUE</span>
+                </div>
+                <div>
+                    <h3 class="font-display-lg text-4xl text-on-background font-bold mb-2" id="kpi-total-revenue">$0</h3>
+                    <p class="font-body-md text-sm text-on-surface-variant">Accumulated service fees</p>
+                </div>
+            </div>
+            <div class="bg-charcoal-surface border border-charcoal-muted p-8 flex flex-col justify-between group cursor-default">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="material-symbols-outlined text-4xl text-metallic-gold">reviews</span>
+                    <span class="font-label-sm text-xs text-metallic-gold bg-charcoal-muted px-3 py-1">FEEDBACK</span>
+                </div>
+                <div>
+                    <h3 class="font-display-lg text-4xl text-on-background font-bold mb-2" id="kpi-avg-rating">0.0</h3>
+                    <p class="font-body-md text-sm text-on-surface-variant">Average customer rating</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Body Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- Appointments Table -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex justify-between items-center border-b border-charcoal-muted pb-4">
+                    <h3 class="font-headline-md text-headline-md text-on-background uppercase">Client Reservations</h3>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase font-bold" id="dashboard-bookings-count">0 secured</span>
+                </div>
+                <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-none" id="dashboard-bookings-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Reviews Moderation -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center border-b border-charcoal-muted pb-4">
+                    <h3 class="font-headline-md text-headline-md text-on-background uppercase">Review Moderation</h3>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase font-bold" id="dashboard-reviews-count">0 reviews</span>
+                </div>
+                <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-none" id="dashboard-reviews-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Interactive Atmospheric Micro-interaction -->
+
+
+</body></html>

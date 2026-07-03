@@ -54,6 +54,7 @@ moveFolder('portfolio');
 moveFolder('pawn');
 moveFolder('nineos');
 moveFolder('gymwave');
+moveFolder('premiumbarbershop');
 moveFile('_redirects');
 copyFile('index.html');
 
