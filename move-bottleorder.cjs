@@ -53,6 +53,7 @@ moveFolder('diet');
 moveFolder('portfolio');
 moveFolder('pawn');
 moveFolder('nineos');
+moveFolder('gymwave');
 moveFile('_redirects');
 copyFile('index.html');
 
