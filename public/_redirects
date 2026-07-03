@@ -1,1 +1,31 @@
+/cleaningservice/* /cleaningservice/:splat 200
+/cleaningservice /cleaningservice/index.html 200
+
+/premiumbarbershop/* /premiumbarbershop/:splat 200
+/premiumbarbershop /premiumbarbershop/index.html 200
+
+/gymwave/* /gymwave/:splat 200
+/gymwave /gymwave/index.html 200
+
+/nineos/* /nineos/:splat 200
+/nineos /nineos/index.html 200
+
+/bottleorder/* /bottleorder/:splat 200
+/bottleorder /bottleorder/index.html 200
+
+/diet/* /diet/:splat 200
+/diet /diet/index.html 200
+
+/portfolio/* /portfolio/:splat 200
+/portfolio /portfolio/index.html 200
+
+/pawn/* /pawn/:splat 200
+/pawn /pawn/index.html 200
+
+/ninokvariani/* /ninokvariani/:splat 200
+/ninokvariani /ninokvariani/index.html 200
+
+/ninokvariani2/* /ninokvariani2/:splat 200
+/ninokvariani2 /ninokvariani2/index.html 200
+
 /* /index.html 200
