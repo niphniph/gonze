@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Services | Aya Cleaning Solutions</title>
+    <meta name="description" content="Explore our bespoke cleaning packages for luxury properties, deep cleaning, and professional post-construction restoration. Request a consultation today.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="site-header" id="siteHeader">
+        <div class="container header-container">
+            <a href="index.html" class="logo">Aya<span>.</span></a>
+            <nav class="main-nav" id="mainNav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link active" href="services.html">Services</a>
+                <a class="nav-link" href="gallery.html">Gallery</a>
+                <a class="nav-link" href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#estimator" class="btn btn-primary">Book Now</a>
+                <button class="mobile-nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="service-hero" style="padding: 120px 0 60px 0; background-color: var(--soft-white);">
+            <div class="container">
+                <span class="hero-badge">Curated Solutions</span>
+                <h1 style="margin-top: 10px;">Meticulous Restoration of Your Environment</h1>
+                <p>Experience the perfect harmony of Fresh Trust and Meticulous Luxury. We elevate your space beyond standard cleanliness, restoring it to its original pristine state.</p>
+            </div>
+        </section>
+
+        <!-- Before & After Transformation Section -->
+        <section class="section" style="padding-top: 0;">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <span class="hero-badge" style="background: none; border: none; color: var(--secondary); margin-bottom: 8px;">Visual Proof</span>
+                    <h2>The Art of Clean</h2>
+                </div>
+                
+                <div class="slider-outer">
+                    <div class="before-after-slider" id="transformationSlider">
+                        <img alt="Dirty and unorganized luxury space before cleaning" class="slider-img slider-before" src="assets/living_room_before.png"/>
+                        <img alt="Spotless polished luxury space after cleaning" class="slider-img slider-after" id="afterImage" src="assets/living_room_after.png"/>
+                        <div class="slider-handle" id="sliderHandle"></div>
+                        <div class="slider-label label-before">Meticulous Detail</div>
+                        <div class="slider-label label-after">Professional Finish</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="section" style="background-color: var(--soft-white);" id="serviceGrid">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <h2>Our Bespoke Services</h2>
+                    <p>Select a baseline package to start. Each program is tailored dynamically during your estate walkthrough.</p>
+                </div>
+                
+                <div class="services-grid-list">
+                    <!-- Service 1 -->
+                    <div class="service-card">
+                        <div class="service-card-img">
+                            <img alt="Pristine minimalist luxury living room setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUY03sbwBOjf5TXG1lEqkVGA2oYUZKXC39JRFX-DGOlDX4eNheNFomNb7bCtbUVfMZ7mx_leK08T5guqRCxMNnMWlH3QAAnsGmd4Jm2dbit7fuZFrTlF87VjNVtTEsVbJc-lJQEVBoKOD27osuSR--krtTRSFAZPuQa16dNkWcGip8DeJw1u3zi8JCP-CrAbaZiUNdt_n0D9MfBxWGV8ubjuaWgKTEn5233URj8sDz0s0wMKULEGdKlIBPVNd0IkjublmzEgeYYPLB"/>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>House Cleaning</h3>
+                            <p>Standard elite maintenance to keep your family estate in a perpetual state of freshness and calm.</p>
+                            <ul class="service-features-list">
+                                <li><span class="material-symbols-outlined">check_circle</span>Dusting of all high surfaces & trim</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Sanitized luxury kitchen & bathrooms</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>High-filtration microscopic vacuuming</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Hardwood floors mopped & polished</li>
+                            </ul>
+                            <a href="#estimator" class="btn btn-outline select-plan-btn" data-service="house">Select Baseline</a>
+                        </div>
+                    </div>
+
+                    <!-- Service 2 (Recommended Highlighted Card) -->
+                    <div class="service-card" style="border: 2px solid var(--secondary); transform: scale(1.03); z-index: 10; box-shadow: var(--shadow-premium);">
+                        <div class="service-card-img" style="position: relative;">
+                            <span class="hero-badge" style="position: absolute; top: 16px; left: 16px; z-index: 20; background: var(--secondary); color: var(--primary); font-weight: 700; border: none;">Recommended</span>
+                            <img alt="Restoring vanity marble detail close-up" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQHIq_KcFQXBmvw4CIgHvpd6LiMnKC5gPnG4vfUElavgk5wyOjFRtZxntet0K2ohj3i2JDdQiGAQlM61BYY_oz7ydGYaESSteRUXi693scAeDHYvAxuopjatAA4tkY7y9RzgAKIEzkmOAiZkCwoWWogJ9tfJlFseoy-qSKaaXEOUnYnxVxHeDcE39AYdVUMnyBDeGlSzg1OxCZcKpTINKvtBjFztTroD5-aY8mmbOZIgCpEChSulGOSXJbldUWDrOoeQA3Pq3dLrsq"/>
+                        </div>
+                        <div class="service-card-body" style="background-color: var(--white);">
+                            <h3>Deep Cleaning</h3>
+                            <p>A comprehensive restorative scrub that reaches deep into hidden corners and forgotten layers.</p>
+                            <ul class="service-features-list">
+                                <li><span class="material-symbols-outlined">check_circle</span>Intensive sanitization inside cabinets</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Detail-focused scrub of all baseboards</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Sanitizing window tracks and sills</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Clinical steam sterilization of fixtures</li>
+                            </ul>
+                            <a href="#estimator" class="btn btn-primary select-plan-btn" data-service="deep">Select Baseline</a>
+                        </div>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="service-card">
+                        <div class="service-card-img">
+                            <img alt="Modern high-end apartment after construction cleaning" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6OZAbQ17Rp16u438hn84IPhELLlq2hzaxaFxJQut8G-xtMhz5p15uafHK3amcM8Y7ZPOdHTtqAPLyivnsBO9zKvuGYlw1rqTVGbft9FVZCtbtGdmrAvq_y05kU3vVAKqrxWch8vPfiyq6KgoGMzUFbLrSNuneFi8ig9NwKBOcTcn4uEWkbIWUL-yIFrfuMMjdmn9cMB8ZYrEO6YrZckhoKc0YPfkRNo4Fo6-2sXmzztrou6XNrYIsrecektZIcn8zc1Q0qwLOwJwL"/>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Post-Construction</h3>
+                            <p>Expert fine-dust filtration and material safe polishing after home renovations to make it liveable.</p>
+                            <ul class="service-features-list">
+                                <li><span class="material-symbols-outlined">check_circle</span>Complete fine dust air wall filtration</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Deep grout power-scrub and seal</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Hardware detailing & chrome polishing</li>
+                                <li><span class="material-symbols-outlined">check_circle</span>Full vent & air duct clearing</li>
+                            </ul>
+                            <a href="#estimator" class="btn btn-outline select-plan-btn" data-service="post">Select Baseline</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="section" style="background-color: rgba(13, 59, 68, 0.03);">
+            <div class="container" style="max-width: 900px; text-align: center; position: relative;">
+                <span class="material-symbols-outlined" style="font-size: 100px; color: rgba(0, 36, 43, 0.05); position: absolute; top: -50px; left: 50%; transform: translateX(-50%); pointer-events: none;">format_quote</span>
+                <p style="font-family: var(--font-serif); font-size: 24px; font-style: italic; color: var(--primary); margin-bottom: 30px; position: relative; z-index: 2;">
+                    "After our extensive penthouse renovation, the dust seemed absolutely impossible to clear. Aya's Post-Construction team handled everything with such meticulous precision that we could move in three days ahead of schedule. Truly meticulous luxury!"
+                </p>
+                <h4 style="font-family: var(--font-sans); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary);">Rachel Horwitz Lewis</h4>
+                <p style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Penthouse Owner & Fine Interior Designer</p>
+            </div>
+        </section>
+
+        <!-- Dynamic Cost Estimator -->
+        <section class="section" id="estimator">
+            <div class="container">
+                <div class="estimator-section">
+                    <div class="estimator-grid">
+                        <div class="estimator-form-pane">
+                            <h2>Request a Consultation</h2>
+                            <p class="section-subtitle">Input your layout parameters below, and we will formulate a bespoke cleaning proposal.</p>
+                            
+                            <form id="quoteCalculator" onsubmit="event.preventDefault(); alert('Consultation requested! Our client manager will contact you within 2 hours to confirm your custom walkthrough.');">
+                                <div class="form-group-row">
+                                    <div class="form-field">
+                                        <label for="fullName">Full Name</label>
+                                        <input required type="text" id="fullName" placeholder="Thiago Goff">
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="emailAddr">Email Address</label>
+                                        <input required type="email" id="emailAddr" placeholder="thiago@estate.com">
+                                    </div>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="serviceType">Service Standard</label>
+                                    <select id="serviceType">
+                                        <option value="house">House Cleaning (Elite Maintenance)</option>
+                                        <option value="deep" selected>Deep Cleaning (San Sanctuary)</option>
+                                        <option value="post">Post-Construction Restorations</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="sqft">Home Size (Approx. Sq. Ft.)</label>
+                                    <input required type="number" id="sqft" value="2500" min="500" max="20000" step="100">
+                                </div>
+
+                                <div class="form-group-row">
+                                    <div class="form-field">
+                                        <label for="bedrooms">Bedrooms</label>
+                                        <select id="bedrooms">
+                                            <option value="1">1 Bedroom</option>
+                                            <option value="2">2 Bedrooms</option>
+                                            <option value="3" selected>3 Bedrooms</option>
+                                            <option value="4">4 Bedrooms</option>
+                                            <option value="5">5+ Bedrooms</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="bathrooms">Bathrooms</label>
+                                        <select id="bathrooms">
+                                            <option value="1">1 Bathroom</option>
+                                            <option value="2" selected>2 Bathrooms</option>
+                                            <option value="3">3 Bathrooms</option>
+                                            <option value="4">4 Bathrooms</option>
+                                            <option value="5">5+ Bathrooms</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; padding: 16px;">Request Booking</button>
+                            </form>
+                        </div>
+                        
+                        <div class="estimator-result-pane">
+                            <h3>Bespoke Estimate</h3>
+                            <div class="price-display" id="estimatedPrice">$475</div>
+                            <div class="price-period" id="pricePeriod">Estimated Standard Charge</div>
+                            <p style="color: var(--silver); font-size: 14px; padding: 0 20px;">This represents a tailored baseline estimate. All luxury materials and specific detailing guidelines will be finalized during our personal initial estate walkthrough.</p>
+                            <div class="estimate-disclaimer">Includes insured clinical tools, premium organic scents, and vetted double-member service crew.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-top">
+            <div class="footer-brand">
+                <h3>Aya<span>.</span></h3>
+                <p>Providing the highest standard of professional restorative cleaning services for residential and commercial clients who value meticulous luxury.</p>
+                <div class="social-links">
+                    <a class="social-link" href="#" aria-label="Social Link Website"><span class="material-symbols-outlined">public</span></a>
+                    <a class="social-link" href="#" aria-label="Social Link Email"><span class="material-symbols-outlined">alternate_email</span></a>
+                    <a class="social-link" href="#" aria-label="Social Link Phone"><span class="material-symbols-outlined">call</span></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h4>Contact</h4>
+                <p>1200 Luxury Lane<br/>Pristine Heights, NY 10001</p>
+                <p>hello@ayaclean.com<br/>+1 (888) AYA-CLEAN</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container footer-bottom-container">
+                <p>© 2026 Aya Cleaning Solutions. Meticulous Luxury & Fresh Trust.</p>
+                <div class="footer-bottom-badges">
+                    <span>Crafted with Precision</span>
+                    <span>Sustainability Certified</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main Dynamic Script -->
+    <script src="js/main.js"></script>
+</body>
+</html>
