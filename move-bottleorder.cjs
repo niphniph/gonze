@@ -56,6 +56,7 @@ moveFolder('nineos');
 moveFolder('gymwave');
 moveFolder('premiumbarbershop');
 moveFolder('cleaningservice');
+moveFolder('cv');
 moveFile('_redirects');
 copyFile('index.html');
 
