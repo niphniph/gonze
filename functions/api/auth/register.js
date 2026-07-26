@@ -21,33 +21,30 @@ export async function onRequest(context) {
       });
     }
 
-    const { name, email, password, confirmPassword } = await request.json();
+    const body = await request.json();
+    const name = body.name;
+    const email = body.email || body.username;
+    const username = body.username || body.email;
+    const password = body.password;
+    const confirmPassword = body.confirmPassword || body.password;
 
     // 1. Validation
-    if (!name || !email || !password || !confirmPassword) {
-      return new Response(JSON.stringify({ error: "All fields are required" }), {
+    if (!name || !email || !password) {
+      return new Response(JSON.stringify({ error: "ყველა ველი სავალდებულოა" }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
     }
 
     if (password !== confirmPassword) {
-      return new Response(JSON.stringify({ error: "Passwords do not match" }), {
+      return new Response(JSON.stringify({ error: "პაროლები არ ემთხვევა ერთმანეთს" }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return new Response(JSON.stringify({ error: "Invalid email format" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
-      });
-    }
-
-    if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
-      return new Response(JSON.stringify({ error: "Password must be at least 8 characters long and contain both letters and numbers" }), {
+    if (password.length < 6) {
+      return new Response(JSON.stringify({ error: "პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო" }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
