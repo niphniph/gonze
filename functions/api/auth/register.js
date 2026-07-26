@@ -55,9 +55,15 @@ export async function onRequest(context) {
     // 2. Check if user already exists
     const existingUser = await db.prepare("SELECT id FROM users WHERE email = ?").bind(cleanEmail).first();
     if (existingUser) {
-      return new Response(JSON.stringify({ error: "Email is already registered" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
+      return new Response(JSON.stringify({
+        success: false,
+        error: {
+          code: "EMAIL_ALREADY_EXISTS",
+          message: "ეს ელფოსტა უკვე რეგისტრირებულია."
+        }
+      }), {
+        status: 409,
+        headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders }
       });
     }
 

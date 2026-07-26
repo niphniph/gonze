@@ -4,10 +4,16 @@ export async function onRequest(context) {
   const optionsResponse = handleOptions(context.request);
   if (optionsResponse) return optionsResponse;
 
+  const responseHeaders = {
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+    ...corsHeaders
+  };
+
   if (context.request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+    return new Response(JSON.stringify({ success: false, error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } }), {
       status: 405,
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: responseHeaders
     });
   }
 
@@ -15,133 +21,94 @@ export async function onRequest(context) {
   const db = env.DB;
   if (!db) {
     console.error("Cloudflare D1 database binding 'DB' is missing in environment.");
-    return new Response(JSON.stringify({ error: "Database is not connected. Please configure Cloudflare D1 binding named DB." }), {
+    return new Response(JSON.stringify({ success: false, error: { code: "DB_MISSING", message: "Database connection unavailable" } }), {
       status: 500,
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: responseHeaders
     });
   }
 
   try {
-    const { fullName, email, password, confirmPassword } = await request.json();
+    const body = await request.json();
+    const fullName = (body.fullName || body.name || body.username || '').trim();
+    const email = (body.email || body.username || '').trim().toLowerCase();
+    const password = body.password || '';
+    const confirmPassword = body.confirmPassword || password;
 
-    // 1. Validate fields
-    if (!fullName || !email || !password || !confirmPassword) {
-      return new Response(JSON.stringify({ error: "All fields are required" }), {
+    // 1. Validate required fields
+    if (!fullName) {
+      return new Response(JSON.stringify({ success: false, error: { code: "INVALID_NAME", message: "გთხოვთ, მიუთითოთ სრული სახელი." } }), {
         status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
-      });
-    }
-
-    // 2. Password minimum 8 characters
-    if (password.length < 8) {
-      return new Response(JSON.stringify({ error: "Password must be at least 8 characters long" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
-      });
-    }
-
-    // 3. Check confirm password
-    if (password !== confirmPassword) {
-      return new Response(JSON.stringify({ error: "Passwords do not match" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
+        headers: responseHeaders
       });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return new Response(JSON.stringify({ error: "Invalid email format" }), {
+    if (!email || !emailRegex.test(email)) {
+      return new Response(JSON.stringify({ success: false, error: { code: "INVALID_EMAIL", message: "გთხოვთ, მიუთითოთ სწორი ელფოსტის მისამართი." } }), {
         status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
+        headers: responseHeaders
       });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
+    if (password.length < 6) {
+      return new Response(JSON.stringify({ success: false, error: { code: "INVALID_PASSWORD", message: "პაროლი უნდა შეიცავდეს მინიმუმ 6 სიმბოლოს." } }), {
+        status: 400,
+        headers: responseHeaders
+      });
+    }
 
-    // 4. Check if email already exists
-    const existingUser = await db.prepare("SELECT id FROM users WHERE email = ?").bind(cleanEmail).first();
+    if (password !== confirmPassword) {
+      return new Response(JSON.stringify({ success: false, error: { code: "PASSWORD_MISMATCH", message: "პაროლები არ ემთხვევა ერთმანეთს." } }), {
+        status: 400,
+        headers: responseHeaders
+      });
+    }
+
+    // 2. Check if email already exists in D1 users table
+    const existingUser = await db.prepare("SELECT id FROM users WHERE email = ?").bind(email).first();
     if (existingUser) {
-      return new Response(JSON.stringify({ error: "Email already exists" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
+      return new Response(JSON.stringify({ success: false, error: { code: "EMAIL_ALREADY_EXISTS", message: "ეს ელფოსტა უკვე რეგისტრირებულია." } }), {
+        status: 409,
+        headers: responseHeaders
       });
     }
 
-    // 5. Hash password
+    // 3. Hash password using Web Crypto compatible function
     const pwdHash = await hashPassword(password);
     const userId = crypto.randomUUID();
     const nowIso = new Date().toISOString();
 
-    // 6. Insert user into D1
+    // 4. Insert user into D1 users table
     await db.prepare(
-      "INSERT INTO users (id, full_name, email, password_hash, email_verified, created_at) VALUES (?, ?, ?, ?, 0, ?)"
+      "INSERT INTO users (id, full_name, email, password_hash, created_at) VALUES (?, ?, ?, ?, ?)"
     )
-    .bind(userId, fullName.trim(), cleanEmail, pwdHash, nowIso)
+    .bind(userId, fullName, email, pwdHash, nowIso)
     .run();
 
-    // Create empty tracker data row for this user
-    await db.prepare("INSERT OR IGNORE INTO tracker_data (user_id) VALUES (?)").bind(userId).run();
-
-    // 7. Generate 6-digit verification code
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // 8. Generate verification token
-    const token = crypto.randomUUID();
-
-    // 9. Save code and token in verification_codes
-    const codeId = crypto.randomUUID();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours expiration
-
-    await db.prepare(
-      "INSERT INTO verification_codes (id, user_id, email, code, token, expires_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
-    )
-    .bind(codeId, userId, cleanEmail, code, token, expiresAt, nowIso)
-    .run();
-
-    // 10. Send email with BOTH verification code and link
-    const appUrl = env.APP_URL || "https://nine13.site";
-    const verificationLink = `${appUrl}/tracker/verify?token=${token}`;
-
-    const emailHtml = `
-      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 12px;">
-        <h2 style="color: #6200ee;">Verify Your Email Address</h2>
-        <p>Hi ${fullName.trim()},</p>
-        <p>Thank you for signing up. Please verify your email using one of the following methods:</p>
-        
-        <p><strong>Option 1: Enter this 6-digit code</strong></p>
-        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; text-align: center; font-size: 28px; font-weight: bold; letter-spacing: 4px;">
-          ${code}
-        </div>
-        
-        <p><strong>Option 2: Click the verification link below</strong></p>
-        <p><a href="${verificationLink}" style="background-color: #6200ee; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email</a></p>
-        <p>Or copy and paste this URL into your browser:</p>
-        <p>${verificationLink}</p>
-        
-        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-        <p style="font-size: 12px; color: #666;">This code and link will expire in 24 hours.</p>
-      </div>
-    `;
-
-    await sendEmail({
-      to: cleanEmail,
-      subject: "Verify your email - Nine Tracker",
-      html: emailHtml
-    }, env);
+    // 5. Ensure tracker_data record exists
+    try {
+      await db.prepare("INSERT OR IGNORE INTO tracker_data (user_id) VALUES (?)").bind(userId).run();
+    } catch (e) {
+      // Ignore if table schemas differ
+    }
 
     return new Response(JSON.stringify({
       success: true,
-      message: "Registration successful. Verification email sent.",
-      email: cleanEmail
+      user: {
+        id: userId,
+        fullName: fullName,
+        email: email
+      }
     }), {
       status: 201,
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: responseHeaders
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message || "An unexpected error occurred" }), {
+    console.error("D1 Registration Error:", error);
+    return new Response(JSON.stringify({ success: false, error: { code: "SERVER_ERROR", message: "სერვერის შეცდომა რეგისტრაციისას." } }), {
       status: 500,
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: responseHeaders
     });
   }
 }
