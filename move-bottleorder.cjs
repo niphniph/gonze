@@ -57,6 +57,7 @@ moveFolder('gymwave');
 moveFolder('premiumbarbershop');
 moveFolder('cleaningservice');
 moveFolder('cv');
+moveFolder('psychosyntesis');
 moveFile('_redirects');
 copyFile('index.html');
 
