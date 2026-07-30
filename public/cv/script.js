@@ -236,8 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Auto-pop up video 1.2 seconds after page load
+  // Auto-pop up video 5 seconds after page load
   setTimeout(() => {
     openModal();
-  }, 1200);
+  }, 5000);
 });
