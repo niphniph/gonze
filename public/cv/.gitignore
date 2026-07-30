@@ -1,0 +1,11 @@
+# Ignore log files
+*.log
+
+# Ignore OS files
+Thumbs.db
+Desktop.ini
+*.lnk
+Portfolio Video.mp4
+
+# Wrangler
+.wrangler/

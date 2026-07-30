@@ -31,4 +31,7 @@
 /psychosyntesis/* /psychosyntesis/:splat 200
 /psychosyntesis /psychosyntesis/index.html 200
 
+/cv/* /cv/:splat 200
+/cv /cv/index.html 200
+
 /* /index.html 200
